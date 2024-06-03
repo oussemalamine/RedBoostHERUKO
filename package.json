@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && node index.js",
-    "client": "npm run dev --prefix frontend",
+    "client": "cd frontend && npm run dev",
     "server": "nodemon backend/index.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "npm run server & npm run client"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -26,8 +26,7 @@
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
-    "concurrently": "^8.2.2"
+    "passport-local": "^1.0.0"
   },
   "keywords": [],
   "author": "",
