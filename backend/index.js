@@ -8,7 +8,7 @@ const passport = require("passport");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const multer = require("multer");
-
+const path = require('path');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/"); // Destination folder
@@ -57,6 +57,13 @@ app.use(
     credentials: true,
   })
 );
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// Put your API routes here
+
+
 
 
 const store = new MongoDBSession({
@@ -156,6 +163,15 @@ app.put("/updateTask/:taskId", handleTask);
 app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
+
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
+});
+
+
 // Database + Server Connection Validation
 mongoose
   .connect(db)
