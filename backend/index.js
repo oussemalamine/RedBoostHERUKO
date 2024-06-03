@@ -51,7 +51,7 @@ app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requ
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://redboost-65f83dc8cbf1.herokuapp.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -78,7 +78,7 @@ app.use(
     store: store,
     cookie: {
       secure: false,
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000,
       // maxAge: 30 * 1000,
     },
