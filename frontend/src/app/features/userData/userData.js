@@ -5,7 +5,7 @@ export const loadUserData = createAsyncThunk(
   'userData/loadCurrentUser',
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('http://localhost:5000/loadCurrentUser', {
+      const response = await axiosInstance.post('https://redboost-65f83dc8cbf1.herokuapp.com/loadCurrentUser', {
         email: email,
       })
       return response.data
@@ -20,7 +20,7 @@ export const updateUserData = createAsyncThunk(
   async (userId,userData, { rejectWithValue }) => {
     console.log("updating current user")
     try {
-      const response = await axiosInstance.put(`http://localhost:5000/updateUser/${userId}`, userData)
+      const response = await axiosInstance.put(`https://redboost-65f83dc8cbf1.herokuapp.com/updateUser/${userId}`, userData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)

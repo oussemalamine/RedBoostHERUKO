@@ -113,7 +113,7 @@ const Task = ({ task }) => {
 
       console.log('Uploading file:', deliverableFile) // Debugging log
 
-      const response = await axios.post('http://localhost:5000/upload', formData, {
+      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com//upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

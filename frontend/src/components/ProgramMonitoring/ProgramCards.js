@@ -81,7 +81,7 @@ export default function ProgramCards() {
             endDate,
             budget,
             authorizedUsers: [programLead],
-            logo: `http://localhost:5000/${response.data.path}`,
+            logo: `https://redboost-65f83dc8cbf1.herokuapp.com//${response.data.path}`,
           }
           dispatch(createProgram(programData))
         }
