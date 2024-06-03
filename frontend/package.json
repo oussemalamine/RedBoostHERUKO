@@ -13,8 +13,8 @@
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "dev-client": "vite",
-    "build": "vite build",
+    "dev": "vite",
+    "build": "vite build && (cd ../backend && npm install) ",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

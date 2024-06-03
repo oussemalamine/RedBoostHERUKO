@@ -51,11 +51,18 @@ app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requ
 
 app.use(
   cors({
-    origin: "https://redboost-65f83dc8cbf1.herokuapp.com",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+// Serve static files from the React app
+app.use(express.static(path.join(dirname, '../frontend/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(dirname, '../frontend/dist', 'index.html'));
+});
 
 const store = new MongoDBSession({
   uri: db,

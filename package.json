@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd backend && node index.js",
-    "client": "cd frontend && npm run dev",
-    "server": "nodemon backend/index.js",
-    "dev": "npm run server & npm run client"
+    "start": "cd backend && node index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
