@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://redboost-65f83dc8cbf1.herokuapp.com',
   withCredentials: true, // Important for sessions
 })
 
