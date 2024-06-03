@@ -8,6 +8,7 @@ const passport = require("passport");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const path = require("path");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/"); // Destination folder
@@ -58,10 +59,10 @@ app.use(
 );
 
 // Serve static files from the React app
-app.use(express.static(path.join(dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(dirname, '../frontend/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 const store = new MongoDBSession({
