@@ -168,7 +168,7 @@ app.get("/sessions", sessionsRoute);
 // The "catchall" handler: for any request that doesn't
 // match one above, send back index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  res.sendFile(path.join('../frontend/build/index.html'));
 
 });
 
