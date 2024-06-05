@@ -1,188 +1,158 @@
-require("dotenv").config();
-const express = require("express");
-const session = require("express-session");
-const MongoDBSession = require("connect-mongodb-session")(session);
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser"); // Import body-parser
-const passport = require("passport");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const multer = require("multer");
+require('dotenv').config();
+const express = require('express');
+const session = require('express-session');
+const MongoDBSession = require('connect-mongodb-session')(session);
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const cors = require('cors');
+const mongoose = require('mongoose');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const fileUpload = require('express-fileupload');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Destination folder
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + "-" + Date.now()); // Naming the file
-  },
-});
-const upload = multer({
-  storage: storage,
-});
-const db = process.env.DATABASE_URI;
-const secret = process.env.SECRET;
-const PORT = process.env.PORT || 5000; //this is can be changed careful with it !!!!!!!!!!
+// Initialize Express
 const app = express();
-const signupRoute = require("./routes/api/register");
-const loginRoute = require("./routes/api/login");
-const checkAuthRoute = require("./routes/api/checkAuth");
-const logoutRoute = require("./routes/api/logout");
-const usersRoute = require("./routes/api/users");
-const UpdateUser = require("./routes/api/UpdateUser");
-const checkPass = require("./routes/api/checkPass");
-const AddEvent = require("./routes/api/AddEvent");
-const getEvents = require("./routes/api/getEvents");
-const deleteEvent = require("./routes/api/DeleteEvent");
-const UpdateEvent = require("./routes/api/UpdateEvent");
-const forgetPassword = require("./routes/api/ForgetPassword");
-const handleProgram = require("./routes/api/handleProgram");
-const handleActivity = require("./routes/api/handleActivity");
-const hundleEntrepreneur = require("./routes/api/hundleEntrepreneur");
-const handleStartups = require("./routes/api/handleStartups");
-const handleTask = require("./routes/api/handleTask");
-const sessionsRoute = require("./routes/api/Sessions");
-require("./passport/index");
 
-// Increase payload size limit for body-parser
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requests
+app.use(bodyParser.json({ limit: '50mb' }));
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-
-// Cloudinary config
-app.use(fileUpload());
+// Cloudinary configuration
 cloudinary.config({
-  cloud_name: 'redboost',
-  api_key: '649819331138157',
-  api_secret: 'ldl_j0oGOzHQjX-cvT97jc-bL5Y'
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+app.use(fileUpload());
 
-
+// MongoDB Session store
 const store = new MongoDBSession({
-  uri: db,
-  collection: "sessions",
-});
-// Add event listeners to the store
-store.on("connected", () => {
-  console.log("Session store connected!");
+  uri: process.env.DATABASE_URI,
+  collection: 'sessions',
 });
 
-store.on("error", (error) => {
-  console.error("Session store error:", error);
+store.on('connected', () => {
+  console.log('Session store connected!');
 });
-app.use(
-  session({
-    key: "sessionId",
-    secret: secret,
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-    cookie: {
-      secure: false,
-      httpOnly: false,
-      maxAge: 24 * 60 * 60 * 1000,
-      // maxAge: 30 * 1000,
-    },
-  })
-);
+
+store.on('error', (error) => {
+  console.error('Session store error:', error);
+});
+
+app.use(session({
+  key: 'sessionId',
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
+  cookie: {
+    secure: false,
+    httpOnly: false,
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-//configure the server to serve statically the files from the backend server with no sniff
+// File upload route
 app.post('/upload', (req, res) => {
-  const file = req.files.image.path;
+  if (!req.files || !req.files.image) {
+    return res.status(400).send({ message: "No file uploaded" });
+  }
+  const file = req.files.image.tempFilePath;
 
   cloudinary.uploader.upload(file, (error, result) => {
     if (error) {
+      console.error('Upload error:', error);
       return res.status(500).send(error);
     }
     res.status(200).send(result);
   });
 });
 
+// Import routes
+const signupRoute = require('./routes/api/register');
+const loginRoute = require('./routes/api/login');
+const checkAuthRoute = require('./routes/api/checkAuth');
+const logoutRoute = require('./routes/api/logout');
+const usersRoute = require('./routes/api/users');
+const UpdateUser = require('./routes/api/UpdateUser');
+const checkPass = require('./routes/api/checkPass');
+const AddEvent = require('./routes/api/AddEvent');
+const getEvents = require('./routes/api/getEvents');
+const deleteEvent = require('./routes/api/DeleteEvent');
+const UpdateEvent = require('./routes/api/UpdateEvent');
+const forgetPassword = require('./routes/api/ForgetPassword');
+const handleProgram = require('./routes/api/handleProgram');
+const handleActivity = require('./routes/api/handleActivity');
+const hundleEntrepreneur = require('./routes/api/hundleEntrepreneur');
+const handleStartups = require('./routes/api/handleStartups');
+const handleTask = require('./routes/api/handleTask');
+const sessionsRoute = require('./routes/api/Sessions');
 
-// Routes
-app.post("/upload", upload.single("logo"), (req, res) => {
-  // 'logo' is the name of the form field in your frontend
-  if (req.file) {
-    // Handle the file information and reference in the database here
-    res.status(200).send(req.file);
-  } else {
-    res.status(400).send({ message: "File upload failed" });
-  }
-});
-app.post("/register", signupRoute);
-app.post("/login", loginRoute);
-app.post("/events", AddEvent);
-app.post("/forget-password", forgetPassword);
-app.get("/login", checkAuthRoute);
-app.get("/logout", logoutRoute);
-app.post("/loadCurrentUser", usersRoute);
-app.post("/loadUsers", usersRoute);
-app.get("/checkPass", checkPass);
-app.get("/events", getEvents);
-app.put("/users/:userId", UpdateUser);
-app.delete("/deleteUser/:userId", usersRoute);
-app.put("/updateUser/:userId", usersRoute);
-app.put("/events/:idEvent", UpdateEvent);
-app.delete("/events/:idEvent", deleteEvent);
-app.post("/addProgram", handleProgram);
-app.delete("/deleteProgram/:programId ", handleProgram);
-app.put("/updateProgram/:programId", handleProgram);
-app.post("/loadPrograms", handleProgram);
-app.post("/addActivity", handleActivity);
-app.delete("/deleteActivity/:activityId", handleActivity);
-app.put("/updateActivity/:activityId", handleActivity);
-app.post("/loadActivity/:activityId", handleActivity);
-app.post("/loadActivitiesByProgramId/:programId", handleActivity);
-app.post("/createntrepreneurs", hundleEntrepreneur);
-app.post("/createstartup", handleStartups);
-app.get("/loadAllentrepreneurs", hundleEntrepreneur);
-app.post("/addTask", handleTask);
-app.post("/loadTask/:taskId", handleTask);
-app.delete("/deleteTask/:taskId", handleTask);
-app.put("/updateTask/:taskId", handleTask);
-app.post("/loadTasks", handleTask);
-app.post("/loadTasksByActivityId/:activityId", handleTask);
-app.get("/sessions", sessionsRoute);
+// Use routes
+app.use('/register', signupRoute);
+app.use('/login', loginRoute);
+app.use('/events', AddEvent);
+app.use('/forget-password', forgetPassword);
+app.use('/login', checkAuthRoute);
+app.use('/logout', logoutRoute);
+app.use('/loadCurrentUser', usersRoute);
+app.use('/loadUsers', usersRoute);
+app.use('/checkPass', checkPass);
+app.use('/events', getEvents);
+app.use('/users/:userId', UpdateUser);
+app.use('/deleteUser/:userId', usersRoute);
+app.use('/updateUser/:userId', usersRoute);
+app.use('/events/:idEvent', UpdateEvent);
+app.use('/events/:idEvent', deleteEvent);
+app.use('/addProgram', handleProgram);
+app.use('/deleteProgram/:programId', handleProgram);
+app.use('/updateProgram/:programId', handleProgram);
+app.use('/loadPrograms', handleProgram);
+app.use('/addActivity', handleActivity);
+app.use('/deleteActivity/:activityId', handleActivity);
+app.use('/updateActivity/:activityId', handleActivity);
+app.use('/loadActivity/:activityId', handleActivity);
+app.use('/loadActivitiesByProgramId/:programId', handleActivity);
+app.use('/createntrepreneurs', hundleEntrepreneur);
+app.use('/createstartup', handleStartups);
+app.use('/loadAllentrepreneurs', hundleEntrepreneur);
+app.use('/addTask', handleTask);
+app.use('/loadTask/:taskId', handleTask);
+app.use('/deleteTask/:taskId', handleTask);
+app.use('/updateTask/:taskId', handleTask);
+app.use('/loadTasks', handleTask);
+app.use('/loadTasksByActivityId/:activityId', handleTask);
+app.use('/sessions', sessionsRoute);
 
-
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back index.html
+// Catch-all handler
 app.get('*', (req, res) => {
-  res.sendFile(path.join('../frontend/build/index.html'));
-
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
-
-// Database + Server Connection Validation
-mongoose
-  .connect(db)
+// Database and Server Connection
+mongoose.connect(process.env.DATABASE_URI)
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Database Connected!");
+      console.log('Database Connected!');
       console.log(`Server is running on PORT: ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error("Error connecting to MongoDB Atlas:", error);
+    console.error('Error connecting to MongoDB Atlas:', error);
   });
