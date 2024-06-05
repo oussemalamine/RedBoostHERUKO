@@ -9,6 +9,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const fileUpload = require('express-fileupload');
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/"); // Destination folder
@@ -61,8 +64,14 @@ app.use(
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// Put your API routes here
 
+// Cloudinary config
+app.use(fileUpload());
+cloudinary.config({
+  cloud_name: 'redboost',
+  api_key: '649819331138157',
+  api_secret: 'ldl_j0oGOzHQjX-cvT97jc-bL5Y'
+});
 
 
 
@@ -98,26 +107,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //configure the server to serve statically the files from the backend server with no sniff
-app.use(
-  "/uploads",
-  express.static("uploads", {
-    setHeaders: (res, path) => {
-      res.setHeader("X-Content-Type-Options", "nosniff");
-    },
-  })
-);
+app.post('/upload', (req, res) => {
+  const file = req.files.image.path;
 
-app.post('/upload', upload.single('deliverableFile'), (req, res) => {
-  console.log('File received:', req.file); // Debugging log
-
-  if (!req.file) {
-    return res.status(400).send('No file uploaded.');
-  }
-  res.status(200).send({
-    fileName: req.file.filename,
-    filePath: `/uploads/${req.file.filename}`,
+  cloudinary.uploader.upload(file, (error, result) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.status(200).send(result);
   });
 });
+
 
 // Routes
 app.post("/upload", upload.single("logo"), (req, res) => {
@@ -163,6 +163,7 @@ app.put("/updateTask/:taskId", handleTask);
 app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
+
 
 
 // The "catchall" handler: for any request that doesn't
