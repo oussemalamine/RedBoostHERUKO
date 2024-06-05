@@ -41,6 +41,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requests
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/'
+}));
 
 app.use(
   cors({
@@ -55,7 +59,9 @@ app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 
 // Cloudinary config
-app.use(fileUpload());
+
+
+
 cloudinary.config({
   cloud_name: 'redboost',
   api_key: '649819331138157',
@@ -95,18 +101,35 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//configure the server to serve statically the files from the backend server with no sniff
-app.post('/upload', (req, res) => {
-  const file = req.files.image.path;
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log('Request body:', req.body);
+  if (req.files) {
+    console.log('Files:', req.files);
+  }
+  next();
+});
 
-  cloudinary.uploader.upload(file, (error, result) => {
+// File upload route
+app.post('/upload', (req, res) => {
+  if (!req.files || !req.files.file) {
+    return res.status(400).send({ message: "No file uploaded" });
+  }
+
+  const file = req.files.file;
+  const tempFilePath = file.tempFilePath || file.path;
+
+  cloudinary.uploader.upload(tempFilePath, {
+    resource_type: "auto"
+  }, (error, result) => {
     if (error) {
-      return res.status(500).send(error);
+      console.error('Upload error:', error);
+      return res.status(500).send({ message: "Upload failed", error });
     }
     res.status(200).send(result);
   });
 });
-
 
 // Routes
 
