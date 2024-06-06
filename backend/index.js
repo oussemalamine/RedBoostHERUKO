@@ -11,6 +11,19 @@ const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fileUpload = require("express-fileupload");
 
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Destination folder
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now()); // Naming the file
+  },
+});
+const upload = multer({
+  storage: storage,
+});
+
 const db = process.env.DATABASE_URI;
 const secret = process.env.SECRET;
 const PORT = process.env.PORT || 5000; //this is can be changed careful with it !!!!!!!!!!
@@ -88,6 +101,27 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//configure the server to serve statically the files from the backend server with no sniff
+app.use(
+  "/uploads",
+  express.static("uploads", {
+    setHeaders: (res, path) => {
+      res.setHeader("X-Content-Type-Options", "nosniff");
+    },
+  })
+);
+
+// Routes
+app.post("/upload", upload.single("logo"), (req, res) => {
+  // 'logo' is the name of the form field in your frontend
+  if (req.file) {
+    // Handle the file information and reference in the database here
+    res.status(200).send(req.file);
+  } else {
+    res.status(400).send({ message: "File upload failed" });
+  }
+});
 
 // File upload route
 app.post("/upload", (req, res) => {
