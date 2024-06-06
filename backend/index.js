@@ -6,16 +6,23 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser"); // Import body-parser
 const passport = require("passport");
 const cors = require("cors");
+const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const helmet = require("helmet");
 const mongoose = require("mongoose");
-const path = require('path');
-const cloudinary = require('cloudinary').v2;
-const fileUpload = require('express-fileupload');
 
 
+// Connect to MongoDB
 const db = process.env.DATABASE_URI;
 const secret = process.env.SECRET;
 const PORT = process.env.PORT || 5000; //this is can be changed careful with it !!!!!!!!!!
 const app = express();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const signupRoute = require("./routes/api/register");
 const loginRoute = require("./routes/api/login");
 const checkAuthRoute = require("./routes/api/checkAuth");
@@ -41,10 +48,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requests
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: '/tmp/'
-}));
 
 app.use(
   cors({
@@ -53,22 +56,6 @@ app.use(
     credentials: true,
   })
 );
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-
-// Cloudinary config
-
-
-
-cloudinary.config({
-  cloud_name: 'redboost',
-  api_key: '649819331138157',
-  api_secret: 'ldl_j0oGOzHQjX-cvT97jc-bL5Y'
-});
-
-
 
 const store = new MongoDBSession({
   uri: db,
@@ -91,47 +78,71 @@ app.use(
     store: store,
     cookie: {
       secure: false,
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       // maxAge: 30 * 1000,
     },
   })
 );
 
+// Cloudinary file upload route
+app.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send({ message: "No file uploaded" });
+  }
+
+  cloudinary.uploader.upload(
+    req.file.path,
+    { resource_type: "auto" },
+    (error, result) => {
+      if (error) {
+        console.error("Upload error:", error);
+        return res.status(500).send({ message: "Upload failed", error });
+      }
+      res.status(200).send(result);
+    }
+  );
+});
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(helmet());
+
+// Cloudinary file upload route
+app.post("/uploadLogo", upload.single("logo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send({ message: "No file uploaded" });
+  }
+
+  cloudinary.uploader.upload(
+    req.file.path,
+    { resource_type: "auto" },
+    (error, result) => {
+      if (error) {
+        console.error("Upload error:", error);
+        return res.status(500).send({ message: "Upload failed", error });
+      }
+      res.status(200).send(result);
+    }
+  );
+});
+
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Log incoming requests
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log('Request body:', req.body);
-  if (req.files) {
-    console.log('Files:', req.files);
+  console.log("Request body:", req.body);
+  if (req.file) {
+    console.log("Files:", req.file);
   }
   next();
 });
 
-// File upload route
-app.post('/upload', (req, res) => {
-  if (!req.files || !req.files.file) {
-    return res.status(400).send({ message: "No file uploaded" });
-  }
-
-  const file = req.files.file;
-  const tempFilePath = file.tempFilePath || file.path;
-
-  cloudinary.uploader.upload(tempFilePath, {
-    resource_type: "auto"
-  }, (error, result) => {
-    if (error) {
-      console.error('Upload error:', error);
-      return res.status(500).send({ message: "Upload failed", error });
-    }
-    res.status(200).send(result);
-  });
-});
-
-// Routes
 
 app.post("/register", signupRoute);
 app.post("/login", loginRoute);
@@ -168,15 +179,16 @@ app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
 
-
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join('../frontend/build/index.html'));
-
+// The "catchall" handler: for any request that doesn't match one above, send back index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: "Something went wrong", error: err });
+});
 
 // Database + Server Connection Validation
 mongoose
