@@ -48,7 +48,7 @@ export const loadPrograms = createAsyncThunk(
   'programs/loadPrograms',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('https://redboost-65f83dc8cbf1.herokuapp.com/loadPrograms')
+      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/loadPrograms')
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
