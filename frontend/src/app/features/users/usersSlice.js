@@ -3,7 +3,7 @@ import axios from 'axios'
 //load users
 export const loadUsers = createAsyncThunk('programs/loadUsers', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/loadUsers')
+    const response = await axiosInstance.post('/loadUsers')
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -13,7 +13,7 @@ export const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({userId, userData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`https://redboost-65f83dc8cbf1.herokuapp.com/updateUser/${userId}`,userData);
+      const response = await axios.put(`/updateUser/${userId}`,userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

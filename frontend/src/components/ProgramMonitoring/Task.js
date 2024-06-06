@@ -113,7 +113,7 @@ const Task = ({ task }) => {
 
       console.log('Uploading file:', deliverableFile) // Debugging log
 
-      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/upload', formData, {
+      const response = await axios.post('http://localhost:5000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -127,7 +127,7 @@ const Task = ({ task }) => {
           ...task.deliverables,
           {
             fileName: newDeliverableName ? newDeliverableName : deliverableFile.name,
-            fileUrl: response.data.secure_url, // Use secure_url from Cloudinary response
+            fileUrl: response.data.secure_url,
           },
         ],
       }

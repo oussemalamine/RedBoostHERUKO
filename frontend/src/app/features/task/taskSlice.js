@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const loadTask = createAsyncThunk('task/loadTask', async (taskId, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`https://redboost-65f83dc8cbf1.herokuapp.com/loadTask/${taskId}`)
+    const response = await axiosInstance.post(`/loadTask/${taskId}`)
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -14,7 +14,7 @@ export const createTask = createAsyncThunk(
   'task/addTask',
   async (taskData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`https://redboost-65f83dc8cbf1.herokuapp.com/addTask`, taskData)
+      const response = await axiosInstance.post(`/addTask`, taskData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -26,7 +26,7 @@ export const deleteTask = createAsyncThunk(
   'task/deleteTask',
   async (taskId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`https://redboost-65f83dc8cbf1.herokuapp.com/deleteTask/${taskId}`)
+      const response = await axiosInstance.delete(`/deleteTask/${taskId}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -36,7 +36,7 @@ export const deleteTask = createAsyncThunk(
 
 export const loadTasks = createAsyncThunk('task/loadTasks', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`https://redboost-65f83dc8cbf1.herokuapp.com/loadTasks`)
+    const response = await axiosInstance.post(`/loadTasks`)
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -47,7 +47,7 @@ export const loadTasksByActivityId = createAsyncThunk(
   'task/loadTasksByActivityId',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`https://redboost-65f83dc8cbf1.herokuapp.com/loadTasksByActivityId/${activityId}`)
+      const response = await axiosInstance.post(`/loadTasksByActivityId/${activityId}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -61,7 +61,7 @@ export const updateTask = createAsyncThunk(
     try {
       console.log('Updating task with ID:', taskId)
       console.log('Task data:', taskData)
-      const response = await axios.put(`https://redboost-65f83dc8cbf1.herokuapp.com/updateTask/${taskId}`, taskData)
+      const response = await axiosInstance.put(`/updateTask/${taskId}`, taskData)
       console.log('Update response:', response.data)
       return response.data
     } catch (error) {

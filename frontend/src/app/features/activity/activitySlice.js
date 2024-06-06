@@ -4,7 +4,7 @@ export const createActivity = createAsyncThunk(
   'activity/addActivity',
   async (activityData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`https://redboost-65f83dc8cbf1.herokuapp.com/addActivity`, activityData)
+      const response = await axiosInstance.post(`/addActivity`, activityData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -18,7 +18,7 @@ export const deleteActivity = createAsyncThunk(
   async (activityId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
-        `https://redboost-65f83dc8cbf1.herokuapp.com/deleteActivity/${activityId}`,
+        `/deleteActivity/${activityId}`,
       )
       return response.data
     } catch (error) {
@@ -34,7 +34,7 @@ export const updateActivity = createAsyncThunk(
     try {
       const { activityId } = activityData
       const response = await axiosInstance.put(
-        `https://redboost-65f83dc8cbf1.herokuapp.com/updateActivity/${activityId}`,
+        `/updateActivity/${activityId}`,
         activityData,
       )
       return response.data
@@ -49,7 +49,7 @@ export const loadActivity = createAsyncThunk(
   'activity/loadActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`https://redboost-65f83dc8cbf1.herokuapp.com/loadActivity/${activityId}`)
+      const response = await axiosInstance.post(`/loadActivity/${activityId}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -63,7 +63,7 @@ export const loadActivitiesByProgramId = createAsyncThunk(
   async (programId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `https://redboost-65f83dc8cbf1.herokuapp.com/loadActivitiesByProgramId/${programId}`,
+        `/loadActivitiesByProgramId/${programId}`,
       )
       return response.data
     } catch (error) {
