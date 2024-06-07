@@ -127,7 +127,7 @@ const Task = ({ task }) => {
           ...task.deliverables,
           {
             fileName: newDeliverableName ? newDeliverableName : deliverableFile.name,
-            fileUrl: response.data.secure_url,
+            fileUrl: response.data.secure_url, 
           },
         ],
       }

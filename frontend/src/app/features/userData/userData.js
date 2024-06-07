@@ -5,7 +5,7 @@ export const loadUserData = createAsyncThunk(
   'userData/loadCurrentUser',
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/loadCurrentUser', {
+      const response = await axiosInstance.post('http://localhost:5000/loadCurrentUser', {
         email: email,
       })
       return response.data
@@ -20,7 +20,7 @@ export const updateUserData = createAsyncThunk(
   async (userId,userData, { rejectWithValue }) => {
     console.log("updating current user")
     try {
-      const response = await axiosInstance.put(`/updateUser/${userId}`, userData)
+      const response = await axiosInstance.put(`http://localhost:5000/updateUser/${userId}`, userData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)

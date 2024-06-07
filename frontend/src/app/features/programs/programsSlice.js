@@ -7,7 +7,7 @@ export const createProgram = createAsyncThunk(
   async (programData, { rejectWithValue }) => {
     try {
       console.log(programData)
-      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/addProgram', programData)
+      const response = await axios.post('http://localhost:5000/addProgram', programData)
       return response.data
     } catch (error) {
       console.log(error)
@@ -20,7 +20,7 @@ export const deleteProgram = createAsyncThunk(
   'programs/deleteProgram',
   async (programId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`https://redboost-65f83dc8cbf1.herokuapp.com/deleteProgram/${programId}`)
+      const response = await axios.delete(`http://localhost:5000/deleteProgram/${programId}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -34,7 +34,7 @@ export const updateProgram = createAsyncThunk(
     try {
       const { programId } = programData
       const response = await axios.put(
-        `https://redboost-65f83dc8cbf1.herokuapp.com/updateProgram/${programId}`,
+        `http://localhost:5000/updateProgram/${programId}`,
         programData,
       )
       return response.data
@@ -48,7 +48,7 @@ export const loadPrograms = createAsyncThunk(
   'programs/loadPrograms',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/loadPrograms')
+      const response = await axios.post('http://localhost:5000/loadPrograms')
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
