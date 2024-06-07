@@ -56,7 +56,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -84,7 +84,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },
