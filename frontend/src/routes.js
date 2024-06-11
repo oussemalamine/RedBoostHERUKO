@@ -12,7 +12,7 @@ const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
 const Users = React.lazy(() => import('./views/users/users'))
 const TaskValidation = React.lazy(() => import('./views/TaskValidation/TaskValidation'))
 const StatisticsEntrepeneurs = React.lazy(() => import('./views/Statistics/EntrepreneurStat'))
-const ProgramsStatistics = React.lazy(()=> import('./views/Statistics/ProgramsStatistics'))
+const ProgramsStatistics = React.lazy(() => import('./views/Statistics/ProgramsStatistics'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
@@ -20,11 +20,6 @@ const routes = [
   { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
   { path: '/user', name: 'User', element: User },
   { path: '/Database', name: 'Database Manager', element: MainDatabaseManager },
-  {
-    path: '/Monitoring',
-    name: 'Program Monitoring',
-    element: ProgramCards,
-  },
   { path: '/users', name: 'Users', element: Users },
   { path: '/events', name: 'All events', element: Events },
   { path: '/Validation', name: 'Validation', element: TaskValidation },
@@ -32,7 +27,11 @@ const routes = [
   { path: '/CreateContact', name: 'Create Contact', element: CreateContact },
   { path: '/allContacts', name: 'All Contacts', element: allContacts },
   { path: '/Contacts/EntrepConacts', name: 'Entrepreneurs Contacts', element: EntrepConacts },
-  { path: '/statistics/entrepreneurs', name: 'StatisticsEntrepeneurs', element: StatisticsEntrepeneurs },
+  {
+    path: '/statistics/entrepreneurs',
+    name: 'StatisticsEntrepeneurs',
+    element: StatisticsEntrepeneurs,
+  },
   { path: '/statistics/programs', name: 'StatisticsPrograms', element: ProgramsStatistics },
 ]
 
