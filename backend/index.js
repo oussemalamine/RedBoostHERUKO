@@ -1,16 +1,15 @@
-require("dotenv").config();
+require("dotenv").config(); // dotenv configuration at the top
 const express = require("express");
 const session = require("express-session");
 const MongoDBSession = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const helmet = require("helmet");
 const mongoose = require("mongoose");
-const multer = require("multer"); // Import multer
+const multer = require("multer");
 
 // Connect to MongoDB
 const db = process.env.DATABASE_URI;
@@ -48,11 +47,10 @@ const handleTask = require("./routes/api/handleTask");
 const sessionsRoute = require("./routes/api/Sessions");
 require("./passport/index");
 
-// Increase payload size limit for body-parser
-app.use(express.json());
+// Increase payload size limit and use built-in middleware
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(
   cors({
@@ -190,23 +188,8 @@ app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
 
-app.get("*", (req, res) => {
-  // Attempt to serve static files first
-  res.sendFile(
-    path.resolve(__dirname, "../frontend/build", req.path),
-    (err) => {
-      if (err && err.code === "ENOENT") {
-        // If the file is not found, serve index.html
-        res.sendFile(
-          path.resolve(__dirname, "../frontend/build", "index.html")
-        );
-      } else if (err) {
-        // If there is any other error, send a 500 response
-        res.status(500).send("Server Error");
-      }
-    }
-  );
-});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Global error handler
 app.use((err, req, res, next) => {
