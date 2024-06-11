@@ -85,7 +85,8 @@ app.use(
     store: store,
     cookie: {
       secure: true,
-      httpOnly: true,
+      sameSite: 'none',
+      httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
