@@ -94,6 +94,31 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
+    },
+  })
+);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log("Request body:", req.body);
+  if (req.file) {
+    console.log("Files:", req.file);
+  }
+  next();
+});
+
+// Define routes
 // Cloudinary file upload routes
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
@@ -130,32 +155,6 @@ app.post("/uploadLogo", upload.single("logo"), (req, res) => {
     }
   );
 });
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
-    },
-  })
-);
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-// Log incoming requests
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log("Request body:", req.body);
-  if (req.file) {
-    console.log("Files:", req.file);
-  }
-  next();
-});
-
-// Define routes
 app.post("/register", signupRoute);
 app.post("/login", loginRoute);
 app.post("/events", AddEvent);
