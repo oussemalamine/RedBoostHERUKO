@@ -106,6 +106,11 @@ app.use(
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+// Catch-all handler for any request that doesn't match one above
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
+
 // Log incoming requests
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
@@ -187,9 +192,6 @@ app.put("/updateTask/:taskId", handleTask);
 app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Global error handler
 app.use((err, req, res, next) => {
