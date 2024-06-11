@@ -20,11 +20,7 @@ const routes = [
   { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
   { path: '/user', name: 'User', element: User },
   { path: '/Database', name: 'Database Manager', element: MainDatabaseManager },
-  {
-    path: '/Monitoring',
-    name: 'Program Monitoring',
-    element: ProgramCards,
-  },
+
   { path: '/users', name: 'Users', element: Users },
   { path: '/events', name: 'All events', element: Events },
   { path: '/Validation', name: 'Validation', element: TaskValidation },
