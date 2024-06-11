@@ -62,6 +62,8 @@ app.use(
   })
 );
 
+app.set("trust proxy", 1); // trust first proxy
+
 const store = new MongoDBSession({
   uri: db,
   collection: "sessions",
@@ -85,7 +87,8 @@ app.use(
     store: store,
     cookie: {
       secure: true,
-      httpOnly: true,
+      sameSite: "none",
+      httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
@@ -135,7 +138,6 @@ app.use(
     directives: {
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
-      // Add other directives as needed
     },
   })
 );
