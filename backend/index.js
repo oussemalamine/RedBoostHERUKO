@@ -190,9 +190,22 @@ app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.get("/sessions", sessionsRoute);
 
-// The "catchall" handler: for any request that doesn't match one above, send back index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+  // Attempt to serve static files first
+  res.sendFile(
+    path.resolve(__dirname, "../frontend/build", req.path),
+    (err) => {
+      if (err && err.code === "ENOENT") {
+        // If the file is not found, serve index.html
+        res.sendFile(
+          path.resolve(__dirname, "../frontend/build", "index.html")
+        );
+      } else if (err) {
+        // If there is any other error, send a 500 response
+        res.status(500).send("Server Error");
+      }
+    }
+  );
 });
 
 // Global error handler
