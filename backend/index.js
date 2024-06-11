@@ -146,6 +146,14 @@ app.use(
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+// Set the MIME type for JavaScript files
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.type('application/javascript');
+  }
+  next();
+});
+
 // Log incoming requests
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);

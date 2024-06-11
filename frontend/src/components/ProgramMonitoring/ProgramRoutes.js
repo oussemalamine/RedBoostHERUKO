@@ -7,7 +7,7 @@ const ProgramRoutes = () => {
   const programs = useSelector((state) => state.programsSlice.programs)
   return (
     <Routes>
-      <Route path={'/Monitoring'} name= {'Program Monitoring'} element= {<ProgramCards/>} />
+      <Route path={'/'} name= {'Program Monitoring'} element= {<ProgramCards/>} />
       {programs.map((program) => (
         <Route
           key={program._id}
