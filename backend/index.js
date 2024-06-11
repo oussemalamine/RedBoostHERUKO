@@ -138,6 +138,7 @@ app.use(
     directives: {
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
+      scriptSrc: ["'self'", "'cdn.jsdelivr.net'"] // Add the CDN domain to script-src
       // Add other directives as needed
     },
   })
