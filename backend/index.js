@@ -62,6 +62,8 @@ app.use(
   })
 );
 
+app.set('trust proxy', 1); // trust first proxy
+
 const store = new MongoDBSession({
   uri: db,
   collection: "sessions",
