@@ -22,30 +22,35 @@ const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
   { path: '/Dash', exact: true, name: 'Home', element: Dashboard },
   { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
-  { path: '/user', name: 'User', element: User },
-  { path: '/Database', name: 'Database Manager', element: MainDatabaseManager },
+
+  { path: '/user', exact: true, name: 'User', element: User },
+  { path: '/Database', exact: true, name: 'Database Manager', element: MainDatabaseManager },
+
+  { path: '/users', exact: true, name: 'Users', element: Users },
+  { path: '/events', exact: true, name: 'All events', element: Events },
+  { path: '/Validation', exact: true, name: 'Validation', element: TaskValidation },
+  { path: '/CreateEvent', exact: true, name: 'Create Events', element: CreateEvents },
+  { path: '/CreateContact', exact: true, name: 'Create Contact', element: CreateContact },
+  { path: '/allContacts', exact: true, name: 'All Contacts', element: allContacts },
   {
-    path: '/Monitoring',
-    name: 'Program Monitoring',
-    element: ProgramCards,
+    path: '/Contacts/EntrepConacts',
+    exact: true,
+    name: 'Entrepreneurs Contacts',
+    element: EntrepConacts,
   },
-  { path: '/users', name: 'Users', element: Users },
-  { path: '/events', name: 'All events', element: Events },
-  { path: '/Validation', name: 'Validation', element: TaskValidation },
-  { path: '/CreateEvent', name: 'Create Events', element: CreateEvents },
-  { path: '/CreateContact', name: 'Create Contact', element: CreateContact },
-  { path: '/allContacts', name: 'All Contacts', element: AllContacts },
 
   {
     path: '/statistics/entrepreneurs',
     name: 'StatisticsEntrepeneurs',
     element: StatisticsEntrepeneurs,
+    exact: true,
   },
   { path: '/statistics/programs', name: 'StatisticsPrograms', element: ProgramsStatistics },
   { path: '/entrepeneurs', name: 'Entrepeneurs', element: EntrepreneursTable },
   { path: '/entrepeneurs/:id', name: ' entrepeneur', element: entrepeneurDetails },
   { path: '/category', name: ' categories', element: CategoryMain },
   { path: '/addCategory', name: 'category', element: AddCategoryPage },
+
 ]
 
 export default routes

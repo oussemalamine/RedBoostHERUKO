@@ -1,9 +1,8 @@
-require("dotenv").config();
+require("dotenv").config(); // dotenv configuration at the top
 const express = require("express");
 const session = require("express-session");
 const MongoDBSession = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
 const path = require("path");
@@ -50,11 +49,12 @@ const sessionsRoute = require("./routes/api/Sessions");
 
 require("./passport/index");
 
-// Middleware
-app.use(express.json());
+
+// Increase payload size limit and use built-in middleware
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(
   cors({
@@ -63,6 +63,9 @@ app.use(
     credentials: true,
   })
 );
+
+app.set("trust proxy", 1); // trust first proxy
+
 
 const store = new MongoDBSession({
   uri: db,
@@ -86,13 +89,37 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      secure: false,
-      httpOnly: true,
+
+      secure: true,
+      sameSite: "none",
+      httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
+    },
+  })
+);
+
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log("Request body:", req.body);
+  if (req.file) {
+    console.log("Files:", req.file);
+  }
+  next();
+});
+
+// Define routes
 // Cloudinary file upload routes
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
@@ -129,32 +156,6 @@ app.post("/uploadLogo", upload.single("logo"), (req, res) => {
     }
   );
 });
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
-    },
-  })
-);
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-// Log incoming requests
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log("Request body:", req.body);
-  if (req.file) {
-    console.log("Files:", req.file);
-  }
-  next();
-});
-
-// Define routes
 app.post("/register", signupRoute);
 app.post("/login", loginRoute);
 app.post("/events", AddEvent);
@@ -191,9 +192,13 @@ app.post("/loadTasksByActivityId/:activityId", handleTask);
 app.post("/tasksByUser", handleTask);  // Register the new route
 app.get("/sessions", sessionsRoute);
 
-// The "catchall" handler: for any request that doesn't match one above, send back index.html
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// Catch-all handler for any request that doesn't match one above
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+  console.log("Request URL:", req.url);
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
 // Global error handler

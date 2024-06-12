@@ -180,7 +180,7 @@ function Activity({ activity, tasks }) {
   }
   const handleViewTask = (task) => {
     const currentPath = window.location.pathname
-    navigate(`${currentPath}/${task.taskName}`)
+    navigate(`${currentPath}/${task._id}`)
   }
   const formatDate = (date) => {
     let month = '' + (date.getMonth() + 1), // getMonth() is zero-based
