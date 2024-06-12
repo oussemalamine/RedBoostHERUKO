@@ -190,6 +190,7 @@ app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Catch-all handler for any request that doesn't match one above
 app.get("*", (req, res) => {
+  console.log("Request URL:", req.url);
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
