@@ -25,8 +25,9 @@ cloudinary.config({
 });
 
 // Multer setup for file uploads
-const upload = multer({ dest: "uploads/" }); // Define multer upload middleware
+const upload = multer({ dest: "uploads/" });
 
+// Import Routes
 const signupRoute = require("./routes/api/register");
 const loginRoute = require("./routes/api/login");
 const checkAuthRoute = require("./routes/api/checkAuth");
@@ -45,11 +46,14 @@ const hundleEntrepreneur = require("./routes/api/hundleEntrepreneur");
 const handleStartups = require("./routes/api/handleStartups");
 const handleTask = require("./routes/api/handleTask");
 const sessionsRoute = require("./routes/api/Sessions");
+
 require("./passport/index");
+
 
 // Increase payload size limit and use built-in middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 app.use(
@@ -61,6 +65,7 @@ app.use(
 );
 
 app.set("trust proxy", 1); // trust first proxy
+
 
 const store = new MongoDBSession({
   uri: db,
@@ -84,6 +89,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
+
       secure: true,
       sameSite: "none",
       httpOnly: false,
@@ -183,6 +189,7 @@ app.delete("/deleteTask/:taskId", handleTask);
 app.put("/updateTask/:taskId", handleTask);
 app.post("/loadTasks", handleTask);
 app.post("/loadTasksByActivityId/:activityId", handleTask);
+app.post("/tasksByUser", handleTask);  // Register the new route
 app.get("/sessions", sessionsRoute);
 
 // Serve static files from the React app
