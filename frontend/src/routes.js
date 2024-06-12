@@ -1,23 +1,20 @@
-import { element } from 'prop-types'
 import React from 'react'
-import EntrepreneursTable from './views/entrepeneur/entrepeneursTable'
-import entrepeneurDetails from './views/entrepeneur/entrepeneurDetails'
-import CategoryMain from './views/category/categoryMain'
-import AddCategoryPage from './views/category/addCategory'
-import AllContacts from './views/contacts/AllContacts'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Events = React.lazy(() => import('./components/Events/Events'))
 const CreateEvents = React.lazy(() => import('./components/Events/CreateEvent'))
 const User = React.lazy(() => import('./components/profile/UserProfile'))
-const ProgramCards = React.lazy(() => import('./components/ProgramMonitoring/ProgramCards'))
 const MainDatabaseManager = React.lazy(() => import('./views/dataBaseManager/MainDatabaseManager'))
 const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
 const Users = React.lazy(() => import('./views/users/users'))
 const TaskValidation = React.lazy(() => import('./views/TaskValidation/TaskValidation'))
 const StatisticsEntrepeneurs = React.lazy(() => import('./views/Statistics/EntrepreneurStat'))
 const ProgramsStatistics = React.lazy(() => import('./views/Statistics/ProgramsStatistics'))
-
+const CategoryMain = React.lazy(() => import('./views/category/categoryMain'))
+const AddCategoryPage = React.lazy(() => import('./views/category/addCategory'))
+const entrepeneurDetails = React.lazy(() => import('./views/entrepeneur/entrepeneurDetails'))
+const EntrepreneursTable = React.lazy(() => import('./views/entrepeneur/entrepeneursTable'))
+const AllContacts = React.lazy(() => './views/contacts/AllContacts')
 const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
   { path: '/Dash', exact: true, name: 'Home', element: Dashboard },
@@ -31,14 +28,7 @@ const routes = [
   { path: '/Validation', exact: true, name: 'Validation', element: TaskValidation },
   { path: '/CreateEvent', exact: true, name: 'Create Events', element: CreateEvents },
   { path: '/CreateContact', exact: true, name: 'Create Contact', element: CreateContact },
-  { path: '/allContacts', exact: true, name: 'All Contacts', element: allContacts },
-  {
-    path: '/Contacts/EntrepConacts',
-    exact: true,
-    name: 'Entrepreneurs Contacts',
-    element: EntrepConacts,
-  },
-
+  { path: '/allContacts', name: 'All Contacts', element: AllContacts },
   {
     path: '/statistics/entrepreneurs',
     name: 'StatisticsEntrepeneurs',
@@ -50,7 +40,6 @@ const routes = [
   { path: '/entrepeneurs/:id', name: ' entrepeneur', element: entrepeneurDetails },
   { path: '/category', name: ' categories', element: CategoryMain },
   { path: '/addCategory', name: 'category', element: AddCategoryPage },
-
 ]
 
 export default routes
