@@ -14,7 +14,7 @@ const CategoryMain = React.lazy(() => import('./views/category/categoryMain'))
 const AddCategoryPage = React.lazy(() => import('./views/category/addCategory'))
 const entrepeneurDetails = React.lazy(() => import('./views/entrepeneur/entrepeneurDetails'))
 const EntrepreneursTable = React.lazy(() => import('./views/entrepeneur/entrepeneursTable'))
-const AllContacts = React.lazy(() => './views/contacts/AllContacts')
+const AllContacts = React.lazy(() => import('./views/contacts/AllContacts'))
 const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
   { path: '/Dash', exact: true, name: 'Home', element: Dashboard },
