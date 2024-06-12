@@ -127,7 +127,7 @@ function Program({ program, activities }) {
       dispatch(
         addRoutes([
           {
-            path: `/Monitoring/${encodeURIComponent(program.programTitle)}/${encodeURIComponent(activity.payload.name)}`,
+            path: `/Monitoring/${program._id}/${activity.payload._id}`,
             name: activity.payload.name,
             activityId: activity.payload._id,
           },
