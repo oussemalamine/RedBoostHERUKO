@@ -133,7 +133,7 @@ function Program({ program, activities }) {
       dispatch(
         addRoutes([
           {
-            path: `/Monitoring/${encodeURIComponent(program.programTitle)}/${encodeURIComponent(activity.payload.name)}`,
+            path: `/Monitoring/${program._id}/${activity.payload._id}`,
             name: activity.payload.name,
             activityId: activity.payload._id,
           },
@@ -179,7 +179,7 @@ function Program({ program, activities }) {
   const handleDateClick = (activity) => {
     console.log('activity', activity)
     // Navigate to the activity details page without reloading the entire app
-    navigate(`/Dash/Monitoring/${program.programTitle}/${activity.title}`)
+    navigate(`/Dash/Monitoring/${program._id}/${activity._id}`)
   }
   return (
     <CContainer style={{ padding: '20px' }} className="mt-4">
