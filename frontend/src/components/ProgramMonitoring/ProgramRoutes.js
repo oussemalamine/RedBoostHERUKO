@@ -1,17 +1,16 @@
 import { useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router-dom'
 import ActivityRoutes from './ActivityRoutes'
-import ProgramCards from './ProgramCards'
+
 const ProgramRoutes = () => {
   const programs = useSelector((state) => state.programsSlice.programs)
   return (
     <Routes>
-      <Route path={`/`} exact name="Programs" element={<ProgramCards />} />
       {programs.map((program) => (
         <Route
           key={program._id}
           name={program.programTitle}
-          path={`/${program._id}/*`}
+          path={`/${program.programTitle}/*`}
           element={<ActivityRoutes program={program} />}
         />
       ))}
