@@ -73,29 +73,29 @@ export default function ProgramCards() {
     console.log('logo', logo)
     formData.append('logo', logo)
     axiosInstance
-      .post('/uploadLogo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('response', response)
-          const programData = {
-            programTitle,
-            programDescription,
-            startDate,
-            endDate,
-            budget,
-            authorizedUsers: [programLead],
-            logo: response.data.secure_url,
-          }
-          dispatch(createProgram(programData))
-        }
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
+  .post('/uploadLogo', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      console.log('response', response)
+      const programData = {
+        programTitle,
+        programDescription,
+        startDate,
+        endDate,
+        budget,
+        authorizedUsers: [programLead],
+        logo: response.data.secure_url,
+      }
+      dispatch(createProgram(programData))
+    }
+  })
+  .catch((error) => {
+    console.log('error', error)
+  })
 
     setVisible(false)
   }
@@ -238,7 +238,7 @@ export default function ProgramCards() {
                 <ProgramCard
                   logo={program.logo}
                   title={program.programTitle}
-                  path={`${window.location.pathname}/${program._id}`}
+                  path={`${window.location.pathname}/${program.programTitle}`}
                 />
               </CCol>
             ))}

@@ -32,7 +32,7 @@ const ActivityRoutes = ({ program }) => {
       {activities.map((activity) => (
         <Route
           key={activity._id}
-          path={`${activity._id}/*`}
+          path={`${activity.name}/*`}
           element={<TaskRoutes activity={activity} />}
         />
       ))}
