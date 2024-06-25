@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { CContainer, CCard, CCardBody, CCardHeader, CCol, CFormInput, CRow, CButton, CTable, CTableHead, CTableBody, CTableHeaderCell, CTableDataCell, CTableRow } from '@coreui/react';
 import { FcContacts } from "react-icons/fc";
-import AdvancedFilter from './AdvancedFilter';
+
 
 const AllContacts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,9 +22,9 @@ const AllContacts = () => {
 
   return (
     <div>
-
+     
     <CContainer className="my-4">
-
+     
       <CRow className="mb-4">
         <CCol>
           <Link to="/dash/entrepeneurs">
@@ -60,9 +60,8 @@ const AllContacts = () => {
         </CCardHeader>
         <CCardBody>
           <CTable striped responsive>
-
             <CTableHead>
-            <CTableRow>
+              <tr>
               <CTableHeaderCell>Name</CTableHeaderCell>
               <CTableHeaderCell>Last Name</CTableHeaderCell>
               <CTableHeaderCell>Phone Number</CTableHeaderCell>
@@ -70,25 +69,25 @@ const AllContacts = () => {
               <CTableHeaderCell>Gender</CTableHeaderCell>
               <CTableHeaderCell>Email</CTableHeaderCell>
               <CTableHeaderCell>Action</CTableHeaderCell>
-              </CTableRow>
+              </tr>
             </CTableHead>
-
             <CTableBody>
               {filteredContacts.map(contact => (
-                <CTableRow key={contact.id}>
-                  <CTableDataCell>{contact.name}</CTableDataCell>
-                  <CTableDataCell>{contact.lastName}</CTableDataCell>
-                  <CTableDataCell>{contact.phoneNumber}</CTableDataCell>
-                  <CTableDataCell>{contact.role}</CTableDataCell>
-                  <CTableDataCell>{contact.gender}</CTableDataCell>
-                  <CTableDataCell>{contact.email}</CTableDataCell>
-                  <CTableDataCell>
-                    <Link to={`/profile/${contact.id}`}>
-                      <CButton color="primary">View Profile</CButton>
-                    </Link>
-                  </CTableDataCell>
-                </CTableRow>
-              ))}
+              <CTableRow key={contact.id}>
+              <CTableDataCell>{contact.nom}</CTableDataCell>
+              <CTableDataCell>{contact.prenom}</CTableDataCell>
+              <CTableDataCell>{contact.adresse}</CTableDataCell>
+              <CTableDataCell>{contact.dateDeNaissance}</CTableDataCell>
+              <CTableDataCell>{contact.gender}</CTableDataCell>
+              <CTableDataCell>{contact.email}</CTableDataCell>
+              <CTableDataCell>
+              <Link to={`/profile/${contact.id}`}>
+                <CButton color="primary">View Profile</CButton>
+              </Link>
+            </CTableDataCell>
+          </CTableRow>
+            ))}
+
             </CTableBody>
           </CTable>
         </CCardBody>
