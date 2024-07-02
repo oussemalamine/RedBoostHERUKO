@@ -17,7 +17,7 @@ const db = process.env.DATABASE_URI;
 const secret = process.env.SECRET;
 const PORT = process.env.PORT || 5000;
 const app = express();
-
+const nodemailer = require('nodemailer');
 // Cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -48,6 +48,8 @@ const handleStartups = require("./routes/api/handleStartups");
 const handleTask = require("./routes/api/handleTask");
 const sessionsRoute = require("./routes/api/Sessions");
 
+const emailRouter = require("./routes/api/emailRouter")
+
 require("./passport/index");
 
 // Middleware
@@ -58,7 +60,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -87,7 +89,7 @@ app.use(
     store: store,
     cookie: {
       secure: false,
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
@@ -162,6 +164,7 @@ app.post("/forget-password", forgetPassword);
 app.get("/login", checkAuthRoute);
 app.get("/logout", logoutRoute);
 app.post("/loadCurrentUser", usersRoute);
+app.post("/loadUserById", usersRoute);
 app.post("/loadUsers", usersRoute);
 app.get("/checkPass", checkPass);
 app.get("/events", getEvents);
@@ -192,11 +195,12 @@ app.post("/tasksByUser", handleTask);  // Register the new route
 app.get("/sessions", sessionsRoute);
 app.delete("/deleteEntrepreneur/:id",hundleEntrepreneur)
 app.put("/updateEntrepreneur/:id",hundleEntrepreneur)
+
 // The "catchall" handler: for any request that doesn't match one above, send back index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
-
+app.post("/sendEmail",emailRouter)
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
