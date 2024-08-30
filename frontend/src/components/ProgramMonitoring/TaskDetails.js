@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-<<<<<<< HEAD
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 
-=======
->>>>>>> origin/main
 import { useParams } from 'react-router-dom'
 import {
   CCard,
@@ -19,11 +16,8 @@ import {
   CFormCheck,
   CFormTextarea,
   CForm,
-<<<<<<< HEAD
   CProgressBar,
   CProgress
-=======
->>>>>>> origin/main
 } from '@coreui/react'
 import { updateTask } from '../../app/features/task/taskSlice'
 import { useDispatch } from 'react-redux'
@@ -34,10 +28,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 import { loadUserById } from '../../app/features/users/usersSlice'
-<<<<<<< HEAD
 import { FcFullTrash } from "react-icons/fc";
-=======
->>>>>>> origin/main
 
 const TaskDetails = () => {
   const { taskId } = useParams()
@@ -52,11 +43,8 @@ const TaskDetails = () => {
   const [newRapportText, setNewRapportText] = useState('')
   const [newComment, setNewComment] = useState('')
   const [deliverableFile, setDeliverableFile] = useState(null)
-<<<<<<< HEAD
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
-=======
->>>>>>> origin/main
 
   useEffect(() => {
     setCurrentTask(task || {})
@@ -157,7 +145,6 @@ const TaskDetails = () => {
   }
 
   const handleAddDeliverable = async (e) => {
-<<<<<<< HEAD
     e.preventDefault();
 
     if (deliverableFile) {
@@ -243,54 +230,6 @@ const TaskDetails = () => {
     window.location.reload();
   };
 
-=======
-    e.preventDefault()
-    if (newDeliverableName === '') {
-      return notifyError('Deliverable Name')
-    }
-
-    if (!deliverableFile) {
-      return notifyError('Deliverable File')
-    }
-
-    try {
-      const formData = new FormData()
-      formData.append('file', deliverableFile)
-
-      console.log('Uploading file:', deliverableFile)
-
-      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      console.log('Upload response:', response.data)
-
-      const updatedTask = {
-        ...task,
-        deliverables: [
-          ...task.deliverables,
-          {
-            fileName: newDeliverableName ? newDeliverableName : deliverableFile.name,
-            fileUrl: response.data.secure_url,
-          },
-        ],
-      }
-
-      dispatch(
-        updateTask({
-          taskId: task._id,
-          taskData: updatedTask,
-        }),
-      )
-      window.location.reload()
-    } catch (error) {
-      console.error('Error uploading file:', error)
-      toast.error('Failed to upload file. Please try again.')
-    }
-  }
->>>>>>> origin/main
 
   const handleAddRapport = () => {
     if (newRapportTitle === '') {
@@ -311,37 +250,22 @@ const TaskDetails = () => {
     window.location.reload()
   }
 
-<<<<<<< HEAD
   // hundle delete KPIS
   const handleDeleteKpi = (index) => {
     const updatedKpis = currentTask.kpis.filter((_, i) => i !== index)
     const updatedTask = {
       ...currentTask,
       kpis: updatedKpis,
-=======
-  const handleAddComment = () => {
-    if (newComment === '') {
-      return notifyError('Comment')
-    }
-    const updatedTask = {
-      ...task,
-      comments: [...task.comments, { text: newComment }],
->>>>>>> origin/main
     }
     dispatch(
       updateTask({
         taskId: task._id,
         taskData: updatedTask,
-<<<<<<< HEAD
       })
-=======
-      }),
->>>>>>> origin/main
     )
     window.location.reload()
   }
 
-<<<<<<< HEAD
 
   // const handleAddComment = () => {
   //   if (newComment === '') {
@@ -360,8 +284,6 @@ const TaskDetails = () => {
   //   window.location.reload()
   // }
 
-=======
->>>>>>> origin/main
   const getColorByIndex = (index) => {
     const colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']
     return colors[index % colors.length]
@@ -478,11 +400,7 @@ const TaskDetails = () => {
                             justifyContent: 'space-between',
                           }}
                         >
-<<<<<<< HEAD
                            KPI-{index} <IoClose onClick={() => handleDeleteKpi(index)} style={{ cursor: 'pointer' }} />
-=======
-                          KPI-{index} <IoClose />
->>>>>>> origin/main
                         </div>
                         <div className="card-body">
                           <h5 className="card-title">{kpi.label}</h5>
@@ -523,7 +441,6 @@ const TaskDetails = () => {
           <CCard className="mt-3 mb-3">
             <CCardHeader className="bg-info text-light">Documents</CCardHeader>
             <CCardBody>
-<<<<<<< HEAD
             <CListGroup>
               {currentTask.deliverables &&
                 currentTask.deliverables.map((deliverable, index) => (
@@ -594,49 +511,6 @@ const TaskDetails = () => {
             </CListGroup>
           </CCardBody>
 
-=======
-              <CListGroup>
-                {currentTask.deliverables &&
-                  currentTask.deliverables.map((deliverable, index) => (
-                    <CListGroupItem key={index}>
-                      <CButton onClick={() => handleDownload(deliverable.fileUrl)} color="link">
-                        {deliverable.fileName}
-                      </CButton>
-                    </CListGroupItem>
-                  ))}
-                <CListGroupItem>
-                  <CForm onSubmit={handleAddDeliverable}>
-                    <label htmlFor="newDeliverableName">Name:</label>
-                    <CFormInput
-                      id="newDeliverableName"
-                      placeholder="Deliverable Name"
-                      value={newDeliverableName}
-                      onChange={(e) => setNewDeliverableName(e.target.value)}
-                    />
-                    <label htmlFor="newDeliverableFile" className="mt-3 mb-3">
-                      Upload File:
-                    </label>
-                    <input
-                      id="newDeliverableFile"
-                      name="deliverableFile" // Ensure this name matches the one expected by Multer
-                      type="file"
-                      onChange={(e) => {
-                        console.log('Selected deliverable file:', e.target.files[0])
-                        setDeliverableFile(e.target.files[0])
-                      }}
-                    />
-                    <CButton
-                      style={{ backgroundColor: '#00cc99' }}
-                      type="submit"
-                      className="mt-3 mb-3"
-                    >
-                      Add Deliverable
-                    </CButton>
-                  </CForm>
-                </CListGroupItem>
-              </CListGroup>
-            </CCardBody>
->>>>>>> origin/main
           </CCard>
 
           <CCard className="mt-3 mb-3">
@@ -656,21 +530,14 @@ const TaskDetails = () => {
                     style={{ minWidth: '300px', margin: '10px' }}
                     className={`card radius-10 border-start border-0 border-3 border-${getColorByIndex(index)} shadow`}
                   >
-<<<<<<< HEAD
                     <IoClose onClick={() => handleDeleteReport(index)} // Call the delete handler
-=======
-                    <IoClose
->>>>>>> origin/main
                       style={{
                         position: 'absolute',
                         top: '0',
                         right: '0',
                         fontSize: '20px',
                         margin: '5px',
-<<<<<<< HEAD
                         cursor: 'pointer',
-=======
->>>>>>> origin/main
                       }}
                     />
                     <div className="card-body">
@@ -709,24 +576,10 @@ const TaskDetails = () => {
               </CButton>
             </CCardBody>
           </CCard>
-<<<<<<< HEAD
-=======
-
-          <CCard className="mt-3 mb-3">
-            <CCardHeader className="bg-info text-light">Comment Section</CCardHeader>
-            <CCardBody>
-              <CommentSection />
-            </CCardBody>
-          </CCard>
->>>>>>> origin/main
         </CCardBody>
       </CCard>
     </>
   )
 }
 
-<<<<<<< HEAD
 export default TaskDetails
-=======
-export default TaskDetails
->>>>>>> origin/main
