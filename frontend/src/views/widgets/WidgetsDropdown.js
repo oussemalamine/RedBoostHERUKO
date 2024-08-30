@@ -115,6 +115,7 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
+{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/Dash/statistics/entrepreneurs" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
@@ -179,12 +180,13 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
+{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
-        <Link to="/Dash/statistics/programs" style={{ textDecoration: 'none' }}>
+        <Link to="/Dash/statistics/startupsAccelerated" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
             color="warning"
             value={programs.length}
-            title="Programs"
+            title="Startups Accelerated"
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
@@ -234,12 +236,13 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
+{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
             color="danger"
             value={sessions.length}
-            title="Sessions"
+            title="Startups Accelerated"
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
@@ -253,6 +256,301 @@ const WidgetsDropdown = ({ className }) => {
                 </CDropdownMenu>
               </CDropdown>
             }
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* Entrepreneurs Trained */ }
+      <CCol sm={6} xl={4} xxl={3}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="danger"
+            value={sessions.length}
+            title="Entrepreneurs Trained"
+            action={
+              <CDropdown alignment="end">
+                <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
+                  <CIcon icon={cilOptions} />
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem>Action</CDropdownItem>
+                  <CDropdownItem>Another action</CDropdownItem>
+                  <CDropdownItem>Something else here...</CDropdownItem>
+                  <CDropdownItem disabled>Disabled action</CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
+            }
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* Applications*/ }
+      <CCol sm={6} xl={4} xxl={3}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="danger"
+            value={sessions.length}
+            title="Applications"
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* People reached on social media*/ }
+      <CCol sm={6} xl={4} xxl={3}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="secondary"
+            value={sessions.length}
+            title="People reached on social media"
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* partners */ }
+      <CCol sm={6} xl={4} xxl={3}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="success"
+            value={sessions.length}
+            title="Partners"
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* partners */ }
+<CCol sm={12} xl={8} xxl={6}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="success"
+            value={sessions.length}
+            title="Partners"
+            chart={
+              <CChartBar
+                className="mt-3 mx-3"
+                style={{ height: '70px' }}
+                data={{
+                  labels: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+                    'August', 'September', 'October', 'November', 'December',
+                    'January', 'February', 'March', 'April',
+                  ],
+                  datasets: [
+                    {
+                      label: 'My First dataset',
+                      backgroundColor: 'rgba(255,255,255,.2)',
+                      borderColor: 'rgba(255,255,255,.55)',
+                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
+                      barPercentage: 0.6,
+                    },
+                  ],
+                }}
+                options={{
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { display: false, drawTicks: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      ticks: { display: false },
+                    },
+                  },
+                }}
+              />
+            }
+          />
+        </Link>
+      </CCol>
+
+{/* partners */ }
+<CCol sm={12} xl={8} xxl={6}>
+        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
+          <CWidgetStatsA
+            color="primary"
+            value={sessions.length}
+            title="Partners"
             chart={
               <CChartBar
                 className="mt-3 mx-3"

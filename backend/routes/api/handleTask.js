@@ -172,4 +172,41 @@ router.post("/tasksByUser", async (req, res) => {
   }
 });
 
+// DELETE /deleteDeliverable/:taskId/deliverables/:deliverableId
+router.delete('/deleteDeliverable/:taskId/deliverables/:deliverableId', async (req, res) => {
+  try {
+    const { taskId, deliverableId } = req.params;
+
+    // Find the task by ID
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Ensure deliverables exist
+    if (!task.deliverables || !Array.isArray(task.deliverables)) {
+      return res.status(400).json({ message: 'No deliverables to delete' });
+    }
+
+    // Filter out the deliverable with the matching ID
+    const initialLength = task.deliverables.length;
+    task.deliverables = task.deliverables.filter(deliverable => deliverable._id.toString() !== deliverableId);
+
+    // Check if a deliverable was actually removed
+    if (task.deliverables.length === initialLength) {
+      return res.status(404).json({ message: 'Deliverable not found' });
+    }
+
+    // Save the updated task
+    await task.save();
+
+    res.status(200).json({ message: 'Deliverable deleted successfully', task });
+  } catch (error) {
+    console.error('Error deleting deliverable:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 module.exports = router;

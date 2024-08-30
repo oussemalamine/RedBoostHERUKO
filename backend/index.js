@@ -52,19 +52,18 @@ const emailRouter = require("./routes/api/emailRouter")
 
 require("./passport/index");
 
-// Middleware
-app.use(express.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "50mb" }));
+// Middleware configuration
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(express.json());
+
 
 const store = new MongoDBSession({
   uri: db,
@@ -195,6 +194,8 @@ app.post("/tasksByUser", handleTask);  // Register the new route
 app.get("/sessions", sessionsRoute);
 app.delete("/deleteEntrepreneur/:id",hundleEntrepreneur)
 app.put("/updateEntrepreneur/:id",hundleEntrepreneur)
+app.get("/filterEntrepreneurs",hundleEntrepreneur);
+app.delete("/tasks/:taskId/deliverables/:deliverableId", handleTask); // New route
 
 // The "catchall" handler: for any request that doesn't match one above, send back index.html
 app.get("*", (req, res) => {

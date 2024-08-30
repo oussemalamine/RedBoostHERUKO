@@ -176,11 +176,17 @@ function Program({ program, activities }) {
       name: 'End Date',
       value: new Date(program.endDate).toLocaleDateString(),
     },
+
     { icon: <AiFillDollarCircle />, name: 'Budget', value: program.budget },
     {
       icon: <GiPirateCaptain />,
       name: 'Program Lead',
       value: JSON.stringify(program.authorizedUsers).split('"')[1],
+    },
+    {
+      icon: <FaHourglassEnd />,
+      name: 'Description',
+      value: program.programDescription,
     },
   ];
 

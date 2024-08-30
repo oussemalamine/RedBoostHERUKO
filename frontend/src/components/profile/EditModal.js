@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -21,32 +21,32 @@ const EditModal = ({ setUpdateLog, isOpen, setIsOpen }) => {
   const user = useSelector((state) => state.userData.userData);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (isOpen) {
+      setEditedData({});
+    }
+  }, [isOpen]);
+
   const handleConfirm = async () => {
     try {
       const updatedData = { ...user, ...editedData };
       const response = await axiosInstance.put(`/users/${user._id}`, updatedData);
 
       if (response.status === 200) {
-        console.log('User updated successfully:', response.data);
-        const currentDate = new Date().toLocaleDateString();
-        const updatedLogs = [
-          ...user.logs,
-          {
-            date: currentDate,
-            events: Object.keys(editedData).map(
-              (field) => `User updated ${field} at ${new Date().toLocaleTimeString()}`
-            ),
-          },
-        ];
-        dispatch(setUserData({ ...response.data, logs: updatedLogs }));
-        setUpdateLog(updatedLogs);
+        dispatch(setUserData(response.data));
+        if (typeof setUpdateLog === 'function') {
+          setUpdateLog(response.data.logs); // Update logs only if setUpdateLog is a function
+        } else {
+          console.error('setUpdateLog is not a function');
+        }
       } else {
         console.error('Failed to update user:', response.statusText);
       }
     } catch (error) {
-      console.error('Error updating user:', error.message);
+      console.error('Error updating user:', error);
+    } finally {
+      setIsOpen(false); // Ensure modal closes regardless of success or failure
     }
-    setIsOpen(false);
   };
 
   const handleChange = (e) => {
@@ -70,7 +70,7 @@ const EditModal = ({ setUpdateLog, isOpen, setIsOpen }) => {
                   type="textarea"
                   id="bioInput"
                   name="bio"
-                  defaultValue={user.bio}
+                  value={editedData.bio || user.bio}
                   onChange={handleChange}
                 />
               </FormGroup>
@@ -82,7 +82,7 @@ const EditModal = ({ setUpdateLog, isOpen, setIsOpen }) => {
                   type="text"
                   id="linkedinInput"
                   name="linkedIn"
-                  defaultValue={user.linkedIn}
+                  value={editedData.linkedIn || user.linkedIn}
                   onChange={handleChange}
                 />
               </FormGroup>
@@ -94,7 +94,7 @@ const EditModal = ({ setUpdateLog, isOpen, setIsOpen }) => {
                   type="text"
                   id="behanceInput"
                   name="behance"
-                  defaultValue={user.behance}
+                  value={editedData.behance || user.behance}
                   onChange={handleChange}
                 />
               </FormGroup>

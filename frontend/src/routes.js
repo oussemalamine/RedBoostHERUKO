@@ -24,6 +24,9 @@ const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
 const Users = React.lazy(() => import('./views/users/users'))
 const TaskValidation = React.lazy(() => import('./views/TaskValidation/TaskValidation'))
 const StatisticsEntrepeneurs = React.lazy(() => import('./views/Statistics/EntrepreneurStat'))
+const StartupsAccelerated = React.lazy(() => import('./views/Statistics/StartupsAccelerated'))
+const reportingScreen =React.lazy(()=> import('./views/reporting/reportingScreen'))
+const FileUpload =React.lazy(()=> import('./components/FileUpload'))
 
 
 
@@ -50,7 +53,12 @@ const routes = [
     name: 'StatisticsEntrepeneurs',
     element: StatisticsEntrepeneurs,
   },
-  
+  {
+    path: '/statistics/startupsAccelerated',
+    name: 'StartupsAccelerated',
+    element: StartupsAccelerated,
+  },
+
   { path: '/entrepeneurs', name: 'Entrepeneurs', element: EntrepreneursTable },
   { path: '/entrepeneurs/:id', name: ' entrepeneur', element: EntrepreneurDetails},
   { path: '/category', name: ' categories', element: CategoryMain },
@@ -62,7 +70,9 @@ const routes = [
   {path:'/NewspaperComposer', name:'AI generated composer', element: newspaperComposer},
 
   { path: '/users/:id', name: 'UserDetails', element: UserDetails },
-  { path: '/:taskId', name: 'TaskDetails', element: TaskDetails}
+  { path: '/:taskId', name: 'TaskDetails', element: TaskDetails},
+  {path:'/Reporting', name:'Reporting', element: reportingScreen},
+  {path:'/fileupload', name:'test upload', element: FileUpload}
 
 ]
 

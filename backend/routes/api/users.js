@@ -92,15 +92,16 @@ router.put('/updateUser/:userId', async (req, res) => {
     const userData = req.body;
 
     // Attempt to find and update the user by ID
-    const updatedUser = await UserModel.findByIdAndUpdate(userId, userData, { new: true });
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, userData, { new: true, runValidators: true });
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.status(200).json( updatedUser );
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.error('Error updating user:', error);
+    console.error('Error updating user:', error.message);
+    console.error(error.stack);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

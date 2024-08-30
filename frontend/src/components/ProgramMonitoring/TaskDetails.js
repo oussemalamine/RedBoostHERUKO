@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { storage } from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+
 import { useParams } from 'react-router-dom'
 import {
   CCard,
@@ -13,6 +16,8 @@ import {
   CFormCheck,
   CFormTextarea,
   CForm,
+  CProgressBar,
+  CProgress
 } from '@coreui/react'
 import { updateTask } from '../../app/features/task/taskSlice'
 import { useDispatch } from 'react-redux'
@@ -23,6 +28,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 import { loadUserById } from '../../app/features/users/usersSlice'
+import { FcFullTrash } from "react-icons/fc";
 
 const TaskDetails = () => {
   const { taskId } = useParams()
@@ -37,6 +43,8 @@ const TaskDetails = () => {
   const [newRapportText, setNewRapportText] = useState('')
   const [newComment, setNewComment] = useState('')
   const [deliverableFile, setDeliverableFile] = useState(null)
+  const [file, setFile] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setCurrentTask(task || {})
@@ -137,52 +145,91 @@ const TaskDetails = () => {
   }
 
   const handleAddDeliverable = async (e) => {
-    e.preventDefault()
-    if (newDeliverableName === '') {
-      return notifyError('Deliverable Name')
-    }
+    e.preventDefault();
 
-    if (!deliverableFile) {
-      return notifyError('Deliverable File')
-    }
+    if (deliverableFile) {
+      const storageRef = ref(storage, `deliverables/${deliverableFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, deliverableFile);
 
-    try {
-      const formData = new FormData()
-      formData.append('file', deliverableFile)
-
-      console.log('Uploading file:', deliverableFile)
-
-      const response = await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgress(progress);
         },
-      })
+        (error) => {
+          console.error('Error uploading file:', error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log('File available at', downloadURL);
 
-      console.log('Upload response:', response.data)
+          // Create a new deliverable object
+          const newDeliverable = {
+            fileName: newDeliverableName,
+            fileUrl: downloadURL,
+            // id: uuidv4(), // Assuming you have a function to generate unique IDs
+          };
 
-      const updatedTask = {
-        ...task,
-        deliverables: [
-          ...task.deliverables,
-          {
-            fileName: newDeliverableName ? newDeliverableName : deliverableFile.name,
-            fileUrl: response.data.secure_url,
-          },
-        ],
-      }
+          // Add the new deliverable to the list
+          setCurrentTask((prevTask) => ({
+            ...prevTask,
+            deliverables: [...prevTask.deliverables, newDeliverable],
+          }));
 
-      dispatch(
-        updateTask({
-          taskId: task._id,
-          taskData: updatedTask,
-        }),
-      )
-      window.location.reload()
-    } catch (error) {
-      console.error('Error uploading file:', error)
-      toast.error('Failed to upload file. Please try again.')
+          // Reset form fields
+          setNewDeliverableName('');
+          setDeliverableFile(null);
+          setProgress(0);
+        }
+      );
     }
-  }
+  };
+
+  const handleDeleteDeliverable = async (deliverableId, fileUrl) => {
+    try {
+      // Create a reference to the file to delete
+      const fileRef = ref(storage, fileUrl);
+
+      // Delete the file from Firebase Storage
+      await deleteObject(fileRef);
+
+      console.log('File deleted successfully from Firebase Storage.');
+
+      // Now, remove the deliverable from your application's state or database
+      setCurrentTask((prevTask) => ({
+        ...prevTask,
+        deliverables: prevTask.deliverables.filter((deliverable) => deliverable.id !== deliverableId),
+      }));
+
+      // Optionally, also delete from your database if you're storing deliverables there
+      // Example: await deleteDeliverableFromDatabase(deliverableId);
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
+    window.location.reload()
+  };
+
+
+
+  const handleDeleteReport = (index) => {
+    const updatedReports = currentTask.reports.filter((_, i) => i !== index);
+    const updatedTask = {
+      ...currentTask,
+      reports: updatedReports,
+    };
+
+    dispatch(
+      updateTask({
+        taskId: task._id,
+        taskData: updatedTask,
+      })
+    );
+
+    // Reload the page or update the state if you don't want a full reload
+    window.location.reload();
+  };
+
 
   const handleAddRapport = () => {
     if (newRapportTitle === '') {
@@ -203,22 +250,39 @@ const TaskDetails = () => {
     window.location.reload()
   }
 
-  const handleAddComment = () => {
-    if (newComment === '') {
-      return notifyError('Comment')
-    }
+  // hundle delete KPIS
+  const handleDeleteKpi = (index) => {
+    const updatedKpis = currentTask.kpis.filter((_, i) => i !== index)
     const updatedTask = {
-      ...task,
-      comments: [...task.comments, { text: newComment }],
+      ...currentTask,
+      kpis: updatedKpis,
     }
     dispatch(
       updateTask({
         taskId: task._id,
         taskData: updatedTask,
-      }),
+      })
     )
     window.location.reload()
   }
+
+
+  // const handleAddComment = () => {
+  //   if (newComment === '') {
+  //     return notifyError('Comment')
+  //   }
+  //   const updatedTask = {
+  //     ...task,
+  //     comments: [...task.comments, { text: newComment }],
+  //   }
+  //   dispatch(
+  //     updateTask({
+  //       taskId: task._id,
+  //       taskData: updatedTask,
+  //     }),
+  //   )
+  //   window.location.reload()
+  // }
 
   const getColorByIndex = (index) => {
     const colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']
@@ -336,7 +400,7 @@ const TaskDetails = () => {
                             justifyContent: 'space-between',
                           }}
                         >
-                          KPI-{index} <IoClose />
+                           KPI-{index} <IoClose onClick={() => handleDeleteKpi(index)} style={{ cursor: 'pointer' }} />
                         </div>
                         <div className="card-body">
                           <h5 className="card-title">{kpi.label}</h5>
@@ -377,47 +441,76 @@ const TaskDetails = () => {
           <CCard className="mt-3 mb-3">
             <CCardHeader className="bg-info text-light">Documents</CCardHeader>
             <CCardBody>
-              <CListGroup>
-                {currentTask.deliverables &&
-                  currentTask.deliverables.map((deliverable, index) => (
-                    <CListGroupItem key={index}>
-                      <CButton onClick={() => handleDownload(deliverable.fileUrl)} color="link">
-                        {deliverable.fileName}
-                      </CButton>
-                    </CListGroupItem>
-                  ))}
-                <CListGroupItem>
-                  <CForm onSubmit={handleAddDeliverable}>
-                    <label htmlFor="newDeliverableName">Name:</label>
-                    <CFormInput
-                      id="newDeliverableName"
-                      placeholder="Deliverable Name"
-                      value={newDeliverableName}
-                      onChange={(e) => setNewDeliverableName(e.target.value)}
-                    />
-                    <label htmlFor="newDeliverableFile" className="mt-3 mb-3">
-                      Upload File:
-                    </label>
-                    <input
-                      id="newDeliverableFile"
-                      name="deliverableFile" // Ensure this name matches the one expected by Multer
-                      type="file"
-                      onChange={(e) => {
-                        console.log('Selected deliverable file:', e.target.files[0])
-                        setDeliverableFile(e.target.files[0])
-                      }}
-                    />
+            <CListGroup>
+              {currentTask.deliverables &&
+                currentTask.deliverables.map((deliverable, index) => (
+                  <CListGroupItem key={index}>
                     <CButton
-                      style={{ backgroundColor: '#00cc99' }}
-                      type="submit"
-                      className="mt-3 mb-3"
+                      onClick={() => handleDownload(deliverable.fileUrl)}
+                      color="link"
+                      className="d-flex align-items-center"
                     >
-                      Add Deliverable
+                      {deliverable.fileName}
+                      <CButton color="warning" className="ms-2">
+                        <FcFullTrash
+                          style={{ fontSize: '16px' }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent triggering the download
+                            handleDeleteDeliverable(deliverable.id, deliverable.fileUrl); // Pass the deliverable ID and file URL
+                          }}
+                        />
+                      </CButton>
+
                     </CButton>
-                  </CForm>
-                </CListGroupItem>
-              </CListGroup>
-            </CCardBody>
+                  </CListGroupItem>
+                ))}
+              <CListGroupItem>
+                <CForm onSubmit={handleAddDeliverable}>
+                  <label htmlFor="newDeliverableName">Name:</label>
+                  <CFormInput
+                    id="newDeliverableName"
+                    placeholder="Deliverable Name"
+                    value={newDeliverableName}
+                    onChange={(e) => setNewDeliverableName(e.target.value)}
+                  />
+                  <label htmlFor="newDeliverableFile" className="mt-3 mb-3">
+                    Upload File:
+                  </label>
+                  <input
+                    id="newDeliverableFile"
+                    name="deliverableFile"
+                    type="file"
+                    onChange={(e) => {
+                      console.log('Selected deliverable file:', e.target.files[0]);
+                      setDeliverableFile(e.target.files[0]);
+                    }}
+                  />
+                  <CButton
+                    style={{ backgroundColor: '#00cc99' }}
+                    type="submit"
+                    className="mt-3 mb-3"
+                  >
+                    Add Deliverable
+                  </CButton>
+                          {/* Display Upload Progress as a Bar */}
+                    {progress > 0 && (
+                      <CProgress className="mt-2" style={{ height: '20px' }}>
+                        <CProgressBar
+                          value={progress}
+                          color="success"
+                          animated
+                          striped
+                          className="text-center"
+                        >
+                          {progress}%
+                        </CProgressBar>
+                      </CProgress>
+                    )}
+                </CForm>
+              </CListGroupItem>
+            </CListGroup>
+          </CCardBody>
+
           </CCard>
 
           <CCard className="mt-3 mb-3">
@@ -437,13 +530,14 @@ const TaskDetails = () => {
                     style={{ minWidth: '300px', margin: '10px' }}
                     className={`card radius-10 border-start border-0 border-3 border-${getColorByIndex(index)} shadow`}
                   >
-                    <IoClose
+                    <IoClose onClick={() => handleDeleteReport(index)} // Call the delete handler
                       style={{
                         position: 'absolute',
                         top: '0',
                         right: '0',
                         fontSize: '20px',
                         margin: '5px',
+                        cursor: 'pointer',
                       }}
                     />
                     <div className="card-body">
@@ -480,13 +574,6 @@ const TaskDetails = () => {
               >
                 Add Reporting Section
               </CButton>
-            </CCardBody>
-          </CCard>
-
-          <CCard className="mt-3 mb-3">
-            <CCardHeader className="bg-info text-light">Comment Section</CCardHeader>
-            <CCardBody>
-              <CommentSection />
             </CCardBody>
           </CCard>
         </CCardBody>
