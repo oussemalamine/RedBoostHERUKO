@@ -39,11 +39,8 @@ const Task = ({ task }) => {
   const [newRapportText, setNewRapportText] = useState('')
   const [newComment, setNewComment] = useState('')
   const [deliverableFile, setDeliverableFile] = useState(null)
-<<<<<<< HEAD
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
-=======
->>>>>>> origin/main
   const [statusMessage, setStatusMessage] = useState(
     task.status === 'completed' ? 'Task completed' : 'Task in progress',
   )

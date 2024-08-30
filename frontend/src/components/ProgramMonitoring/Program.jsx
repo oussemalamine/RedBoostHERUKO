@@ -183,14 +183,11 @@ function Program({ program, activities }) {
       name: 'Program Lead',
       value: JSON.stringify(program.authorizedUsers).split('"')[1],
     },
-<<<<<<< HEAD
     {
       icon: <FaHourglassEnd />,
       name: 'Description',
       value: program.programDescription,
     },
-=======
->>>>>>> origin/main
   ];
 
   const handleDateClick = (activity) => {
