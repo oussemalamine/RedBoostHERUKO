@@ -74,6 +74,7 @@ router.put('/updateEntrepreneur/:id', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 // Route to get filtered entrepreneurs' emails by gender and region
 router.get('/filterEntrepreneurs', async (req, res) => {
   const { gender, region } = req.query;
@@ -93,6 +94,8 @@ router.get('/filterEntrepreneurs', async (req, res) => {
   }
 });
 
+=======
+>>>>>>> origin/main
 
 // Route to delete an entrepreneur by ID
 router.delete('/deleteEntrepreneur/:id', async (req, res) => {

@@ -463,7 +463,10 @@ export default function EmailForm() {
       [key]: value,
     }));
   };
+<<<<<<< HEAD
   
+=======
+>>>>>>> origin/main
   const generateTemplateHTML = (selectedTemplate, templateContent) => {
     switch (selectedTemplate) {
       case 'Template1':
