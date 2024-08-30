@@ -1,6 +1,6 @@
 // /backend/firebaseAdmin.js
 const admin = require('firebase-admin');
-const serviceAccount = require('./redboost-31694-firebase-adminsdk-qeqss-69b9b739ec.json');
+require('dotenv').config();  // Ensure you have dotenv installed and required
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
