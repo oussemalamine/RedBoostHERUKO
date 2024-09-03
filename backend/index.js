@@ -94,6 +94,12 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://firebasestorage.googleapis.com; script-src 'self'; style-src 'self';");
+  next();
+});
+
+
 // Cloudinary file upload routes
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
