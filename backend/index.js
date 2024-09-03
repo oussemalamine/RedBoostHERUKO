@@ -94,11 +94,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://firebasestorage.googleapis.com; script-src 'self'; style-src 'self';");
-  next();
-});
-
 
 // Cloudinary file upload routes
 app.post("/upload", upload.single("file"), (req, res) => {
@@ -139,14 +134,14 @@ app.post("/uploadLogo", upload.single("logo"), (req, res) => {
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       imgSrc: ["'self'", "data:", "https://res.cloudinary.com/"],
+//     },
+//   })
+// );
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
