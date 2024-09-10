@@ -17,7 +17,11 @@ import {
   CFormTextarea,
   CForm,
   CProgressBar,
-  CProgress
+  CProgress,
+  CTableHead,
+  CTableRow,
+  CTableBody,
+  CTable
 } from '@coreui/react'
 import { updateTask } from '../../app/features/task/taskSlice'
 import { useDispatch } from 'react-redux'
@@ -373,145 +377,142 @@ const TaskDetails = () => {
       <CCard className="mt-3 mb-3">
         <CCardHeader className="bg-dark text-light">Sections</CCardHeader>
         <CCardBody>
-          <CCard className="mt-3 mb-3">
-            <CCardHeader className="bg-info text-light">KPIs</CCardHeader>
-            <CCardBody>
-              <CListGroup>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
+        <CCard className="mt-3 mb-3">
+          <CCardHeader className="bg-info text-light">KPIs</CCardHeader>
+          <CCardBody>
+            <CListGroupItem>
+              <div className="form-group d-flex align-items-center mt-3 mb-3">
+                <label htmlFor="newKpiLabel" className="me-2">Label:</label>
+                <CFormInput
+                  id="newKpiLabel"
+                  placeholder="KPI Label"
+                  value={newKpiLabel}
+                  onChange={(e) => setNewKpiLabel(e.target.value)}
+                  className="me-3"
+                  style={{ maxWidth: '200px' }}
+                />
+                <label htmlFor="newKpiValue" className="me-2">Value:</label>
+                <CFormInput
+                  id="newKpiValue"
+                  placeholder="KPI Value"
+                  value={newKpiValue}
+                  onChange={(e) => setNewKpiValue(e.target.value)}
+                  className="me-3"
+                  style={{ maxWidth: '150px' }}
+                />
+                <CButton
+                  style={{ backgroundColor: '#00cc99' }}
+                  onClick={() => handleAddKpi()}
                 >
+                  Add KPI
+                </CButton>
+              </div>
+            </CListGroupItem>
+            <CListGroup>
+              <table className="table table-striped table-bordered">
+                <thead className="table-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">KPI Label</th>
+                    <th scope="col">KPI Value</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {currentTask.kpis &&
                     currentTask.kpis.map((kpi, index) => (
-                      <div
-                        key={index}
-                        className={`card text-bg-${getColorByIndex(index)} mb-3`}
-                        style={{ minWidth: '260px', marginRight: '10px' }}
-                      >
-                        <div
-                          className="card-header"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                           KPI-{index} <IoClose onClick={() => handleDeleteKpi(index)} style={{ cursor: 'pointer' }} />
-                        </div>
-                        <div className="card-body">
-                          <h5 className="card-title">{kpi.label}</h5>
-                          <p className="card-text">{kpi.count}</p>
-                        </div>
-                      </div>
+                      <tr key={index}>
+                        <th scope="row">KPI-{index}</th>
+                        <td>{kpi.label}</td>
+                        <td>{kpi.count}</td>
+                        <td>
+                          <IoClose
+                            onClick={() => handleDeleteKpi(index)}
+                            style={{ cursor: 'pointer', color: 'red' }}
+                          />
+                        </td>
+                      </tr>
                     ))}
-                </div>
-                <CListGroupItem>
-                  <label htmlFor="newKpiLabel">Label:</label>
-                  <CFormInput
-                    id="newKpiLabel"
-                    placeholder="KPI Label"
-                    value={newKpiLabel}
-                    onChange={(e) => setNewKpiLabel(e.target.value)}
-                    className="mt-3 mb-3"
-                  />
-                  <label htmlFor="newKpiValue">Value:</label>
-                  <CFormInput
-                    id="newKpiValue"
-                    placeholder="KPI Value"
-                    value={newKpiValue}
-                    onChange={(e) => setNewKpiValue(e.target.value)}
-                    className="mt-3 mb-3"
-                  />
-                  <CButton
-                    style={{ backgroundColor: '#00cc99' }}
-                    onClick={() => handleAddKpi()}
-                    className="mt-3 mb-3"
-                  >
-                    Add KPI
-                  </CButton>
-                </CListGroupItem>
-              </CListGroup>
-            </CCardBody>
-          </CCard>
-
-          <CCard className="mt-3 mb-3">
-            <CCardHeader className="bg-info text-light">Documents</CCardHeader>
-            <CCardBody>
-            <CListGroup>
-              {currentTask.deliverables &&
-                currentTask.deliverables.map((deliverable, index) => (
-                  <CListGroupItem key={index}>
-                    <CButton
-                      onClick={() => handleDownload(deliverable.fileUrl)}
-                      color="link"
-                      className="d-flex align-items-center"
-                    >
-                      {deliverable.fileName}
-                      <CButton color="warning" className="ms-2">
-                        <FcFullTrash
-                          style={{ fontSize: '16px' }}
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent triggering the download
-                            handleDeleteDeliverable(deliverable.id, deliverable.fileUrl); // Pass the deliverable ID and file URL
-                          }}
-                        />
-                      </CButton>
-
-                    </CButton>
-                  </CListGroupItem>
-                ))}
-              <CListGroupItem>
-                <CForm onSubmit={handleAddDeliverable}>
-                  <label htmlFor="newDeliverableName">Name:</label>
-                  <CFormInput
-                    id="newDeliverableName"
-                    placeholder="Deliverable Name"
-                    value={newDeliverableName}
-                    onChange={(e) => setNewDeliverableName(e.target.value)}
-                  />
-                  <label htmlFor="newDeliverableFile" className="mt-3 mb-3">
-                    Upload File:
-                  </label>
-                  <input
-                    id="newDeliverableFile"
-                    name="deliverableFile"
-                    type="file"
-                    onChange={(e) => {
-                      console.log('Selected deliverable file:', e.target.files[0]);
-                      setDeliverableFile(e.target.files[0]);
-                    }}
-                  />
-                  <CButton
-                    style={{ backgroundColor: '#00cc99' }}
-                    type="submit"
-                    className="mt-3 mb-3"
-                  >
-                    Add Deliverable
-                  </CButton>
-                          {/* Display Upload Progress as a Bar */}
-                    {progress > 0 && (
-                      <CProgress className="mt-2" style={{ height: '20px' }}>
-                        <CProgressBar
-                          value={progress}
-                          color="success"
-                          animated
-                          striped
-                          className="text-center"
-                        >
-                          {progress}%
-                        </CProgressBar>
-                      </CProgress>
-                    )}
-                </CForm>
-              </CListGroupItem>
+                </tbody>
+              </table>
             </CListGroup>
           </CCardBody>
+        </CCard>
 
-          </CCard>
+
+        <CCard className="mt-3 mb-3">
+          <CCardHeader className="bg-info text-light">Documents</CCardHeader>
+          <CCardBody>
+            {/* Input fields on a single line */}
+            <CForm onSubmit={handleAddDeliverable} className="d-flex justify-content-between align-items-center mb-4">
+              <CFormInput
+                id="newDeliverableName"
+                placeholder="Deliverable Name"
+                value={newDeliverableName}
+                onChange={(e) => setNewDeliverableName(e.target.value)}
+                className="me-2"
+              />
+              <input
+                id="newDeliverableFile"
+                name="deliverableFile"
+                type="file"
+                onChange={(e) => {
+                  console.log('Selected deliverable file:', e.target.files[0]);
+                  setDeliverableFile(e.target.files[0]);
+                }}
+                className="me-2"
+              />
+              <CButton style={{ backgroundColor: '#00cc99' }} type="submit">
+                Add Deliverable
+              </CButton>
+            </CForm>
+
+            {/* Display Upload Progress as a Bar */}
+            {progress > 0 && (
+              <CProgress className="mt-2 mb-3" style={{ height: '20px' }}>
+                <CProgressBar value={progress} color="success" animated striped className="text-center">
+                  {progress}%
+                </CProgressBar>
+              </CProgress>
+            )}
+
+            {/* Table to display deliverables */}
+            <CTable striped hover responsive>
+              <CTableHead>
+                <CTableRow>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {currentTask.deliverables &&
+                  currentTask.deliverables.map((deliverable, index) => (
+                    <CTableRow key={index}>
+                      <td>{deliverable.fileName}</td>
+                      <td>
+                        <CButton
+                          onClick={() => handleDownload(deliverable.fileUrl)}
+                          color="link"
+                          className="d-inline-flex align-items-center"
+                        >
+                          Download
+                        </CButton>
+                        <CButton color="warning" className="ms-2">
+                          <FcFullTrash
+                            style={{ fontSize: '16px' }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent triggering the download
+                              handleDeleteDeliverable(deliverable.id, deliverable.fileUrl); // Pass the deliverable ID and file URL
+                            }}
+                          />
+                        </CButton>
+                      </td>
+                    </CTableRow>
+                  ))}
+              </CTableBody>
+            </CTable>
+          </CCardBody>
+        </CCard>
 
           <CCard className="mt-3 mb-3">
             <CCardHeader className="bg-info text-light">Reporting Section</CCardHeader>

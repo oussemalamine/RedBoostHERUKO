@@ -1,22 +1,27 @@
 .fullcalendar-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-y: auto;   /* Allow vertical scrolling if necessary */
+  padding: 10px;      /* Add some padding to prevent content overflow */
 }
 
-.fc-event-container {
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.fc-event-container:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.fc {
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .event-content {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 2px 4px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .fullcalendar-container {
+    padding: 0 5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .fullcalendar-container {
+    padding: 0 15px;
+  }
 }
