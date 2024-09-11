@@ -12,26 +12,18 @@ import {
   CRow,
   CFormTextarea,
   CCol,
-  CFormFeedback,
-  CFormLabel
+  CModal,
+  CFormLabel,
+  CFormSwitch,
+  CModalBody,
+  CModalFooter,
+  CFormCheck
 } from '@coreui/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ImportExport } from '../ImportExportEntrepeneur/importExport.js'
 
 const CreateContact = () => {
-  const activitySectors = [
-    { value: 'Sustainable Agriculture', label: 'Sustainable Agriculture' },
-    { value: 'Cosmetics', label: 'Cosmetics' },
-    { value: 'Recycling', label: 'Recycling' },
-    { value: 'Green Tech', label: 'Green Tech' },
-    { value: 'Food Industry', label: 'Food Industry' },
-    { value: 'Creative and Cultural', label: 'Creative and Cultural' },
-    { value: 'Sustainable Tourism', label: 'Sustainable Tourism' },
-    { value: 'Consumption Optimization', label: 'Consumption Optimization' },
-    { value: 'Renewable Energy', label: 'Renewable Energy' },
-    { value: 'Water Resource Management', label: 'Water Resource Management' }
-  ];
 
   const regions = [
     'Ariana', 'Beja', 'Ben Arous', 'Bizerte', 'Gabes', 'Gafsa',
@@ -39,29 +31,104 @@ const CreateContact = () => {
     'Manouba', 'Medenine', 'Monastir', 'Nabeul', 'Sfax', 'Sidi Bouzid',
     'Siliana', 'Sousse', 'Tataouine', 'Tozeur', 'Tunis', 'Zaghouan'
   ];
+  const activitySectors = [
+    'Tourisme durable', 'Agriculture', 'Recyclage', 'Agroalimentaire', 'Cosmétique', 'Energies renouvelables'
+  ];
+  const marcheList = [
+    'locale', 'national', 'international'
+  ];
 
-  const initialContactData = {
-    lastName: '',
-    firstName: '',
-    address: '',
-    email: '',
-    birthDate: '',
-    region: '',
-    gender: '',
-    startupName: '',
-    description: '',
-    governorate: '',
-    activitySector: '',
-    cofounderCount: '',
-    femaleCofounderCount: '',
-    createdOrNot: '',
-    legalForm: '',
-    jobsCreated: '',
-    projectCost: ''
+  const sourceFinList = [
+    'Auto Financement', 'Crédit', 'Subvention'
+  ];
+  const handlePhaseProInputChange = (e) => {
+    const { name, options } = e.target;
+
+  // Create an array of selected values
+  const selectedValues = Array.from(options)
+    .filter(option => option.selected)
+    .map(option => option.value);
+
+  // Update the state with selected values
+  setContactData((prevData) => ({
+    ...prevData,
+    [name]: selectedValues, // Save selected options as an array
+  }))
+  };
+  const handleMarcheInputChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setContactData({
+        ...contactData,
+        marche: [...contactData.marche, value] // Add selected value to marche array
+      });
+    } else {
+      setContactData({
+        ...contactData,
+        marche: contactData.marche.filter((marche) => marche !== value) // Remove unchecked value from marche array
+      });
+    }
   };
 
+
+  const initialContactData = {
+    nom: '', // Last Name
+    prenom: '', // First Name
+    genre: '', // Gender
+    mobile: '', // Mobile Number
+    email: '', // Email
+    dateDeNaissance: '', // Date of Birth
+    diplomeFormation: '', // Diploma/Formation
+    gouvernorat: '', // Governorate
+    delegation: '', // Delegation
+    blacklisted: false, // Blacklisted
+    votreRole: '', // Your Role
+    nomDuProjet: '', // Project Name
+    creeOuPas: false, // Created or Not
+    descriptionActivite: '', // Activity Description
+    secteurActivite: '', // Activity Sector
+    nombreEmployes: '', // Number of Employees
+    lieuImplantation: '', // Location
+    marche: [], // Market (Array of Strings)
+    phaseDeProjet: '', // Project Phase
+    personneCible: '', // Target Audience
+    sourceDeFinancement: '', // Source of Funding
+    formeJuridique: '', // Legal Form
+    dejaBeneficiaireProAcc: false, // Already Beneficiary
+    progAccompagnement: '', // Support Program
+    typeDeBenefice: [], // Type of Benefit (Array of Strings)
+    besoinAppui: [], // Support Needs (Array of Strings)
+    typeProgAccSuivi: [], // Follow-up Support Program Type (Array of Strings)
+    typeProgFormationSuivi: [] // Follow-up Training Program Type (Array of Strings)
+  };
   const [contactData, setContactData] = useState(initialContactData);
   const [validated, setValidated] = useState(false);
+
+
+  // const [contactData, setContactData] = useState({
+  //   blacklisted: false, // Initial state
+  // });
+
+  const [tempBlacklisted, setTempBlacklisted] = useState(contactData.blacklisted); // Temporary state
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSwitchChange = () => {
+    setTempBlacklisted(!contactData.blacklisted); // Toggle temporary state
+    setShowModal(true); // Show confirmation modal
+  };
+
+  const confirmChange = () => {
+    setContactData({ ...contactData, blacklisted: tempBlacklisted }); // Update the actual state
+    setShowModal(false); // Close the modal
+  };
+
+  const cancelChange = () => {
+    setTempBlacklisted(contactData.blacklisted); // Revert the change
+    setShowModal(false); // Close the modal
+  };
+
+
+
 
   const notifyError = (field) => {
     toast.error(`The ${field} field is required.`, {
@@ -75,17 +142,45 @@ const CreateContact = () => {
     });
   };
 
-  const validateCofounders = () => {
-    const { cofounderCount, femaleCofounderCount } = contactData;
-    if (Number(femaleCofounderCount) > Number(cofounderCount)) {
-      return false;
-    }
-    return true;
-  };
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setContactData({ ...contactData, [name]: value });
+    const { name, value, type, checked, options } = e.target;
+
+    // Handling for checkboxes
+    if (type === 'checkbox') {
+      setContactData({
+        ...contactData,
+        [name]: checked,  // Store boolean value for checkbox
+      });
+    }
+    // Handling for multiple select dropdowns
+    else if (options) {
+      const selectedValues = Array.from(options)
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+      setContactData({
+        ...contactData,
+        [name]: selectedValues,  // Store array of selected options
+      });
+    }
+    // Default handling for other input types (text, select, etc.)
+    else {
+      setContactData({
+        ...contactData,
+        [name]: value,
+      });
+    }
+  };
+  const handleSelectChange = (e) => {
+    const { name, options } = e.target;
+    const values = Array.from(options)
+      .filter(option => option.selected)
+      .map(option => option.value);
+
+    setcontactData({
+      ...formData,
+      [name]: values,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -103,13 +198,6 @@ const CreateContact = () => {
         notifyError(field);
         return;
       }
-    }
-
-    if (!validateCofounders()) {
-      toast.error("Number of female co-founders cannot be greater than the total number of co-founders", {
-        autoClose: 3000,
-      });
-      return;
     }
 
     try {
@@ -138,255 +226,392 @@ const CreateContact = () => {
             onSubmit={handleSubmit}
           >
             <CRow className='mb-0'>
-              {/* Information about the entrepreneur */}
-              <CCol md="6" className="mb-4">
-                <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
-                  <legend className="w-auto">Information about the entrepreneur</legend>
-                  <CRow>
-                    <CCol md="6">
-                      {/* Input fields for entrepreneur information */}
-                      <CFormLabel className="mt-2">Last Name</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="lastName"
-                        value={contactData.lastName}
-                        onChange={handleInputChange}
-                        valid={contactData.lastName !== ''}
-                        placeholder="Last Name"
-                        required
-                        feedbackInvalid="Last Name is required."
-                      />
-                    </CCol>
-                    <CCol md="6">
-                      <CFormLabel className="mt-2">First Name</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="firstName"
-                        value={contactData.firstName}
-                        onChange={handleInputChange}
-                        valid={contactData.firstName !== ''}
-                        placeholder="First Name"
-                        required
-                        feedbackInvalid="First Name is required."
-                      />
-                    </CCol>
-                    <CCol md='12'>
-                      <CFormLabel className="mt-2">Address</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="address"
-                        value={contactData.address}
-                        onChange={handleInputChange}
-                        valid={contactData.address !== ''}
-                        placeholder="Address"
-                        required
-                        feedbackInvalid="Address is required."
-                      />
-                    </CCol>
-                    <CCol md='12'>
-                      <CFormLabel className="mt-2">Email</CFormLabel>
-                      <CFormInput
-                        type="email"
-                        name="email"
-                        value={contactData.email}
-                        onChange={handleInputChange}
-                        valid={contactData.email !== ''}
-                        placeholder="Email"
-                        required
-                        feedbackInvalid="Email is required."
-                      />
-                    </CCol>
-                    <CCol md='12'>
-                      <CFormLabel className="mt-2">Birth Date</CFormLabel>
-                      <CFormInput
-                        type="date"
-                        name="birthDate"
-                        value={contactData.birthDate}
-                        onChange={handleInputChange}
-                        valid={contactData.birthDate !== ''}
-                        placeholder="Birth Date"
-                        required
-                        feedbackInvalid="Birth Date is required."
-                      />
-                    </CCol>
-                    <CCol md='6'>
-                      <CFormLabel className="mt-2">Region</CFormLabel>
-                      <CFormSelect
-                        name="region"
-                        value={contactData.region}
-                        onChange={handleInputChange}
-                        valid={contactData.region !== ''}
-                        required
-                        feedbackInvalid="Region is required."
-                      >
-                        <option value="">Select Region</option>
-                        {regions.map((region) => (
-                          <option key={region} value={region}>{region}</option>
-                        ))}
-                      </CFormSelect>
-                    </CCol>
-                    <CCol md='6'>
-                      <CFormLabel className="mt-2">Gender</CFormLabel>
-                      <CFormSelect
-                        name="gender"
-                        value={contactData.gender}
-                        onChange={handleInputChange}
-                        valid={contactData.gender !== ''}
-                        required
-                        feedbackInvalid="Gender is required."
-                      >
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </CFormSelect>
-                    </CCol>
-                    <CCol md='12'>
-                      <CFormLabel className="mt-2">Upload Picture</CFormLabel>
-                      <CFormInput type="file" accept="image/*" name='logo' />
-                    </CCol>
-                    <CCol>
-                      <CFormLabel className="mt-2">Description</CFormLabel>
-                      <CFormTextarea
-                        name='description'
-                        rows="1.5"
-                        placeholder='Description'
-                      ></CFormTextarea>
-                    </CCol>
-                  </CRow>
-                </fieldset>
-              </CCol>
+            {/* Information about the entrepreneur */}
+            <CCol md="6" className="mb-4">
+              <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
+                <legend className="w-auto">Informations sur l'entrepreneur</legend>
+                <CRow>
+                  <CCol md="6">
+                    {/* Input fields for entrepreneur information */}
+                    <CFormLabel className="mt-2">Nom </CFormLabel>
+                    <CFormInput
+                      type="text"
+                      name="nom"
+                      value={contactData.nom}
+                      onChange={handleInputChange}
+                      valid={contactData.nom !== ''}
+                      placeholder="Nom"
+                      required
+                      feedbackInvalid="Le nom est requis."
+                    />
+                  </CCol>
+                  <CCol md="6">
+                    <CFormLabel className="mt-2">Prénom </CFormLabel>
+                    <CFormInput
+                      type="text"
+                      name="prenom"
+                      value={contactData.prenom}
+                      onChange={handleInputChange}
+                      valid={contactData.prenom !== ''}
+                      placeholder="Prénom "
+                      required
+                      feedbackInvalid="Prénom est requis."
+                    />
+                  </CCol>
+                  <CCol md='6'>
+                    <CFormLabel className="mt-2">Genre </CFormLabel>
+                    <CFormSelect
+                      name="genre"
+                      value={contactData.genre}
+                      onChange={handleInputChange}
+                      valid={contactData.genre !== ''}
+                      required
+                      feedbackInvalid="Genre est requis."
+                    >
+                      <option value="">Choisir le Genre</option>
+                      <option value="homme">Homme</option>
+                      <option value="femme">Femme</option>
+                    </CFormSelect>
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Mobile </CFormLabel>
+                    <CFormInput
+                      name="mobile"
+                      value={contactData.mobile}
+                      onChange={handleInputChange}
+                      valid={contactData.mobile !== ''}
+                    />
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Email </CFormLabel>
+                    <CFormInput
+                      type="email"
+                      name="email"
+                      value={contactData.email}
+                      onChange={handleInputChange}
+                      valid={contactData.email !== ''}
+                      placeholder="Email "
+                      required
+                      feedbackInvalid="Email est requis."
+                    />
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Date de naissance</CFormLabel>
+                    <CFormInput
+                      type='date'
+                      name="dateDeNaissance"
+                      value={contactData.dateDeNaissance}
+                      onChange={handleInputChange}
+                    />
+                  </CCol>
+                  <CCol md='6'>
+                    <CFormLabel className="mt-2">Diplôme / Formation </CFormLabel>
+                    <CFormSelect
+                      name="diplomeFormation"
+                      value={contactData.diplomeFormation}
+                      onChange={handleInputChange}
+                      placeholder="Diplôme / Formation"
+                    >
+                      <option value="">Sélectionner le diplôme / la formation </option>
+                      <option value="secondaire">Secondaire</option>
+                      <option value="universitaire">Universitaire</option>
+                      <option value="formationProfessionnelle">Formation Professionnelle</option>
+                    </CFormSelect>
+                  </CCol>
+                  <CCol md='6'>
+                    <CFormLabel className="mt-2">Gouvernorat</CFormLabel>
+                    <CFormSelect
+                      name="gouvernorat"
+                      value={contactData.gouvernorat}
+                      onChange={handleInputChange}
+                      placeholder="Gouvernorat"
+                    >
+                      <option value="">Sélectionner Gouvernorat</option>
+                      {regions.map((region) => (
+                        <option key={region} value={region}>{region}</option>
+                      ))}
+                    </CFormSelect>
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Delegation</CFormLabel>
+                    <CFormInput
+                      name="delegation"
+                      value={contactData.delegation}
+                      onChange={handleInputChange}
+                      placeholder="Delegation "
+                    />
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Blacklisted</CFormLabel>
+                    <CFormSwitch
+                  size="xl"
+                  label="Blacklisted"
+                  id="formSwitchCheckDefaultXL"
+                  name="blacklisted"
+                  checked={tempBlacklisted}
+                  onChange={handleSwitchChange}
+                />
 
-              {/* Startup Information */}
-              <CCol md="6" className="mb-4">
-                <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
-                  <legend className="w-auto">Startup Information</legend>
-                  <div className="row">
-                    <CCol md="12">
-                      {/* Input fields for startup information */}
-                      <CFormLabel className="mt-2">Startup Name</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="startupName"
-                        value={contactData.startupName}
-                        onChange={handleInputChange}
-                        valid={contactData.startupName !== ''}
-                        placeholder="Startup Name"
-                        required
-                        feedbackInvalid="Startup Name is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Governorate</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="governorate"
-                        value={contactData.governorate}
-                        onChange={handleInputChange}
-                        valid={contactData.governorate !== ''}
-                        placeholder="Governorate"
-                        required
-                        feedbackInvalid="Governorate is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Activity Sector</CFormLabel>
-                      <CFormSelect
-                        name="activitySector"
-                        value={contactData.activitySector}
-                        onChange={handleInputChange}
-                        valid={contactData.activitySector !== ''}
-                        required
-                        feedbackInvalid="Activity Sector is required."
-                      >
-                        <option value="">Select Activity Sector</option>
-                        {activitySectors.map((sector) => (
-                          <option key={sector.value} value={sector.value}>{sector.label}</option>
-                        ))}
-                      </CFormSelect>
-                    </CCol>
-                    <CCol md="6">
-                      <CFormLabel className="mt-2">Number of Co-founders</CFormLabel>
-                      <CFormInput
-                        type="number"
-                        name="cofounderCount"
-                        value={contactData.cofounderCount}
-                        onChange={handleInputChange}
-                        valid={contactData.cofounderCount !== ''}
-                        placeholder="Number of Co-founders"
-                        required
-                        feedbackInvalid="Number of Co-founders is required."
-                      />
-                    </CCol>
-                    <CCol md="6">
-                      <CFormLabel className="mt-2">Number of Female Co-founders</CFormLabel>
-                      <CFormInput
-                        type="number"
-                        name="femaleCofounderCount"
-                        value={contactData.femaleCofounderCount}
-                        onChange={handleInputChange}
-                        valid={contactData.femaleCofounderCount !== ''}
-                        placeholder="Number of Female Co-founders"
-                        required
-                        feedbackInvalid="Number of Female Co-founders is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Created or Not?</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="createdOrNot"
-                        value={contactData.createdOrNot}
-                        onChange={handleInputChange}
-                        valid={contactData.createdOrNot !== ''}
-                        placeholder="Created or Not?"
-                        required
-                        feedbackInvalid="This field is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Legal Form</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        name="legalForm"
-                        value={contactData.legalForm}
-                        onChange={handleInputChange}
-                        valid={contactData.legalForm !== ''}
-                        placeholder="Legal Form"
-                        required
-                        feedbackInvalid="Legal Form is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Number of Jobs Created</CFormLabel>
-                      <CFormInput
-                        type="number"
-                        name="jobsCreated"
-                        value={contactData.jobsCreated}
-                        onChange={handleInputChange}
-                        valid={contactData.jobsCreated !== ''}
-                        placeholder="Number of Jobs Created"
-                        required
-                        feedbackInvalid="Number of Jobs Created is required."
-                      />
-                    </CCol>
-                    <CCol md="12">
-                      <CFormLabel className="mt-2">Project Cost</CFormLabel>
-                      <CFormInput
-                        type="number"
-                        name="projectCost"
-                        value={contactData.projectCost}
-                        onChange={handleInputChange}
-                        valid={contactData.projectCost !== ''}
-                        placeholder="Project Cost"
-                        required
-                        feedbackInvalid="Project Cost is required."
-                      />
-                    </CCol>
-                  </div>
+                <CModal visible={showModal} onClose={cancelChange}>
+                  <CModalBody>
+                    Are you sure you want to change the blacklist status?
+                  </CModalBody>
+                  <CModalFooter>
+                    <CButton color="secondary" onClick={cancelChange}>Cancel</CButton>
+                    <CButton color="primary" onClick={confirmChange}>Confirm</CButton>
+                  </CModalFooter>
+                </CModal>
+
+                  </CCol>
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Votre Role au sein de l'entreprise </CFormLabel>
+                    <CFormTextarea
+                      name='votreRole'
+                      rows="1"
+                      value={contactData.votreRole}
+                      onChange={handleInputChange}
+                      placeholder='Votre Role au sein de lentreprise '
+                    ></CFormTextarea>
+                  </CCol>
+
+                  <CCol md='12'>
+                    <CFormLabel className="mt-2">Personne Cible</CFormLabel>
+                    <CFormTextarea
+                      name='personneCible'
+                      rows="1"
+                      value={contactData.personneCible}
+                      onChange={handleInputChange}
+                      placeholder='Quelles sont les personnes Cible de votre projets ?  '
+                    ></CFormTextarea>
+                  </CCol>
+                </CRow>
+              </fieldset>
+            </CCol>
+
+            {/* Startup Information */}
+            <CCol md="6" className="mb-4">
+              <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
+                <legend className="w-auto">Informations sur le projet/startup</legend>
+              <CRow>
+                <CCol md="12">
+                                {/* Input fields for startup information */}
+                                <CFormLabel className="mt-2">Nom du Projet / StartUp </CFormLabel>
+                                <CFormInput
+                                  type="text"
+                                  name="nomDuProjet"
+                                  value={contactData.nomDuProjet}
+                                  onChange={handleInputChange}
+                                  placeholder="Nom du Projet / StartUp"
+                                />
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Cree ou pas</CFormLabel>
+                                <CFormSelect
+                                  name="creeOuPas"
+                                  value={contactData.creeOuPas}
+                                  onChange={handleInputChange}
+                                  placeholder="Entreprise cree Ou Pas"
+                                >
+                                  <option value="">Cree ou pas</option>
+                                  <option value="true">Oui</option>
+                                  <option value="false">Non</option>
+                                </CFormSelect>
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Description de l'activité</CFormLabel>
+                                <CFormInput
+                                  type="text"
+                                  name="descriptionActivite"
+                                  value={contactData.descriptionActivite}
+                                  onChange={handleInputChange}
+                                  placeholder="Description / Activité principale"
+                                />
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Secteur d'Activité</CFormLabel>
+                                <CFormSelect
+                                  name="secteurActivite"
+                                  value={contactData.secteurActivite}
+                                  onChange={handleInputChange}
+                                >
+                                  <option value="">Sélectionner un secteur d'activité</option>
+                                  {activitySectors.map((sector) => (
+                                    <option key={sector} value={sector}>{sector}</option>
+                                  ))}
+                                </CFormSelect>
+                </CCol>
+
+                {/* Additional fields */}
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Nombre d'employés</CFormLabel>
+                                <CFormInput
+                                  type="number"
+                                  name="nombreEmployes"
+                                  value={contactData.nombreEmployes}
+                                  onChange={handleInputChange}
+                                  placeholder="Nombre d'employés"
+                                />
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Lieu d'implantation</CFormLabel>
+                                <CFormInput
+                                  type="text"
+                                  name="lieuImplantation"
+                                  value={contactData.lieuImplantation}
+                                  onChange={handleInputChange}
+                                  placeholder="Lieu d'implantation"
+                                />
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Marché</CFormLabel>
+                                  {marcheList.map((marche) => (
+                                    <CFormCheck
+                                      key={marche}
+                                      type="checkbox"
+                                      name="marche"
+                                      value={marche}
+                                      label={marche}
+                                      checked={contactData.marche.includes(marche)}
+                                      onChange={handleMarcheInputChange}
+                                    />
+                                  ))}
+                </CCol>
+                <CCol md="12">
+                                <CFormLabel className="mt-2">Phase de projet</CFormLabel>
+                                <CFormSelect
+                                  name="phaseDeProjet"
+                                  value={contactData.phaseDeProjet}
+                                  onChange={handlePhaseProInputChange}
+                                >
+                                  <option value="">Sélectionner la phase de projet</option>
+                                  <option value="idee">Idée</option>
+                                  <option value="prototype">Prototype</option>
+                                  <option value="lancement">Lancement</option>
+                                  <option value="croissance">Croissance</option>
+                                </CFormSelect>
+                </CCol>
+              </CRow>
                 </fieldset>
-              </CCol>
+            </CCol>
             </CRow>
 
+            <CRow className='mb-0'>
+            <CCol md="12" className="mb-4">
+            <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
+            <legend className="w-auto">Informations sur l'entrepreneur</legend>
+
+            {/* sourceDeFinancement */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Source de Financement </CFormLabel>
+            <CFormSelect
+                    name="sourceDeFinancement"
+                    value={contactData.sourceDeFinancement}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="Auto financement">Auto financement</option>
+                    <option value="Crédit">Crédit</option>
+                    <option value="Subvention">Subvention</option>
+            </CFormSelect>
+            </CCol>
+
+            {/* formeJuridique */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Forme Juridique</CFormLabel>
+            <CFormInput
+             type="text"
+                    name="formeJuridique"
+                    value={contactData.formeJuridique}
+             onChange={handleInputChange}
+            />
+            </CCol>
+
+            {/* dejaBeneficiaireProAcc */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Déjà Bénéficiaire Programme Accompagnement</CFormLabel>
+            <br></br>
+             <CFormCheck
+              type="checkbox"
+                    name="dejaBeneficiaireProAcc"
+                    checked={contactData.dejaBeneficiaireProAcc}
+              onChange={handleInputChange}
+              />
+            </CCol>
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Programme d'Accompagnement</CFormLabel>
+            {/* progAccompagnement */}
+              <CFormInput
+                type="text"
+                      name="progAccompagnement"
+                      value={contactData.progAccompagnement}
+                onChange={handleInputChange}
+                />
+            </CCol>
+
+            {/* typeDeBenefice */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Type de Bénéfice</CFormLabel>
+              <CFormSelect
+                    name="typeDeBenefice"
+                    multiple
+                    value={contactData.typeDeBenefice}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="Formation">Formation</option>
+                    <option value="Accompagnement">Accompagnement</option>
+                    <option value="Coaching">Coaching</option>
+                    <option value="Prêt d’honneur">Prêt d’honneur</option>
+                  </CFormSelect>
+            </CCol>
+
+            {/* besoinAppui */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Besoin d'Appui</CFormLabel>
+              <CFormSelect
+                    name="besoinAppui"
+                    multiple
+                    value={contactData.besoinAppui}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="Formation">Formation</option>
+                    <option value="Accompagnement">Accompagnement</option>
+                    <option value="Financement">Financement</option>
+              </CFormSelect>
+              </CCol>
+
+            {/* typeProgAccSuivi */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Type de Programme d'Accompagnement Suivi</CFormLabel>
+                  <CFormSelect
+                    name="typeProgAccSuivi"
+                    multiple
+                    value={contactData.typeProgAccSuivi}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="Incubateur">Incubateur</option>
+                    <option value="Accélérateur">Accélérateur</option>
+                    <option value="Coaching personnalisé">Coaching personnalisé</option>
+                  </CFormSelect>
+            </CCol>
+            {/* typeProgFormationSuivi */}
+            <CCol md='12'>
+            <CFormLabel className="mt-2">Type de Programme d'Accompagnement Suivi</CFormLabel>
+                  <CFormSelect
+
+                    name="typeProgFormationSuivi"
+                    multiple
+                    value={contactData.typeProgFormationSuivi}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="Gestion financière">Gestion financière</option>
+                    <option value="Marketing digital">Marketing digital</option>
+                    <option value="Stratégie d'entreprise">Stratégie d'entreprise</option>
+                    <option value="Développement personnel">Développement personnel</option>
+                  </CFormSelect>
+            </CCol>
+                  </fieldset>
+            </CCol>
+            </CRow>
             <CRow>
               <CCol className="text-center mt-4">
                 <CButton type="submit" color="success">Create Contact</CButton>
