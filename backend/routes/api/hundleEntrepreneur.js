@@ -2,24 +2,124 @@ const express = require('express');
 const router = express.Router();
 const Entrepreneur = require('../../database/models/entrepreneurSchema');
 
-// Route to create a new entrepreneur
-router.post('/createntrepreneurs', async (req, res) => {
-  const { nom, prenom, email, nombreCofondateurs, nombreCofondateursFemmes } = req.body;
+// POST request to create a new entrepreneur
+router.post('/createentrepreneurs', async (req, res) => {
+  const {
+    nom, // Last Name
+    prenom, // First Name
+    genre, // Gender
+    mobile, // Mobile Number
+    email, // Email
+    trancheAge, // Date of Birth
+    diplome, // Diploma/Formation
+    gouvernorat, // Governorate
+    delegation, // Delegation
+    star, // Stars
+    blacklisted, // Blacklisted
+    
+    
+    //--------startup variables---------
+    startupType,  // Startup type
+    Label,  //Label startup
+    votreRole, // Your Role
+    projName, // Project Name
+    phaseDeProjet, // Project Phase
+    entCapital, // Capitale d'entreprise
+    entDate, //Date de creation entreprise
+    formeJuridique, // Legal Form
+    descriptionActivite, // Activity Description
+    secteurActivite, // Activity Sector
+    empTot, // Number of Employees
+    nbF, // Number of female employees
+    projGouv, // Project governaurate
+    projDel, // Project delegation
+    prodMarch,
+    chiffreAf,
+    marche, // Market (Array of Strings)
+    typeFinance,
+    montantFinance,
+    sourceFinance,
+    progAcc,
+    progAccNom, // Support Program
+    typeAcc,
+    besoinAppui, // Support Needs (Array of Strings)
+    socialMedia,
+    siteWeb,
+    typeFinanceRed,
+    montantFinanceRed,
+    progAccRed,
+    redProg,
+    typeAccRed
+  } = req.body;
+  console.log('OVER HERE',req.body);
 
-  if (!nom || !prenom || !email || nombreCofondateurs === undefined || nombreCofondateursFemmes === undefined) {
-    return res.status(400).json({ message: 'All fields are required.' });
-  }
-
-  if (Number(nombreCofondateursFemmes) > Number(nombreCofondateurs)) {
-    return res.status(400).json({ message: 'Nombre Cofondateurs Femmes cannot be greater than Nombre Cofondateurs.' });
+  // Check for required fields
+  if (!nom || !prenom || !genre || !email || !diplome) {
+    return res.status(400).json({ message: 'Please fill all required fields' });
   }
 
   try {
-    const entrepreneur = new Entrepreneur(req.body);
+    // Check if email already exists
+    const existingEntrepreneur = await Entrepreneur.findOne({ email });
+    if (existingEntrepreneur) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    // Create a new entrepreneur
+    const entrepreneur = new Entrepreneur({
+      nom, // Last Name
+      prenom, // First Name
+      genre, // Gender
+      mobile, // Mobile Number
+      email, // Email
+      trancheAge, // Date of Birth
+      diplome, // Diploma/Formation
+      gouvernorat, // Governorate
+      delegation, // Delegation
+      star, // Stars
+      blacklisted, // Blacklisted
+      
+      
+      //--------startup variables---------
+      startupType,  // Startup type
+      Label,  //Label startup
+      votreRole, // Your Role
+      projName, // Project Name
+      phaseDeProjet, // Project Phase
+      entCapital, // Capitale d'entreprise
+      entDate, //Date de creation entreprise
+      formeJuridique, // Legal Form
+      descriptionActivite, // Activity Description
+      secteurActivite, // Activity Sector
+      empTot, // Number of Employees
+      nbF, // Number of female employees
+      projGouv, // Project governaurate
+      projDel, // Project delegation
+      prodMarch,
+      chiffreAf,
+      marche, // Market (Array of Strings)
+      typeFinance,
+      montantFinance,
+      sourceFinance,
+      progAcc,
+      progAccNom, // Support Program
+      typeAcc,
+      besoinAppui, // Support Needs (Array of Strings)
+      socialMedia,
+      siteWeb,
+      typeFinanceRed,
+      montantFinanceRed,
+      progAccRed,
+      redProg,
+      typeAccRed
+    });
+
+    // Save the entrepreneur to the database
     await entrepreneur.save();
-    res.status(201).json(entrepreneur);
+
+    res.status(201).json({ message: 'Entrepreneur created successfully', entrepreneur });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: 'Internal server error', error });
   }
 });
 
