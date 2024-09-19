@@ -182,7 +182,7 @@ app.delete("/deleteActivity/:activityId", handleActivity);
 app.put("/updateActivity/:activityId", handleActivity);
 app.post("/loadActivity/:activityId", handleActivity);
 app.post("/loadActivitiesByProgramId/:programId", handleActivity);
-app.post("/createntrepreneurs", hundleEntrepreneur);
+app.post("/createentrepreneurs", hundleEntrepreneur);
 app.post("/createstartup", handleStartups);
 app.get("/loadAllentrepreneurs", hundleEntrepreneur);
 app.post("/addTask", handleTask);
