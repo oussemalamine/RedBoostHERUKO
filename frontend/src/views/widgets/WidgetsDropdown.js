@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -11,11 +11,19 @@ import {
   CDropdownItem,
   CDropdownToggle,
   CWidgetStatsA,
+  CButton,
+  CModal,
+  CModalHeader,
+  CModalBody,
+  CModalFooter,
+  CForm,
+  CFormInput,
+  CFormCheck
 } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
-import { cilOptions } from '@coreui/icons'
+import { cilOptions, cilUser, cilBriefcase, cilPeople, cilCalendar } from '@coreui/icons'
 
 const WidgetsDropdown = ({ className }) => {
   const widgetChartRef1 = useRef(null)
@@ -25,6 +33,7 @@ const WidgetsDropdown = ({ className }) => {
   const programs = useSelector((state) => state.programsSlice.programs)
   const sessions = useSelector((state) => state.sessionsSlice.sessions)
   const users = useSelector((state) => state.usersSlice.users)
+  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     const handleColorSchemeChange = () => {
@@ -49,24 +58,70 @@ const WidgetsDropdown = ({ className }) => {
     }
   }, [])
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible)
+  }
+
   return (
     <CRow className={className} xs={{ gutter: 4 }}>
+      <CRow>
+        <CCol>
+          <CButton color="primary" onClick={toggleModal}>Add new key indicator</CButton>
+          <CModal visible={modalVisible} onClose={toggleModal}>
+            <CModalHeader closeButton>Input Form</CModalHeader>
+            <CModalBody>
+              <CForm>
+                <div className="mb-3">
+                  <CFormInput id="label" placeholder="Enter label" label="Label" />
+                </div>
+                <div className="mb-3">
+                  <CFormInput id="value" placeholder="Enter value" label="Value"/>
+                </div>
+                <div className="mb-3">
+                  <CFormCheck inline id="inlineCheckbox1" value="Green'it 2.0" label="Green'it 2.0"/>
+                  <CFormCheck inline id="inlineCheckbox2" value="WomenGoGreen" label="WomenGoGreen"/>
+                  <CFormCheck inline id="inlineCheckbox3" value="Creact4Med" label="Creact4Med"/>
+                </div>
+              </CForm>
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="primary">
+                Save
+              </CButton>
+            </CModalFooter>
+          </CModal>
+        </CCol>
+      </CRow>
+
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/statistics/users" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
             color="primary"
             value={users.length}
             title="Users"
+            icon={<CIcon icon={cilUser} size="xl" />}
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
                   <CIcon icon={cilOptions} />
                 </CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem>Action</CDropdownItem>
-                  <CDropdownItem>Another action</CDropdownItem>
-                  <CDropdownItem>Something else here...</CDropdownItem>
-                  <CDropdownItem disabled>Disabled action</CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilUser} className="me-2" />
+                    View Details
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilBriefcase} className="me-2" />
+                    Manage Users
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilPeople} className="me-2" />
+                    User Reports
+                  </CDropdownItem>
+                  <CDropdownItem disabled>
+                    <CIcon icon={cilCalendar} className="me-2" />
+                    Schedule
+                  </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             }
@@ -115,23 +170,31 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
-{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/Dash/statistics/entrepreneurs" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
             color="info"
             value={entrepreneurs.length}
             title="Entrepreneurs"
+            icon={<CIcon icon={cilPeople} size="xl" />}
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
                   <CIcon icon={cilOptions} />
                 </CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem>Action</CDropdownItem>
-                  <CDropdownItem>Another action</CDropdownItem>
-                  <CDropdownItem>Something else here...</CDropdownItem>
-                  <CDropdownItem disabled>Disabled action</CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilPeople} className="me-2" />
+                    View Details
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilBriefcase} className="me-2" />
+                    Manage Entrepreneurs
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilCalendar} className="me-2" />
+                    Schedule
+                  </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             }
@@ -180,29 +243,33 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
-{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/Dash/statistics/startupsAccelerated" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
-            color="warning"
+            color="success"
             value={programs.length}
             title="Startups Accelerated"
+            icon={<CIcon icon={cilBriefcase} size="xl" />}
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
                   <CIcon icon={cilOptions} />
                 </CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem>Action</CDropdownItem>
-                  <CDropdownItem>Another action</CDropdownItem>
-                  <CDropdownItem>Something else here...</CDropdownItem>
-                  <CDropdownItem disabled>Disabled action</CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilBriefcase} className="me-2" />
+                    View Details
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilCalendar} className="me-2" />
+                    Schedule
+                  </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             }
             chart={
-              <CChartLine
-                className="mt-3"
+              <CChartBar
+                className="mt-3 mx-3"
                 style={{ height: '70px' }}
                 data={{
                   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -211,8 +278,7 @@ const WidgetsDropdown = ({ className }) => {
                       label: 'My First dataset',
                       backgroundColor: 'rgba(255,255,255,.2)',
                       borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40],
-                      fill: true,
+                      data: [5, 10, 6, 8, 15, 12, 10],
                     },
                   ],
                 }}
@@ -222,12 +288,16 @@ const WidgetsDropdown = ({ className }) => {
                   },
                   maintainAspectRatio: false,
                   scales: {
-                    x: { display: false },
-                    y: { display: false },
-                  },
-                  elements: {
-                    line: { borderWidth: 2, tension: 0.4 },
-                    point: { radius: 0, hitRadius: 10, hoverRadius: 4 },
+                    x: {
+                      grid: { display: false },
+                      ticks: { display: false },
+                    },
+                    y: {
+                      min: 0,
+                      max: 20,
+                      grid: { display: false },
+                      ticks: { display: false },
+                    },
                   },
                 }}
               />
@@ -236,351 +306,60 @@ const WidgetsDropdown = ({ className }) => {
         </Link>
       </CCol>
 
-{/* People reached on social media*/ }
       <CCol sm={6} xl={4} xxl={3}>
         <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
           <CWidgetStatsA
-            color="danger"
+            color="warning"
             value={sessions.length}
-            title="Startups Accelerated"
+            title="Sessions"
+            icon={<CIcon icon={cilCalendar} size="xl" />}
             action={
               <CDropdown alignment="end">
                 <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
                   <CIcon icon={cilOptions} />
                 </CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem>Action</CDropdownItem>
-                  <CDropdownItem>Another action</CDropdownItem>
-                  <CDropdownItem>Something else here...</CDropdownItem>
-                  <CDropdownItem disabled>Disabled action</CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilCalendar} className="me-2" />
+                    View Details
+                  </CDropdownItem>
+                  <CDropdownItem>
+                    <CIcon icon={cilBriefcase} className="me-2" />
+                    Manage Sessions
+                  </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             }
             chart={
-              <CChartBar
+              <CChartLine
                 className="mt-3 mx-3"
                 style={{ height: '70px' }}
                 data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
+                  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                   datasets: [
                     {
                       label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
+                      backgroundColor: 'transparent',
                       borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
+                      pointBackgroundColor: getStyle('--cui-warning'),
+                      data: [15, 12, 22, 15, 10, 18, 14],
                     },
                   ],
                 }}
                 options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
+                  plugins: {
+                    legend: { display: false },
                   },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* Entrepreneurs Trained */ }
-      <CCol sm={6} xl={4} xxl={3}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="danger"
-            value={sessions.length}
-            title="Entrepreneurs Trained"
-            action={
-              <CDropdown alignment="end">
-                <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
-                  <CIcon icon={cilOptions} />
-                </CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem>Action</CDropdownItem>
-                  <CDropdownItem>Another action</CDropdownItem>
-                  <CDropdownItem>Something else here...</CDropdownItem>
-                  <CDropdownItem disabled>Disabled action</CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
-            }
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
                   maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
                   scales: {
                     x: {
-                      grid: { display: false, drawTicks: false },
+                      grid: { display: false },
                       ticks: { display: false },
                     },
                     y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
-                  },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* Applications*/ }
-      <CCol sm={6} xl={4} xxl={3}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="danger"
-            value={sessions.length}
-            title="Applications"
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
-                  },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* People reached on social media*/ }
-      <CCol sm={6} xl={4} xxl={3}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="secondary"
-            value={sessions.length}
-            title="People reached on social media"
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
-                  },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* partners */ }
-      <CCol sm={6} xl={4} xxl={3}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="success"
-            value={sessions.length}
-            title="Partners"
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
-                  },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* partners */ }
-<CCol sm={12} xl={8} xxl={6}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="success"
-            value={sessions.length}
-            title="Partners"
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
-                      ticks: { display: false },
-                    },
-                  },
-                }}
-              />
-            }
-          />
-        </Link>
-      </CCol>
-
-{/* partners */ }
-<CCol sm={12} xl={8} xxl={6}>
-        <Link to="/Dash/statistics/sessions" style={{ textDecoration: 'none' }}>
-          <CWidgetStatsA
-            color="primary"
-            value={sessions.length}
-            title="Partners"
-            chart={
-              <CChartBar
-                className="mt-3 mx-3"
-                style={{ height: '70px' }}
-                data={{
-                  labels: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December',
-                    'January', 'February', 'March', 'April',
-                  ],
-                  datasets: [
-                    {
-                      label: 'My First dataset',
-                      backgroundColor: 'rgba(255,255,255,.2)',
-                      borderColor: 'rgba(255,255,255,.55)',
-                      data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                      barPercentage: 0.6,
-                    },
-                  ],
-                }}
-                options={{
-                  maintainAspectRatio: false,
-                  plugins: { legend: { display: false } },
-                  scales: {
-                    x: {
-                      grid: { display: false, drawTicks: false },
-                      ticks: { display: false },
-                    },
-                    y: {
-                      grid: { display: false, drawTicks: false, drawBorder: false },
+                      min: 5,
+                      max: 25,
+                      grid: { display: false },
                       ticks: { display: false },
                     },
                   },

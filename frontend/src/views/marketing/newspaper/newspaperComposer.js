@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import {
-  CForm,
-  CFormLabel,
-  CFormInput,
-  CButton,
-  CContainer,
-  CCard,
-  CCardBody,
-  CFormCheck,
-  CRow,
-  CCol,
+import { 
+  CForm, 
+  CFormLabel, 
+  CFormInput, 
+  CButton, 
+  CContainer, 
+  CCard, 
+  CCardBody, 
+  CFormCheck, 
+  CRow, 
+  CCol, 
   CCardHeader
 } from '@coreui/react';
 import axiosInstance from '../../../axiosInstance';
@@ -52,7 +52,7 @@ const AIComponent = () => {
   const [error, setError] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Generate the HTML template using generatedTemplate state
     const emailHTML = `
       <table
@@ -144,15 +144,15 @@ const AIComponent = () => {
         </tbody>
       </table>
     `;
-
+  
     // Example of sending emailHTML using axiosInstance
     try {
       const response = await axiosInstance.post('/sendEmail', { html: emailHTML });
-
+  
       // Handle success
       console.log('Email sent successfully:', response.data);
       // Optionally, reset form or do other actions after successful submission
-
+  
       // Show success toast notification
       toast.success('Email sent successfully');
     } catch (error) {
@@ -178,14 +178,14 @@ const AIComponent = () => {
     }else if (['English', 'french', 'spanich', 'arabic'].includes(value)){
       setLanguage(value);
     }
-
+    
     setState((prevState) =>
       currentState.includes(value)
         ? prevState.filter((item) => item !== value)
         : [...prevState, value]
     );
   };
-
+  
   const renderPreview = () => (
     <div>
       <h2>Preview Emails</h2>
@@ -200,12 +200,12 @@ const AIComponent = () => {
       )}
     </div>
   );
-
-
+  
+  
 
   const showToastError = (message) => {
     toast.error(message, {
-
+     
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -317,7 +317,7 @@ const AIComponent = () => {
       console.log('Generated result:', result);
 
       if (result && result.response && result.response.text) {
-
+        
         setEmails()
         const generatedText = await result.response.text();
         console.log('Generated text:', generatedText);
@@ -336,7 +336,7 @@ const AIComponent = () => {
             region: region  // Example region parameter
           }
         });
-
+    
         setEmails(response.data); // Setting emails state with fetched data
       } catch (error) {
         toast.error('Error fetching filtered entrepreneurs');
@@ -360,9 +360,9 @@ const AIComponent = () => {
   };
 
   const tunisianRegions = [
-    'Tunis', 'Sfax', 'Sousse', 'Gabès', 'Bizerte', 'Ariana', 'Gafsa',
-    'Kairouan', 'Nabeul', 'Monastir', 'Zaghouan', 'Medenine', 'Kasserine',
-    'Mahdia', 'Manouba', 'Ben Arous', 'Kebili', 'Siliana', 'Jendouba',
+    'Tunis', 'Sfax', 'Sousse', 'Gabès', 'Bizerte', 'Ariana', 'Gafsa', 
+    'Kairouan', 'Nabeul', 'Monastir', 'Zaghouan', 'Medenine', 'Kasserine', 
+    'Mahdia', 'Manouba', 'Ben Arous', 'Kebili', 'Siliana', 'Jendouba', 
     'Tozeur', 'Kef', 'Sidi Bouzid', 'Tataouine', 'Beja'
   ];
 
@@ -389,7 +389,7 @@ const AIComponent = () => {
                 {!validity.subject && (
                   <div className="invalid-feedback">Please enter a subject.</div>
                 )}
-
+                
                 <CRow>
                   <CCol>
                     <CFormLabel>Target *</CFormLabel>
@@ -405,7 +405,7 @@ const AIComponent = () => {
                         className={`form-check-input ${validity.target ? '' : 'is-invalid'}`}
                       />
                     ))}
-
+                    
                     {!validity.target && (
                       <div className="invalid-feedback">Please select at least one target.</div>
                     )}
@@ -638,7 +638,7 @@ const AIComponent = () => {
             </tr>
           </tbody>
         </table>
-
+    
   )}</CCol>
 </CRow>
               </CCardBody>

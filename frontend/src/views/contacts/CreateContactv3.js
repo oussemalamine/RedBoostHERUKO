@@ -20,6 +20,8 @@ import {
   CModalFooter,
   CFormCheck
 } from '@coreui/react';
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { Toaster, toast } from 'react-hot-toast';
 import { ImportExport } from '../ImportExportEntrepeneur/importExport.js'
 import GovDel from '../../components/GovDel.js'
@@ -160,36 +162,36 @@ const CreateContactv3 = () => {
     if(contactData.diplome==='') return toast.error(`Choisir Diplome`);
     if(contactData.gouvernorat==='') return toast.error(`Choisir Gouvernoat`);
     if(contactData.delegation==='') return toast.error(`Choisir Delegation`);
-    // if(contactData.startupType==='') return toast.error(`Choisir le Type`);
-    // if(contactData.Label==='' && contactData.startupType==='startup') return toast.error(`Choisir Label`);
-    // if(contactData.votreRole==='') return toast.error(`Choisir votre Role`);
-    // if(contactData.projName.length<2) return toast.error(`Nom du projet invalide`);
-    // if(contactData.phaseDeProjet==='') return toast.error(`Choisir Phase du projet`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.entCapital==='') return toast.error(`Choisir Capitale du l'entreprise`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.entDate==='') return toast.error(`Choisir Date de création`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.formeJuridique === '') return toast.error(`Choisir Forme de l'entreprise`);
-    // if(contactData.descriptionActivite.length<5) return toast.error(`Description invalide`);
-    // if(contactData.secteurActivite==='') return toast.error(`Choisir Secteur d'activité`);
-    // if(isNaN(contactData.empTot)||contactData.empTot==='') return toast.error(`Choisir nombre totale d'employés`);
-    // if(isNaN(contactData.nbF)||contactData.nbF==='') return toast.error(`Choisir nombre d'employés femmes`);
-    // if(contactData.nbF > contactData.empTot) return toast.error(`Nombre d'employés femmes invalide`);
-    // if(contactData.projGouv==='') return toast.error(`Choisir Gouvernoat du projet`);
-    // if(contactData.projDel==='') return toast.error(`Choisir Delegation du projet`);
-   // if(contactData.prodMarch==='') return toast.error(`Est-que vos produits / services sur le marché?`);
-   // if(contactData.prodMarch==='Oui' && contactData.marche.length===0) return toast.error(`Saisir le marché?`);
-   // if(contactData.chiffreAf==='') return toast.error(`Choisir Chiffre d'affaires`);
-   // if(contactData.typeFinance.length===0) return toast.error(`Choisir Type de financement`);
-   // if(contactData.montantFinance==='') return toast.error(`Choisir Montant de financement`);
-   // if((contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention'))&&contactData.sourceFinance==='') return toast.error(`Choisir Source de financement`);
-   // if(contactData.progAcc==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-   // if(contactData.progAcc==='Oui' && contactData.progAccNom=='') return toast.error(`Tapez le programme d'accompagnement`);
-   // if(contactData.progAcc==='Oui' && contactData.typeAcc.length===0) return toast.error(`Choisir le Type d'accompagnement`);
-   // if(contactData.besoinAppui.length<5)return toast.error(`Tapez les besoins`);
-   // if(contactData.typeFinanceRed.length===0) return toast.error(`Choisir Type de financement`);
-   // if(contactData.montantFinanceRed==='') return toast.error(`Choisir Montant de financement`);
-   // if(contactData.progAccRed==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-   // if(contactData.progAccRed==='Oui' && contactData.redProg=='') return toast.error(`Choisir le(s) programme d'accompagnement`);
-   // if(contactData.typeAccRed.length===0) return toast.error(`Choisir le Type d'accompagnement`);
+    if(contactData.startupType==='') return toast.error(`Choisir le Type`);
+    if(contactData.Label==='' && contactData.startupType==='startup') return toast.error(`Choisir Label`);
+    if(contactData.votreRole==='') return toast.error(`Choisir votre Role`);
+    if(contactData.projName.length<2) return toast.error(`Nom du projet invalide`);
+    if(contactData.phaseDeProjet==='') return toast.error(`Choisir Phase du projet`);
+    if(contactData.phaseDeProjet==='Crée' && contactData.entCapital==='') return toast.error(`Choisir Capitale du l'entreprise`);
+    if(contactData.phaseDeProjet==='Crée' && contactData.entDate==='') return toast.error(`Choisir Date de création`);
+    if(contactData.phaseDeProjet==='Crée' && contactData.formeJuridique === '') return toast.error(`Choisir Forme de l'entreprise`);
+    if(contactData.descriptionActivite.length<5) return toast.error(`Description invalide`);
+    if(contactData.secteurActivite==='') return toast.error(`Choisir Secteur d'activité`);
+    if(isNaN(contactData.empTot)||contactData.empTot==='') return toast.error(`Choisir nombre totale d'employés`);
+    if(isNaN(contactData.nbF)||contactData.nbF==='') return toast.error(`Choisir nombre d'employés femmes`);
+    if(contactData.nbF > contactData.empTot) return toast.error(`Nombre d'employés femmes invalide`);
+    if(contactData.projGouv==='') return toast.error(`Choisir Gouvernoat du projet`);
+    if(contactData.projDel==='') return toast.error(`Choisir Delegation du projet`);
+    if(contactData.prodMarch==='') return toast.error(`Est-que vos produits / services sur le marché?`);
+    if(contactData.prodMarch==='Oui' && contactData.marche.length===0) return toast.error(`Saisir le marché?`);
+    if(contactData.chiffreAf==='') return toast.error(`Choisir Chiffre d'affaires`);
+    if(contactData.typeFinance.length===0) return toast.error(`Choisir Type de financement`);
+    if(contactData.montantFinance==='') return toast.error(`Choisir Montant de financement`);
+    if((contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention'))&&contactData.sourceFinance==='') return toast.error(`Choisir Source de financement`);
+    if(contactData.progAcc==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
+    if(contactData.progAcc==='Oui' && contactData.progAccNom=='') return toast.error(`Tapez le programme d'accompagnement`);
+    if(contactData.progAcc==='Oui' && contactData.typeAcc.length===0) return toast.error(`Choisir le Type d'accompagnement`);
+    if(contactData.besoinAppui.length<5)return toast.error(`Tapez les besoins`);
+    if(contactData.typeFinanceRed.length===0) return toast.error(`Choisir Type de financement`);
+    if(contactData.montantFinanceRed==='') return toast.error(`Choisir Montant de financement`);
+    if(contactData.progAccRed==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
+    if(contactData.progAccRed==='Oui' && contactData.redProg=='') return toast.error(`Choisir le(s) programme d'accompagnement`);
+    if(contactData.typeAccRed.length===0) return toast.error(`Choisir le Type d'accompagnement`);
   }
 
   const handleInputChange = (event) => {
@@ -349,7 +351,7 @@ const CreateContactv3 = () => {
                       onChange={handleInputChange}
                       placeholder="Diplôme / Formation"
                       valid={contactData.diplome !== ''}
-
+                      required
                       feedbackInvalid="diplome / Formation est requis."
                     >
                       <option value="">Sélectionner le diplôme / la formation </option>
@@ -368,7 +370,7 @@ const CreateContactv3 = () => {
                       value={contactData.gouvernorat}
                       onChange={handleInputChange}
                       placeholder="Gouvernorat"
-
+                      required
                       valid={contactData.gouvernorat !== ''}
                       feedbackInvalid="Gouvernorat est requis."
                     >
@@ -387,7 +389,7 @@ const CreateContactv3 = () => {
                       value={contactData.delegation}
                       onChange={handleInputChange}
                       placeholder="Delegation"
-
+                      required
                       valid={contactData.delegation !== ''}
                       feedbackInvalid="Delegation est requis."
                     >
@@ -452,7 +454,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Vous êtes Projet / startup"
                     valid={contactData.startupType !== ''}
-
+                    required
                 >
                     <option value="">Vous êtes Startup / Entreprise</option>
                     <option value="entreprise">Entreprise</option>
@@ -482,7 +484,7 @@ const CreateContactv3 = () => {
                     value={contactData.votreRole}
                     onChange={handleInputChange}
                     valid={contactData.votreRole !== ''}
-
+                    required
                   >
                     <option value="">Sélectionner votre role</option>
                     <option value="Président Directeur Général">Président Directeur Général</option>
@@ -501,7 +503,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Nom du project"
                     valid={contactData.projName.length >= 4}
-
+                    required
                     />
                 </CCol>
                 <CCol md="12">
@@ -511,7 +513,7 @@ const CreateContactv3 = () => {
                     value={contactData.phaseDeProjet}
                     onChange={handleInputChange}
                     valid={contactData.phaseDeProjet !== ''}
-
+                    required
                 >
                     <option value="">Selectionner le phase</option>
                     <option value="Ideation">Ideation</option>
@@ -579,7 +581,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Desciription"
                     valid={contactData.descriptionActivite !== ''}
-
+                    required
                     />
                 </CCol>
                 <CCol md="12">
@@ -589,7 +591,7 @@ const CreateContactv3 = () => {
                     value={contactData.secteurActivite}
                     onChange={handleInputChange}
                     valid={contactData.secteurActivite}
-
+                    required
                   >
                     <option value="">Selectionner Secteur d'Activite</option>
                     <option value="Secteur Agricole">Secteur Agricole</option>
@@ -615,7 +617,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="N° Total"
                     feedbackInvalid="N° Total est requis."
-
+                    required
                   />
                 </CCol>
                 <CCol md="6">
@@ -628,7 +630,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="N° des femmes"
                     feedbackInvalid="N° des femmes est requis."
-
+                    required
                   />
                 </CCol>
                 <CCol md='6'>
@@ -640,7 +642,7 @@ const CreateContactv3 = () => {
                       placeholder="Gouvernorat"
                       valid={contactData.projGouv !== ''}
                       feedbackInvalid="Gouvernorat est requis."
-
+                      required
                     >
                       <option value="">Select Gouvernorat</option>
                       {gouvernoratStartup.map((gouv) => (
@@ -659,7 +661,7 @@ const CreateContactv3 = () => {
                       placeholder="Delegation"
                       valid={contactData.projDel !== ''}
                       feedbackInvalid="Delegation est requis."
-
+                      required
                     >
                       <option value="">Select Delegation</option>
                       {delegationStartup.map((dele) => (
@@ -715,7 +717,7 @@ const CreateContactv3 = () => {
                     value={contactData.chiffreAf}
                     onChange={handleInputChange}
                     valid={contactData.chiffreAf !== ''}
-
+                    required
                   >
                     <option value="">Selectionner Chiffre d'Affaires</option>
                     <option value="1,000 ou moins">1,000 ou moins</option>
@@ -749,7 +751,7 @@ const CreateContactv3 = () => {
                     label={source}
                     checked={contactData.typeFinance.includes(source)}
                     onChange={(e) => handleCheckboxInputChange(e, 'typeFinance')}
-
+                    required
                     />
                 ))}
                 </CCol>
@@ -762,7 +764,7 @@ const CreateContactv3 = () => {
                     value={contactData.montantFinance}
                     onChange={handleInputChange}
                     placeholder="Montant"
-
+                    required
                 />
                 </CCol>
 
@@ -831,7 +833,7 @@ const CreateContactv3 = () => {
                         valid={contactData.typeAcc !== ''}
                         checked={contactData.typeAcc.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAcc')}
-
+                        required
                         />
                     ))}
                     </CCol>
@@ -848,7 +850,7 @@ const CreateContactv3 = () => {
                         onChange={handleInputChange}
                         valid={contactData.besoinAppui !== ''}
                         feedbackInvalid="Champ requis!"
-
+                        required
                     />
                   </CCol>
                   <CCol md='12'>
@@ -895,7 +897,7 @@ const CreateContactv3 = () => {
                     checked={contactData.typeFinanceRed.includes(source)}
                     valid={contactData.typeFinanceRed !== ''}
                     onChange={(e) => handleCheckboxInputChange(e, 'typeFinanceRed')}
-
+                    required
                     />
                     ))}
                 </CCol>
@@ -908,7 +910,7 @@ const CreateContactv3 = () => {
                     valid={contactData.montantFinanceRed !== ''}
                     onChange={handleInputChange}
                     placeholder="Montant"
-
+                    required
                   />
               </CCol>
               <CCol md="12">
@@ -963,7 +965,7 @@ const CreateContactv3 = () => {
                         valid={contactData.typeAccRed !== ''}
                         checked={contactData.typeAccRed.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAccRed')}
-
+                        required
                         />
                     ))}
                     </CCol>

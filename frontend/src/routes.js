@@ -21,6 +21,7 @@ const EntrepConacts = React.lazy(() => import('./components/contacts/EntrepConac
 const ProgramCards = React.lazy(() => import('./components/ProgramMonitoring/ProgramCards'))
 const MainDatabaseManager = React.lazy(() => import('./views/dataBaseManager/MainDatabaseManager'))
 const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
+const CreateContactv3 = React.lazy(() => import('./views/contacts/CreateContactv3'))
 const Users = React.lazy(() => import('./views/users/users'))
 const TaskValidation = React.lazy(() => import('./views/TaskValidation/TaskValidation'))
 const StatisticsEntrepeneurs = React.lazy(() => import('./views/Statistics/EntrepreneurStat'))

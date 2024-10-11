@@ -38,7 +38,7 @@ const EntrepreneurDetails = () => {
   if (!entrepreneur) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100">
-        <CAlert color="danger">Entrepreneur not found</CAlert>
+        <CAlert color="danger">Entrepreneur Introuvable</CAlert>
       </div>
     );
   }
@@ -52,6 +52,15 @@ const EntrepreneurDetails = () => {
   const handleEntrepreneurEditClick = () => {
     setEntrepreneurEditVisible(true); // Open the EntrepreneurEdit modal when Edit button is clicked
   };
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-11
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  
+  // console.log(formatDate(entrepreneur.DateCre));
 
   return (
     <div className="container mt-4">
@@ -101,17 +110,14 @@ const EntrepreneurDetails = () => {
                 </div>
                 <p className="text-muted mt-4">Entrepeneur</p>
                 <p className="text-muted mb-0">
-                  <strong>Bio:</strong> <br /> Lorem ipsum dolor sit amet,
-                  consectetur adipiscing elit. Sed fermentum, odio nec
-                  pharetra fermentum, nulla tellus sollicitudin risus, nec
-                  pretium nunc ipsum et nisi.
+                  <strong>Bio:</strong> <br /> {entrepreneur.bio}
                 </p>
               </div>
             </CCol>
 
             <CCol md={3} className="text-center text-md-start px-md-3 mt-5">
-              <p className="text-muted mt-mb-2">Member since {memberSince}</p>
-              <p className="text-muted mt-mb-2">XP Points: {entrepreneur.xpPoints}</p>
+              <p className="text-muted mt-mb-2">Member since {moment(entrepreneur.DateCre).format('MMMM Do, YYYY')}</p>
+              <p className="text-muted mt-mb-2">XP Points: {entrepreneur.star}</p>
             </CCol>
             <div className="text-end">
               <CButton color="secondary" onClick={handleEntrepreneurEditClick}>
@@ -128,17 +134,15 @@ const EntrepreneurDetails = () => {
           <InfoCard
             title="Personal Information"
             info={[
-              { label: 'Address', value: entrepreneur.adresse },
-              { label: 'Email', value: entrepreneur.email },
-              { label: 'Region', value: entrepreneur.region },
-              { label: 'Gouvernorat', value: entrepreneur.gouvernorat },
-              { label: 'Gender', value: entrepreneur.gender },
-              {
-                label: 'Date of Birth',
-                value: moment(entrepreneur.dateDeNaissance).format(
-                  'MMMM Do, YYYY'
-                ),
-              },
+              { label: 'Genre: ', value: entrepreneur.genre },
+              { label: 'Mobile: ', value: entrepreneur.mobile },
+              { label: 'Email: ', value: entrepreneur.email },
+              { label: "Tranche d'Age: ", value: entrepreneur.trancheAge },
+              { label: 'Diplome: ', value: entrepreneur.diplome },
+              { label: 'Gouvernorat: ', value: entrepreneur.gouvernorat },
+              { label: 'Delegation: ', value: entrepreneur.delegation },
+              { label: 'Blacklisted: ', value: String(entrepreneur.blacklisted) },
+              
             ]}
           />
         </CCol>
@@ -147,43 +151,57 @@ const EntrepreneurDetails = () => {
           <InfoCard
             title="Startup Information"
             info={[
-              { label: 'Startup Name', value: entrepreneur.startupName },
-              { label: 'Description', value: entrepreneur.description },
-              {
-                label: 'Activities Sector',
-                value: entrepreneur.secteurActivites,
-              },
-              {
-                label: 'Number of Co-founders',
-                value: entrepreneur.nombreCofondateurs,
-              },
-              {
-                label: 'Number of Female Co-founders',
-                value: entrepreneur.nombreCofondateursFemmes,
-              },
-              { label: 'Created or Not', value: entrepreneur.creeeOuNon },
-              { label: 'Legal Form', value: entrepreneur.formeJuridique },
-              {
-                label: 'Number of Jobs Created',
-                value: entrepreneur.nombreEmploisCrees,
-              },
-              {
-                label: 'Project Cost',
-                value: entrepreneur.coutProjet,
-              },
-              {
-                label: 'Disbursement Date',
-                value: moment(entrepreneur.dateDecaissement).format(
-                  'MMMM Do, YYYY'
-                ),
-              },
+              { label: 'Type: ', value: entrepreneur.startupType },
+              entrepreneur.startupType === 'startup' && { label: 'Pré-Label / Label: ', value: entrepreneur.Label },
+              { label: 'Votre Role: ', value: entrepreneur.votreRole },
+              { label: 'Nom du Projet: ', value: entrepreneur.projName },
+              { label: 'Phase du Project: ', value: entrepreneur.phaseDeProjet },
+              entrepreneur.phaseDeProjet === 'Crée' && { label: "Capitale de l'entreprise: ", value: entrepreneur.entCapital },
+              entrepreneur.phaseDeProjet === 'Crée' && { label: 'Date de création: ', value: moment(entrepreneur.entDate).format('MMMM Do, YYYY') },
+              entrepreneur.phaseDeProjet === 'Crée' && { label: 'Forme Juridique: ', value: entrepreneur.formeJuridique },              { label: 'Desciription / Activité principale: ', value: entrepreneur.descriptionActivite },
+              { label: "Nombre d'Employés Totales: ", value: entrepreneur.empTot },
+              { label: "Nombre d'Employés Femmes: ", value: entrepreneur.nbF },
+              { label: 'Lieu d’implantation (Gouvernorat): ', value: entrepreneur.projGouv },
+              { label: 'Lieu d’implantation (Delegation): ', value: entrepreneur.projDel },
+              entrepreneur.prodMarch === 'Oui' && { label: 'Marché: ', value: entrepreneur.marche.join(', ') },
+              { label: "Chiffre d'Affaires: ", value: entrepreneur.chiffreAf }
+            ].filter(Boolean)}
+          />
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol xs={12} md={6}>
+          <InfoCard
+            title="Personal Information"
+            info={[
+              { label: 'Type de Financement: ', value: entrepreneur.typeFinance.join(', ') },
+              { label: 'Montant de financement: ', value: entrepreneur.montantFinance },
+              (entrepreneur.typeFinance.includes('Crédit') || entrepreneur.typeFinance.includes('Subvention')) && { label: 'Source de Financement: ', value: entrepreneur.sourceFinance },
+              entrepreneur.progAcc === 'Oui' && { label: "Programme d'Accompagnement: ", value: entrepreneur.progAccNom },
+              entrepreneur.progAcc === 'Oui' && { label: "Type d'accompagnement: ", value: entrepreneur.typeAcc.join(', ') },
+              { label: 'Besoins du Projet: ', value: entrepreneur.besoinAppui },
+              entrepreneur.siteWeb !== '' && { label: 'Lien Site web: ', value: entrepreneur.siteWeb },
+              entrepreneur.socialMedia !== '' && { label: 'Lien social media: ', value: entrepreneur.socialMedia },
+            ]}
+          />
+        </CCol>
+
+        <CCol xs={12} md={6}>
+          <InfoCard
+            title="REDSTART"
+            info={[
+              { label: 'Type de Financement: ', value: entrepreneur.typeFinanceRed.join(', ') },
+              { label: 'Montant de financement: ', value: entrepreneur.montantFinanceRed },
+              entrepreneur.progAccRed === 'Oui' &&{ label: "Programme d'Accompagnement: ", value: entrepreneur.redProg.join(', ') },
+              { label: "Type d'accompagnement: ", value: entrepreneur.typeAccRed.join(', ') },
+              
             ]}
           />
         </CCol>
       </CRow>
       <div className="text-center">
         <CButton color="primary" onClick={handleEditClick}>
-          Modify
+          Modifier
         </CButton>
       </div>
     </div>

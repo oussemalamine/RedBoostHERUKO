@@ -158,7 +158,7 @@ const TaskDetails = () => {
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = parseFloat(((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2));
           setProgress(progress);
         },
         (error) => {

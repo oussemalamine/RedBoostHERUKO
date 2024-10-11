@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { CButton } from '@coreui/react';
-import { Toaster, toast } from 'react-hot-toast';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axiosInstance from '../../axiosInstance.js';
 
 export function ImportExport() {
@@ -220,7 +221,7 @@ export function ImportExport() {
       <CButton onClick={handleImportClick} color="secondary" className="m-2">
         Import Data
       </CButton>
-      <Toaster position="top-right" reverseOrder={false}  />
-      </div>
+      <ToastContainer />
+    </div>
   );
 }

@@ -11,30 +11,29 @@ import {
   CCol,
   CFormLabel,
 } from '@coreui/react';
-import { cilSearch } from '@coreui/icons';
 
 const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
-  const [filters, setFilters] = useState({
+  // Default filter state
+  const defaultFilters = {
     sector: '',
-    male: true, // Default checked
-    female: true, // Default checked
-    region: '',
+    male: true,  // Default checked
+    female: true,  // Default checked
     gouvernorat: '',
     search: ''
-  });
+  };
+
+  // Filters state
+  const [filters, setFilters] = useState(defaultFilters);
 
   const [sectors, setSectors] = useState([]);
-  const [regions, setRegions] = useState([]);
   const [gouvernorats, setGouvernorats] = useState([]);
   const [atLeastOneGenderChecked, setAtLeastOneGenderChecked] = useState(true);
   const [filteredEntrepreneurs, setFilteredEntrepreneurs] = useState([]);
 
   useEffect(() => {
-    const uniqueSectors = [...new Set(entrepreneurs.map((e) => e.secteurActivites))];
-    const uniqueRegions = [...new Set(entrepreneurs.map((e) => e.region))];
+    const uniqueSectors = [...new Set(entrepreneurs.map((e) => e.secteurActivite))];
     const uniqueGouvernorats = [...new Set(entrepreneurs.map((e) => e.gouvernorat))];
-    setSectors(uniqueSectors);
-    setRegions(uniqueRegions);
+    setSectors(uniqueSectors);  
     setGouvernorats(uniqueGouvernorats);
   }, [entrepreneurs]);
 
@@ -47,9 +46,9 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
     // Filter entrepreneurs based on search input
     const filtered = entrepreneurs.filter(entrepreneur =>
       Object.values(entrepreneur).some(val =>
-        val.toString().toLowerCase().includes(filters.search.toLowerCase())
+        val && val.toString().toLowerCase().includes(filters.search.toLowerCase())
       )
-    );
+    );    
     setFilteredEntrepreneurs(filtered);
   }, [filters.search, entrepreneurs]);
 
@@ -69,6 +68,12 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
     }));
   };
 
+  // Function to reset filters
+  const handleResetFilters = () => {
+    setFilters(defaultFilters); // Reset filters to default
+    onFilterUpdate(defaultFilters); // Trigger filter update with default values
+  };
+
   const handleFilterSubmit = (event) => {
     event.preventDefault();
     onFilterUpdate(filters);
@@ -76,14 +81,14 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
 
   return (
     <CCard className="mb-4 shadow">
-      <CCardHeader className="bg-primary text-white">Advanced Filter</CCardHeader>
+      <CCardHeader className="bg-primary text-white">Filtre Avancée</CCardHeader>
       <CCardBody>
         <CForm onSubmit={handleFilterSubmit}>
           <CRow className="mb-3">
             <CCol md="4">
-              <CFormLabel htmlFor="sector">Sector</CFormLabel>
+              <CFormLabel htmlFor="sector">Secteur:</CFormLabel>
               <CFormSelect name="sector" value={filters.sector} onChange={handleFilterChange}>
-                <option value="">All Sectors</option>
+                <option value="">Toutes Secteurs</option>
                 {sectors.map((sector) => (
                   <option key={sector} value={sector}>
                     {sector}
@@ -92,7 +97,7 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
               </CFormSelect>
             </CCol>
             <CCol md="4">
-              <CFormLabel>Gender</CFormLabel>
+              <CFormLabel>Genre</CFormLabel>
               <div>
                 <input
                   type="checkbox"
@@ -102,7 +107,7 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
                   onChange={handleGenderChange}
                 />
                 <label htmlFor="male" className="mx-2">
-                  Male
+                  Homme
                 </label>
                 <input
                   type="checkbox"
@@ -112,87 +117,59 @@ const AdvancedFilter = ({ entrepreneurs, onFilterUpdate }) => {
                   onChange={handleGenderChange}
                 />
                 <label htmlFor="female" className="mx-2">
-                  Female
+                  Femme
                 </label>
               </div>
             </CCol>
+          </CRow>
+          <CRow>
             <CCol md="4">
-              <CFormLabel htmlFor="region">Region</CFormLabel>
-              <CFormSelect name="region" value={filters.region} onChange={handleFilterChange}>
-                <option value="">All Regions</option>
-                {regions.map((region) => (
-                  <option key={region} value={region}>
-                    {region}
+              <CFormLabel htmlFor="gouvernorat">Gouvernorat:</CFormLabel>
+              <CFormSelect name="gouvernorat" value={filters.gouvernorat} onChange={handleFilterChange}>
+                <option value="">Touts Gouvernorats</option>
+                {gouvernorats.map((gouvernorat) => (
+                  <option key={gouvernorat} value={gouvernorat}>
+                    {gouvernorat}
                   </option>
                 ))}
               </CFormSelect>
             </CCol>
           </CRow>
-          <CRow>
-  <CCol md="4">
-    <CFormLabel htmlFor="ageMin">Minimum Age</CFormLabel>
-    <CFormInput
-      type="number"
-      id="ageMin"
-      name="ageMin"
-      value={filters.ageMin}
-      onChange={handleFilterChange}
-      min="0"
-      placeholder="Min Age"
-    />
-  </CCol>
-  <CCol md="4">
-    <CFormLabel htmlFor="ageMax">Maximum Age</CFormLabel>
-    <CFormInput
-      type="number"
-      id="ageMax"
-      name="ageMax"
-      value={filters.ageMax}
-      onChange={handleFilterChange}
-      min="0"
-      placeholder="Max Age"
-    />
-  </CCol>
-  <CCol md="4">
-    <CFormLabel htmlFor="gouvernorat">Gouvernorat</CFormLabel>
-    <CFormSelect name="gouvernorat" value={filters.gouvernorat} onChange={handleFilterChange}>
-      <option value="">All Gouvernorats</option>
-      {gouvernorats.map((gouvernorat) => (
-        <option key={gouvernorat} value={gouvernorat}>
-          {gouvernorat}
-        </option>
-      ))}
-    </CFormSelect>
-  </CCol>
-</CRow>
 
           <CRow>
-            
             <CCol md="12">
-              <CFormLabel htmlFor="search">Search</CFormLabel>
+              <CFormLabel htmlFor="search">Recherche:</CFormLabel>
               <div className="input-group">
                 <CFormInput
                   type="text"
                   id="search"
                   name="search"
                   className="form-control"
-                  placeholder="Search..."
+                  placeholder="Nom du l'Entrepreneur / Startup / Email"
                   value={filters.search}
                   onChange={handleFilterChange}
                 />
-                
               </div>
             </CCol>
           </CRow>
-          <CButton
-            type="submit"
-            color="primary"
-            className="mt-3"
-            disabled={!atLeastOneGenderChecked}
-            
-          >
-            Apply Filters
-          </CButton>
+
+          <div className="d-flex justify-content-start gap-2 mt-3">
+            <CButton
+              type="submit"
+              color="primary"
+              disabled={!atLeastOneGenderChecked}
+            >
+              Appliquer Filtre
+            </CButton>
+            {/* Remove Filters button */}
+            <CButton
+              type="button"
+              color="secondary"
+              onClick={handleResetFilters}
+            >
+               Annuler
+            </CButton>
+          </div>
         </CForm>
       </CCardBody>
     </CCard>

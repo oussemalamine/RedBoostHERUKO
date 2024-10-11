@@ -9,7 +9,7 @@ const InfoCard = ({ title, info }) => (
     <CCardBody>
       {info.map((item, index) => (
         <div className="mb-3" key={index}>
-          <strong>{item.label}:</strong> <span>{item.value}</span>
+          <strong>{item.label}</strong> <span>{item.value}</span>
         </div>
       ))}
     </CCardBody>

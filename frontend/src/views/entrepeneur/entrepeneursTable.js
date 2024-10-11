@@ -21,27 +21,28 @@ const EntrepreneursTable = () => {
     let filtered = allEntrepreneurs;
 
     if (filters.sector) {
-      filtered = filtered.filter(e => e.secteurActivites === filters.sector);
+      filtered = filtered.filter(e => e.secteurActivite === filters.sector);
     }
-    if (filters.gender) {
-      filtered = filtered.filter(e => e.gender === filters.gender);
+
+    if (filters.male || filters.female) {
+      filtered = filtered.filter(e => {
+        if (filters.male && filters.female) return true; // Include both genders
+        if (filters.male) return e.genre === 'homme';
+        if (filters.female) return e.genre === 'femme';
+        return false; // Should never reach here, but a fallback
+      });
     }
-    if (filters.region) {
-      filtered = filtered.filter(e => e.region === filters.region);
-    }
-    if (filters.ageMin) {
-      filtered = filtered.filter(e => e.age >= filters.ageMin);
-    }
-    if (filters.ageMax) {
-      filtered = filtered.filter(e => e.age <= filters.ageMax);
-    }
+    
     if (filters.gouvernorat) {
       filtered = filtered.filter(e => e.gouvernorat === filters.gouvernorat);
     }
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       filtered = filtered.filter(e =>
-        Object.values(e).some(val => typeof val === 'string' && val.toLowerCase().includes(searchTerm))
+        (e.nom && e.nom.toLowerCase().includes(searchTerm)) ||
+        (e.prenom && e.prenom.toLowerCase().includes(searchTerm)) ||
+        (e.email && e.email.toLowerCase().includes(searchTerm)) ||
+        (e.projName && e.projName.toLowerCase().includes(searchTerm))
       );
     }
 
@@ -134,11 +135,10 @@ const EntrepreneursTable = () => {
             <thead>
               <tr>
                 <th></th>
-                <th>Entrepreneur Name</th>
-                <th>Startup Name</th>
-                <th>Activities Sector</th>
-                <th>Birthday</th>
-                <th>Mail</th>
+                <th>Nom du l'Entrepreneur</th>
+                <th>Nom du Startup</th>
+                <th>Secteur d'Activité</th>
+                <th>Email</th>
                 <th></th> {/* See More button */}
               </tr>
             </thead>
@@ -154,15 +154,8 @@ const EntrepreneursTable = () => {
                     />
                   </td>
                   <td>{entrepreneur.nom} {entrepreneur.prenom}</td>
-                  <td>{entrepreneur.startupName}</td>
-                  <td>{entrepreneur.secteurActivites}</td>
-                  <td>
-                    {new Date(entrepreneur.dateDeNaissance).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </td>
+                  <td>{entrepreneur.projName}</td>
+                  <td>{entrepreneur.secteurActivite}</td>
                   <td>{entrepreneur.email}</td>
                   <td>
                     <Link to={`${entrepreneur._id}`}>

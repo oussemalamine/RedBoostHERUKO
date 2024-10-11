@@ -62,9 +62,9 @@ const AllContacts = () => {
           <CTable striped responsive>
             <CTableHead>
               <tr>
-              <CTableHeaderCell>Name</CTableHeaderCell>
-              <CTableHeaderCell>Last Name</CTableHeaderCell>
-              <CTableHeaderCell>Phone Number</CTableHeaderCell>
+              <CTableHeaderCell>Nom</CTableHeaderCell>
+              <CTableHeaderCell>Prénom</CTableHeaderCell>
+              <CTableHeaderCell>Mobile</CTableHeaderCell>
               <CTableHeaderCell>Role</CTableHeaderCell>
               <CTableHeaderCell>Gender</CTableHeaderCell>
               <CTableHeaderCell>Email</CTableHeaderCell>
@@ -76,12 +76,12 @@ const AllContacts = () => {
               <CTableRow key={contact.id}>
               <CTableDataCell>{contact.nom}</CTableDataCell>
               <CTableDataCell>{contact.prenom}</CTableDataCell>
-              <CTableDataCell>{contact.adresse}</CTableDataCell>
-              <CTableDataCell>{contact.dateDeNaissance}</CTableDataCell>
-              <CTableDataCell>{contact.gender}</CTableDataCell>
+              <CTableDataCell>{contact.mobile}</CTableDataCell>
+              <CTableDataCell>{contact.votreRole}</CTableDataCell>
+              <CTableDataCell>{contact.genre}</CTableDataCell>
               <CTableDataCell>{contact.email}</CTableDataCell>
               <CTableDataCell>
-              <Link to={`/profile/${contact.id}`}>
+              <Link to={`/dash/entrepeneurs/${contact._id}`}>
                 <CButton color="primary">View Profile</CButton>
               </Link>
             </CTableDataCell>

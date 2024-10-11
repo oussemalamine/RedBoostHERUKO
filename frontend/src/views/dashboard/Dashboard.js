@@ -48,7 +48,7 @@ const Dashboard = () => {
         <>
          <WidgetsDropdown users={users} className="mb-4" />
           <CRow>
-            <CCol xs={6}>
+            <CCol xs={12} md={6}>
               <CCard className="mb-4">
                 <CCardHeader>Online Users</CCardHeader>
                 <CCardBody>
@@ -91,7 +91,7 @@ const Dashboard = () => {
                 </CCardBody>
               </CCard>
             </CCol>
-            <CCol xs={6}>
+            <CCol xs={12} md={6}>
               <CCard className="mb-4">
                 <CCardHeader>Calendar</CCardHeader>
                 <CCardBody>

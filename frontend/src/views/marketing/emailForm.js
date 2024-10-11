@@ -18,7 +18,7 @@ import EmailsPopUps from  './popouts/EmailsPopUps';
 import axiosInstance from '../../axiosInstance';
 
 import { ToastContainer, toast } from 'react-toastify'; // Assuming you are using react-toastify for notifications
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export default function EmailForm() {
   const [validated, setValidated] = useState(false);
@@ -463,7 +463,7 @@ export default function EmailForm() {
       [key]: value,
     }));
   };
-
+  
   const generateTemplateHTML = (selectedTemplate, templateContent) => {
     switch (selectedTemplate) {
       case 'Template1':
@@ -516,7 +516,7 @@ export default function EmailForm() {
             </tbody>
           </table>
         `;
-
+      
       case 'Template2':
         return `
           <table
@@ -713,7 +713,7 @@ export default function EmailForm() {
     }};
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+   
     setValidated(true);
   };
   // Function to handle the selection of recipients
@@ -772,7 +772,7 @@ export default function EmailForm() {
     } else {
       console.error('No file selected');
     }
-
+  
   };
   return (
     <CRow>
@@ -803,7 +803,7 @@ export default function EmailForm() {
             <CRow className="mb-3">
               <CCol>
                 <CFormLabel htmlFor="to">To</CFormLabel> <br/>
-                <CButton color="primary"
+                <CButton color="primary" 
                 onClick={openRecipientsPopUp}
                 onChange={() => setTo(recipients)}
                 >
@@ -815,7 +815,7 @@ export default function EmailForm() {
               </CCol>
               <CCol>
                 <CFormLabel htmlFor="cc">CC</CFormLabel><br/>
-                <CButton color="primary"
+                <CButton color="primary" 
                 onClick={() => openCCRecipientsPopUp()}
                 onChange={() => setCc(ccRecipients)}
                 >
@@ -927,14 +927,14 @@ export default function EmailForm() {
               type='file'
               accept='image/*'
                 id="image1"
-                onChange={(e) => handleFileChange(e,'image1')}
+                onChange={(e) => handleFileChange(e,'image1')} 
                 />
               <CFormLabel htmlFor="image2">image2 for Template 1</CFormLabel>
               <CFormInput
               type='file'
               accept='image/*'
                 id="image2"
-                onChange={(e) => handleFileChange(e,'image2')}
+                onChange={(e) => handleFileChange(e,'image2')} 
                 />
             </>
           )}
@@ -967,28 +967,28 @@ export default function EmailForm() {
                   type='file'
                   accept='image/*'
                   id="logo"
-                  onChange={(e) => handleFileChange(e,'logo')}
+                  onChange={(e) => handleFileChange(e,'logo')} 
                   />
                 <CFormLabel htmlFor="image1">image1</CFormLabel>
                 <CFormInput
                   type='file'
                   accept='image/*'
                   id="image1"
-                  onChange={(e) => handleFileChange(e,'image1')}
+                  onChange={(e) => handleFileChange(e,'image1')} 
                   />
                 <CFormLabel htmlFor="image2">image2 </CFormLabel>
                 <CFormInput
                   type='file'
                   accept='image/*'
                   id="image2"
-                  onChange={(e) => handleFileChange(e,'image2')}
+                  onChange={(e) => handleFileChange(e,'image2')} 
                 />
                 <CFormLabel htmlFor="image2">image 3</CFormLabel>
                 <CFormInput
                   type='file'
                   accept='image/*'
                   id="image3"
-                  onChange={(e) => handleFileChange(e,'image3')}
+                  onChange={(e) => handleFileChange(e,'image3')} 
                 />
             </>
           )}
@@ -1022,28 +1022,28 @@ export default function EmailForm() {
               type='file'
               accept='image/*'
                 id="logo"
-                onChange={(e) => handleFileChange(e,'logo')}
+                onChange={(e) => handleFileChange(e,'logo')} 
                 />
               <CFormLabel htmlFor="image1">image1</CFormLabel>
               <CFormInput
               type='file'
               accept='image/*'
                 id="image1"
-                onChange={(e) => handleFileChange(e,'image1')}
+                onChange={(e) => handleFileChange(e,'image1')} 
                 />
               <CFormLabel htmlFor="image2">image2 </CFormLabel>
               <CFormInput
                 type='file'
                 accept='image/*'
                 id="image2"
-                onChange={(e) => handleFileChange(e,'image2')}
+                onChange={(e) => handleFileChange(e,'image2')} 
               />
               <CFormLabel htmlFor="image2">image 3</CFormLabel>
               <CFormInput
                 type='file'
                 accept='image/*'
                   id="image3"
-                  onChange={(e) => handleFileChange(e,'image3')}
+                  onChange={(e) => handleFileChange(e,'image3')} 
               />
             </>
           )}

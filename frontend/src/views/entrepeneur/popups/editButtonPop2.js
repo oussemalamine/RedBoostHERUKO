@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import axiosInstance from '../../axiosInstance.js';
+import { useDispatch } from 'react-redux';
+
+import axiosInstance from '../../../axiosInstance';
 import axios from 'axios';
 import {
   CContainer,
@@ -18,14 +20,28 @@ import {
   CFormSwitch,
   CModalBody,
   CModalFooter,
-  CFormCheck
+  CFormCheck,
+  CModalHeader,
+  CModalTitle
 } from '@coreui/react';
 import { Toaster, toast } from 'react-hot-toast';
-import { ImportExport } from '../ImportExportEntrepeneur/importExport.js'
-import GovDel from '../../components/GovDel.js'
+import { ImportExport } from '../../ImportExportEntrepeneur/importExport'
+import GovDel from '../../../components/GovDel'
 
-const CreateContactv3 = () => {
 
+
+
+const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
+
+
+
+
+
+  
+    
+    const dispatch = useDispatch();
+
+  // Initialize state with entrepreneur data or empty strings
 
   const marcheList = [
     'Locale', 'National', 'International'
@@ -39,11 +55,11 @@ const CreateContactv3 = () => {
   const accompagnement = ['Formation','Coaching','Technique','Mentorat'];
 
   const accompagnementRed = ['Formation','Coaching','Technique','Mentorat'];
-
-
+  
+  
   const handleCheckboxInputChange = (e, field) => {
     const { value, checked } = e.target;
-
+  
     setContactData((prevData) => {
       if (checked) {
         return {
@@ -58,64 +74,64 @@ const CreateContactv3 = () => {
       }
     });
   };
-
-
+  
+  
 
 
   const initialContactData = {
-    //-------entrepreneur variables-----------
-    nom: '', // Last Name
-    prenom: '', // First Name
-    genre: '', // Gender
-    mobile: '', // Mobile Number
-    email: '', // Email
-    trancheAge: '', // Date of Birth
-    diplome: '', // Diploma/Formation
-    gouvernorat: '', // Governorate
-    delegation: '', // Delegation
-    star: '', // Stars
-    blacklisted: false, // Blacklisted
+    //-------entrepreneurvariables-----------
+    nom:entrepreneur.nom || '',//LastName
+    prenom:entrepreneur.prenom || '',//FirstName
+    genre:entrepreneur.genre || '',//Gender
+    mobile:entrepreneur.mobile || '',//MobileNumber
+    email:entrepreneur.email || '',//Email
+    trancheAge:entrepreneur.trancheAge || '',//DateofBirth
+    diplome:entrepreneur.diplome || '',//Diploma/Formation
+    gouvernorat:entrepreneur.gouvernorat || '',//Governorate
+    delegation:entrepreneur.delegation || '',//Delegation
+    star:entrepreneur.star || '',//Stars
+    blacklisted:entrepreneur.blacklisted || false,//Blacklisted
 
 
-    //--------startup variables---------
-    startupType: '',  // Startup type
-    Label: '',  //Label startup
-    votreRole: '', // Your Role
-    projName: '', // Project Name
-    phaseDeProjet: '', // Project Phase
-    entCapital: '', // Capitale d'entreprise
-    entDate: '', //Date de creation entreprise
-    formeJuridique: '', // Legal Form
-    descriptionActivite: '', // Activity Description
-    secteurActivite: '', // Activity Sector
-    empTot: '', // Number of Employees
-    nbF: '', // Number of female employees
-    projGouv: '', // Project governaurate
-    projDel:'', // Project delegation
-    prodMarch: '',
-    chiffreAf:'',
-    marche: [], // Market (Array of Strings)
-
-
+    //--------startupvariables---------
+    startupType:entrepreneur.startupType || '',//Startuptype
+    Label:entrepreneur.Label || '',//Labelstartup
+    votreRole:entrepreneur.votreRole || '',//YourRole
+    projName:entrepreneur.projName || '',//ProjectName
+    phaseDeProjet:entrepreneur.phaseDeProjet || '',//ProjectPhase
+    entCapital:entrepreneur.entCapital || '',//Capitaled'entreprise
+    entDate:entrepreneur.entDate || '',//Datedecreationentreprise
+    formeJuridique:entrepreneur.formeJuridique || '',//LegalForm
+    descriptionActivite:entrepreneur.descriptionActivite || '',//ActivityDescription
+    secteurActivite:entrepreneur.secteurActivite || '',//ActivitySector
+    empTot:entrepreneur.empTot || '',//NumberofEmployees
+    nbF:entrepreneur.nbF || '',//Numberoffemaleemployees
+    projGouv:entrepreneur.projGouv || '',//Projectgovernaurate
+    projDel:entrepreneur.projDel || '',//Projectdelegation
+    prodMarch:entrepreneur.prodMarch || '',
+    chiffreAf:entrepreneur.chiffreAf || '',
+    marche:entrepreneur.marche || [],//Market(ArrayofStrings)
+   
+   
     //---------------------------------
-    typeFinance: [],
-    montantFinance: '',
-    sourceFinance: '',
-    progAcc: '',
-    progAccNom: '', // Support Program
-    typeAcc:[],
-    besoinAppui: '', // Support Needs (Array of Strings)
-    socialMedia: '',
-    siteWeb: '',
+    typeFinance : entrepreneur.typeFinance || [],
+    montantFinance : entrepreneur.montantFinance || '',
+    sourceFinance : entrepreneur.sourceFinance || '',
+    progAcc : entrepreneur.progAcc || '',
+    progAccNom : entrepreneur.progAccNom || '',//SupportProgram
+    typeAcc : entrepreneur.typeAcc || [],
+    besoinAppui : entrepreneur.besoinAppui || '',//SupportNeeds(ArrayofStrings)
+    socialMedia : entrepreneur.socialMedia || '',
+    siteWeb : entrepreneur.siteWeb || '',
 
 
-    // //---------------------------------------
-    typeFinanceRed:[],
-    montantFinanceRed: '',
-    progAccRed: '',
-    redProg:[],
-    typeAccRed:[]
-
+    ////---------------------------------------
+    typeFinanceRed : entrepreneur.typeFinanceRed || [],
+    montantFinanceRed : entrepreneur.montantFinanceRed || '',
+    progAccRed : entrepreneur.progAccRed || '',
+    redProg : entrepreneur.redProg || [],
+    typeAccRed : entrepreneur.typeAccRed || []
+   
   };
   const [contactData, setContactData] = useState(initialContactData);
   const [validated, setValidated] = useState(false);
@@ -141,7 +157,46 @@ const CreateContactv3 = () => {
 
 
 
-
+  const formValidation = () => {
+    if(contactData.genre==='') return toast.error(`Genre invalide`);
+        if(contactData.mobile.length<8) return toast.error(`Mobile invalide`);
+        if(isNaN(contactData.mobile)) return toast.error(`Mobile invalide`);
+        if(!emailRegex.test(contactData.email)) return toast.error(`Email invalide`);
+        if(contactData.trancheAge==='') return toast.error(`Choisir Tranche d'age`);
+        if(contactData.diplome==='') return toast.error(`Choisir Diplome`);
+        if(contactData.gouvernorat==='') return toast.error(`Choisir Gouvernoat`);
+        if(contactData.delegation==='') return toast.error(`Choisir Delegation`);
+        if(contactData.startupType==='') return toast.error(`Choisir le type`);
+        if(contactData.Label==='' && contactData.startupType==='startup') return toast.error(`Choisir Label`);
+        if(contactData.votreRole==='') return toast.error(`Choisir votre Role`);
+        if(contactData.projName.length<2) return toast.error(`Nom du projet invalide`);
+        if(contactData.phaseDeProjet==='') return toast.error(`Choisir Phase du projet`);
+        if(contactData.phaseDeProjet==='Crée' && contactData.entCapital==='') return toast.error(`Choisir Capitale du l'entreprise`);
+        if(contactData.phaseDeProjet==='Crée' && contactData.entDate==='') return toast.error(`Choisir Date de création`);
+        if(contactData.phaseDeProjet==='Crée' && contactData.formeJuridique === '') return toast.error(`Choisir Forme de l'entreprise`);
+        if(contactData.descriptionActivite.length<5) return toast.error(`Description invalide`);
+        if(contactData.secteurActivite==='') return toast.error(`Choisir Secteur d'activité`);
+        if(isNaN(contactData.empTot)||contactData.empTot==='') return toast.error(`Choisir nombre totale d'employés`);
+        if(isNaN(contactData.nbF)||contactData.nbF==='') return toast.error(`Choisir nombre d'employés femmes`);
+        if(contactData.nbF > contactData.empTot) return toast.error(`Nombre d'employés femmes invalide`);
+        if(contactData.projGouv==='') return toast.error(`Choisir Gouvernoat du projet`);
+        if(contactData.projDel==='') return toast.error(`Choisir Delegation du projet`);
+        if(contactData.prodMarch==='') return toast.error(`Est-que vos produits / services sur le marché?`);
+        if(contactData.prodMarch==='Oui' && contactData.marche.length===0) return toast.error(`Saisir le marché?`);
+        if(contactData.chiffreAf==='') return toast.error(`Choisir Chiffre d'affaires`);
+        if(contactData.typeFinance.length===0) return toast.error(`Choisir Type de financement`);
+        if(contactData.montantFinance==='') return toast.error(`Choisir Montant de financement`);
+        if((contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention'))&&contactData.sourceFinance==='') return toast.error(`Choisir Source de financement`);
+        if(contactData.progAcc==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
+        if(contactData.progAcc==='Oui' && contactData.progAccNom=='') return toast.error(`Tapez le programme d'accompagnement`);
+        if(contactData.progAcc==='Oui' && contactData.typeAcc.length===0) return toast.error(`Choisir le Type d'accompagnement`);
+        if(contactData.besoinAppui.length<5)return toast.error(`Tapez les besoins`);
+        if(contactData.typeFinanceRed.length===0) return toast.error(`Choisir Type de financement`);
+        if(contactData.montantFinanceRed==='') return toast.error(`Choisir Montant de financement`);
+        if(contactData.progAccRed === '') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
+        if(contactData.progAccRed === 'Oui' && contactData.redProg.length === 0) return toast.error(`Choisir le(s) programme d'accompagnement`);
+        if(contactData.typeAccRed.length===0) return toast.error(`Choisir le Type d'accompagnement`);
+  }
 
   const notifySuccess = () => {
     toast.success("Contact created successfully", {
@@ -149,59 +204,16 @@ const CreateContactv3 = () => {
     });
   };
 
-  const formValidation = () => {
-    if(contactData.nom.length<3) return toast.error(`Nom Invalide`);
-    if(contactData.prenom.length<3) return toast.error(`Prénom Invalide`);
-    if(contactData.genre==='') return toast.error(`Genre Invalide`);
-    if(contactData.mobile.length<8) return toast.error(`Mobile Invalide`);
-    if(isNaN(contactData.mobile)) return toast.error(`Mobile invalide`);
-    if (!emailRegex.test(contactData.email)) return toast.error(`Email Invalide`);
-    if(contactData.trancheAge==='') return toast.error(`Choisir Tranche d'Age`);
-    if(contactData.diplome==='') return toast.error(`Choisir Diplome`);
-    if(contactData.gouvernorat==='') return toast.error(`Choisir Gouvernoat`);
-    if(contactData.delegation==='') return toast.error(`Choisir Delegation`);
-    // if(contactData.startupType==='') return toast.error(`Choisir le Type`);
-    // if(contactData.Label==='' && contactData.startupType==='startup') return toast.error(`Choisir Label`);
-    // if(contactData.votreRole==='') return toast.error(`Choisir votre Role`);
-    // if(contactData.projName.length<2) return toast.error(`Nom du projet invalide`);
-    // if(contactData.phaseDeProjet==='') return toast.error(`Choisir Phase du projet`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.entCapital==='') return toast.error(`Choisir Capitale du l'entreprise`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.entDate==='') return toast.error(`Choisir Date de création`);
-    // if(contactData.phaseDeProjet==='Crée' && contactData.formeJuridique === '') return toast.error(`Choisir Forme de l'entreprise`);
-    // if(contactData.descriptionActivite.length<5) return toast.error(`Description invalide`);
-    // if(contactData.secteurActivite==='') return toast.error(`Choisir Secteur d'activité`);
-    // if(isNaN(contactData.empTot)||contactData.empTot==='') return toast.error(`Choisir nombre totale d'employés`);
-    // if(isNaN(contactData.nbF)||contactData.nbF==='') return toast.error(`Choisir nombre d'employés femmes`);
-    // if(contactData.nbF > contactData.empTot) return toast.error(`Nombre d'employés femmes invalide`);
-    // if(contactData.projGouv==='') return toast.error(`Choisir Gouvernoat du projet`);
-    // if(contactData.projDel==='') return toast.error(`Choisir Delegation du projet`);
-   // if(contactData.prodMarch==='') return toast.error(`Est-que vos produits / services sur le marché?`);
-   // if(contactData.prodMarch==='Oui' && contactData.marche.length===0) return toast.error(`Saisir le marché?`);
-   // if(contactData.chiffreAf==='') return toast.error(`Choisir Chiffre d'affaires`);
-   // if(contactData.typeFinance.length===0) return toast.error(`Choisir Type de financement`);
-   // if(contactData.montantFinance==='') return toast.error(`Choisir Montant de financement`);
-   // if((contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention'))&&contactData.sourceFinance==='') return toast.error(`Choisir Source de financement`);
-   // if(contactData.progAcc==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-   // if(contactData.progAcc==='Oui' && contactData.progAccNom=='') return toast.error(`Tapez le programme d'accompagnement`);
-   // if(contactData.progAcc==='Oui' && contactData.typeAcc.length===0) return toast.error(`Choisir le Type d'accompagnement`);
-   // if(contactData.besoinAppui.length<5)return toast.error(`Tapez les besoins`);
-   // if(contactData.typeFinanceRed.length===0) return toast.error(`Choisir Type de financement`);
-   // if(contactData.montantFinanceRed==='') return toast.error(`Choisir Montant de financement`);
-   // if(contactData.progAccRed==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-   // if(contactData.progAccRed==='Oui' && contactData.redProg=='') return toast.error(`Choisir le(s) programme d'accompagnement`);
-   // if(contactData.typeAccRed.length===0) return toast.error(`Choisir le Type d'accompagnement`);
-  }
-
   const handleInputChange = (event) => {
     const { name, type, value, checked } = event.target;
-
+  
     // Handle different input types
     setContactData(prevState => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value, // Use 'checked' for checkboxes, 'value' for others
     }));
   };
-
+  
 
   const gouvernorats = Object.keys(GovDel);
   const selectedGouvernorat = contactData.gouvernorat;
@@ -212,42 +224,52 @@ const CreateContactv3 = () => {
   const delegationStartup = selectedGouvernoratStartup ? GovDel[selectedGouvernoratStartup] : [];
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    }
-    setValidated(true);
-    if (formValidation()) return false;
 
 
-      console.log('DATA: ',contactData);
+  const handleSaveChanges = async () => {
+
+
     try {
-      await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/createentrepreneurs', contactData);
-      toast.success("Contact Crée Avec Succès");
-      setContactData(initialContactData);
+        
+      // Validate form (assuming validateForm and displayErrorToast functions are defined elsewhere)
+      if (formValidation()) return false;
+    
+  
+      // Make PUT request to update entrepreneur
+      const response = await axiosInstance.put(`/updateEntrepreneur/${entrepreneur._id}`, contactData);
+  
+      // Assuming entrepreneur state is updated elsewhere in your React component
+      setVisible(false); // Close modal after saving
+  
+      // Show success toast
+      toast.success('Entrepreneur mis à jour avec succès!', {
+        autoClose: 3000,
+      });
     } catch (error) {
-      console.error(error);
-      toast.error('Echec de Créer un Contact');
+      // Handle error
+      console.error('Error updating entrepreneur:', error);
+  
+      // Show error toast
+      toast.error('Erreur lors de la mise à jour de l\'entrepreneur. Veuillez réessayer.', {
+        autoClose: 3000,
+      });
     }
-  }
+  };
 
   return (
-    <CContainer>
-      <ImportExport />
-      <Toaster position="top-right" reverseOrder={false}  />
-      <CCard>
-        <CCardHeader className="bg-dark text-light">Créer un Nouveau Contact</CCardHeader>
-        <CCardBody>
-          <CForm
-            className="row g-3 needs-validation"
-            noValidate
-            validated={validated}
-            onSubmit={handleSubmit}
-          >
-
+    <CModal
+      size='lg'
+      visible={visible}
+      onClose={() => setVisible(false)}
+      aria-labelledby="editButtonPopModal"
+      backdrop="static"
+    >
+            <Toaster position="top-right" reverseOrder={false}  />
+      <CModalHeader closeButton>
+        <CModalTitle>Edit Entrepreneur</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+            
 {/* ==================================================================================================================================== */}
 {/* =======================================================ENTREPENER INFORMATION======================================================= */}
 {/* ==================================================================================================================================== */}
@@ -256,33 +278,6 @@ const CreateContactv3 = () => {
               <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
                 <legend className="w-auto">Informations sur l'entrepreneur</legend>
                 <CRow>
-                  <CCol md="6">
-                    {/* Input fields for entrepreneur information */}
-                    <CFormLabel className="mt-2">Nom: </CFormLabel>
-                    <CFormInput
-                      type="text"
-                      name="nom"
-                      value={contactData.nom}
-                      onChange={handleInputChange}
-                      valid={contactData.nom !== ''}
-                      placeholder="Nom"
-                      required
-                      feedbackInvalid="Le nom est requis."
-                    />
-                  </CCol>
-                  <CCol md="6">
-                    <CFormLabel className="mt-2">Prénom: </CFormLabel>
-                    <CFormInput
-                      type="text"
-                      name="prenom"
-                      value={contactData.prenom}
-                      onChange={handleInputChange}
-                      valid={contactData.prenom !== ''}
-                      placeholder="Prénom "
-                      required
-                      feedbackInvalid="Prénom est requis."
-                    />
-                  </CCol>
                   <CCol md='6'>
                     <CFormLabel className="mt-2">Genre: </CFormLabel>
                     <CFormSelect
@@ -349,7 +344,7 @@ const CreateContactv3 = () => {
                       onChange={handleInputChange}
                       placeholder="Diplôme / Formation"
                       valid={contactData.diplome !== ''}
-
+                      required
                       feedbackInvalid="diplome / Formation est requis."
                     >
                       <option value="">Sélectionner le diplôme / la formation </option>
@@ -368,7 +363,7 @@ const CreateContactv3 = () => {
                       value={contactData.gouvernorat}
                       onChange={handleInputChange}
                       placeholder="Gouvernorat"
-
+                      required
                       valid={contactData.gouvernorat !== ''}
                       feedbackInvalid="Gouvernorat est requis."
                     >
@@ -387,7 +382,7 @@ const CreateContactv3 = () => {
                       value={contactData.delegation}
                       onChange={handleInputChange}
                       placeholder="Delegation"
-
+                      required
                       valid={contactData.delegation !== ''}
                       feedbackInvalid="Delegation est requis."
                     >
@@ -407,6 +402,9 @@ const CreateContactv3 = () => {
                       placeholder='XP points'
                       value={contactData.star}
                       onChange={handleInputChange}
+                      valid={contactData.star !== ''}
+                      feedbackInvalid="Star requis!"
+                      required
                     />
                   </CCol>
                   <CCol md='12'>
@@ -437,10 +435,10 @@ const CreateContactv3 = () => {
 
 {/* ==================================================================================================================================== */}
 {/* =======================================================STARTUP INFORMATION========================================================== */}
-{/* ==================================================================================================================================== */}
+{/* ==================================================================================================================================== */}            
             <CCol md="6" className="mb-4">
 
-
+              
               <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
               <legend className="w-auto">Informations sur le projet/startup</legend>
               <CRow>
@@ -452,7 +450,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Vous êtes Projet / startup"
                     valid={contactData.startupType !== ''}
-
+                    required
                 >
                     <option value="">Vous êtes Startup / Entreprise</option>
                     <option value="entreprise">Entreprise</option>
@@ -474,7 +472,7 @@ const CreateContactv3 = () => {
                 </CCol>
                 )}
 
-
+                
                 <CCol md="12">
                   <CFormLabel className="mt-2">Votre Role au sein de l'entreprise:</CFormLabel>
                   <CFormSelect
@@ -482,7 +480,7 @@ const CreateContactv3 = () => {
                     value={contactData.votreRole}
                     onChange={handleInputChange}
                     valid={contactData.votreRole !== ''}
-
+                    required
                   >
                     <option value="">Sélectionner votre role</option>
                     <option value="Président Directeur Général">Président Directeur Général</option>
@@ -501,7 +499,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Nom du project"
                     valid={contactData.projName.length >= 4}
-
+                    required
                     />
                 </CCol>
                 <CCol md="12">
@@ -511,7 +509,7 @@ const CreateContactv3 = () => {
                     value={contactData.phaseDeProjet}
                     onChange={handleInputChange}
                     valid={contactData.phaseDeProjet !== ''}
-
+                    required
                 >
                     <option value="">Selectionner le phase</option>
                     <option value="Ideation">Ideation</option>
@@ -534,7 +532,7 @@ const CreateContactv3 = () => {
                         valid={contactData.entCapital !== ''}
                         feedbackInvalid="Capitale de l'entreprise requis!"
                         required={contactData.phaseDeProjet === 'Crée'}
-
+                        
                     />
                     </CCol>
                     <CCol md="6">
@@ -579,7 +577,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="Desciription"
                     valid={contactData.descriptionActivite !== ''}
-
+                    required
                     />
                 </CCol>
                 <CCol md="12">
@@ -589,7 +587,7 @@ const CreateContactv3 = () => {
                     value={contactData.secteurActivite}
                     onChange={handleInputChange}
                     valid={contactData.secteurActivite}
-
+                    required
                   >
                     <option value="">Selectionner Secteur d'Activite</option>
                     <option value="Secteur Agricole">Secteur Agricole</option>
@@ -615,7 +613,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="N° Total"
                     feedbackInvalid="N° Total est requis."
-
+                    required
                   />
                 </CCol>
                 <CCol md="6">
@@ -628,7 +626,7 @@ const CreateContactv3 = () => {
                     onChange={handleInputChange}
                     placeholder="N° des femmes"
                     feedbackInvalid="N° des femmes est requis."
-
+                    required
                   />
                 </CCol>
                 <CCol md='6'>
@@ -640,7 +638,7 @@ const CreateContactv3 = () => {
                       placeholder="Gouvernorat"
                       valid={contactData.projGouv !== ''}
                       feedbackInvalid="Gouvernorat est requis."
-
+                      required
                     >
                       <option value="">Select Gouvernorat</option>
                       {gouvernoratStartup.map((gouv) => (
@@ -659,7 +657,7 @@ const CreateContactv3 = () => {
                       placeholder="Delegation"
                       valid={contactData.projDel !== ''}
                       feedbackInvalid="Delegation est requis."
-
+                      required
                     >
                       <option value="">Select Delegation</option>
                       {delegationStartup.map((dele) => (
@@ -671,19 +669,19 @@ const CreateContactv3 = () => {
                   </CCol>
                   <CCol md="12">
                     <CFormLabel className="mt-2">Est-que vos produits / services sur le marché?</CFormLabel><br/>
-                    <CFormCheck
-                        type="radio"
-                        name="prodMarch"
-                        id="marchOui"
-                        value="Oui"
+                    <CFormCheck 
+                        type="radio" 
+                        name="prodMarch" 
+                        id="marchOui" 
+                        value="Oui" 
                         checked={contactData.prodMarch === 'Oui'}
                         onChange={handleInputChange}
                     /> &nbsp;Oui &nbsp;&nbsp;&nbsp;&nbsp;
-                    <CFormCheck
-                        type="radio"
-                        name="prodMarch"
-                        id="marchNon"
-                        value="Non"
+                    <CFormCheck 
+                        type="radio" 
+                        name="prodMarch" 
+                        id="marchNon" 
+                        value="Non" 
                         checked={contactData.prodMarch === 'Non'}
                         onChange={handleInputChange}
                     /> &nbsp;Non
@@ -715,7 +713,7 @@ const CreateContactv3 = () => {
                     value={contactData.chiffreAf}
                     onChange={handleInputChange}
                     valid={contactData.chiffreAf !== ''}
-
+                    required
                   >
                     <option value="">Selectionner Chiffre d'Affaires</option>
                     <option value="1,000 ou moins">1,000 ou moins</option>
@@ -748,8 +746,8 @@ const CreateContactv3 = () => {
                     value={source}
                     label={source}
                     checked={contactData.typeFinance.includes(source)}
-                    onChange={(e) => handleCheckboxInputChange(e, 'typeFinance')}
-
+                    onChange={(e) => handleCheckboxInputChange(e, 'typeFinance')} 
+                    required
                     />
                 ))}
                 </CCol>
@@ -762,7 +760,7 @@ const CreateContactv3 = () => {
                     value={contactData.montantFinance}
                     onChange={handleInputChange}
                     placeholder="Montant"
-
+                    required
                 />
                 </CCol>
 
@@ -785,19 +783,19 @@ const CreateContactv3 = () => {
 
                 <CCol md="12">
                 <CFormLabel className="mt-2">Avez-vous déjà bénéficié d'un programme d'accompagnement?</CFormLabel><br/>
-                <CFormCheck
-                    type="radio"
-                    name="progAcc"
-                    id="progAcc1"
-                    value="Oui"
+                <CFormCheck 
+                    type="radio" 
+                    name="progAcc" 
+                    id="progAcc1" 
+                    value="Oui" 
                     checked={contactData.progAcc === 'Oui'}
                     onChange={handleInputChange}
                 /> &nbsp;Oui &nbsp;&nbsp;&nbsp;
-                <CFormCheck
-                    type="radio"
-                    name="progAcc"
-                    id="progAcc2"
-                    value="Non"
+                <CFormCheck 
+                    type="radio" 
+                    name="progAcc" 
+                    id="progAcc2" 
+                    value="Non" 
                     checked={contactData.progAcc === 'Non'}
                     onChange={handleInputChange}
                 /> &nbsp;Non
@@ -828,10 +826,10 @@ const CreateContactv3 = () => {
                         name="typeAcc"
                         value={source}
                         label={source}
-                        valid={contactData.typeAcc !== ''}
+                        valid={contactData.typeAcc !== ''} 
                         checked={contactData.typeAcc.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAcc')}
-
+                        required
                         />
                     ))}
                     </CCol>
@@ -842,13 +840,14 @@ const CreateContactv3 = () => {
                     <CFormLabel className="mt-2">Quels sont les besoins de votre projet  en matière d'appui?</CFormLabel>
                     <CFormTextarea
                         rows={2}
+                        text="Must be 8-20 words long."
                         name="besoinAppui"
                         placeholder="Besions"
                         value={contactData.besoinAppui}
                         onChange={handleInputChange}
                         valid={contactData.besoinAppui !== ''}
                         feedbackInvalid="Champ requis!"
-
+                        required
                     />
                   </CCol>
                   <CCol md='12'>
@@ -875,10 +874,10 @@ const CreateContactv3 = () => {
                     />
                   </CCol>
                   </fieldset>
+                  
 
 
-
-
+            
           </CCol>
           <CCol md="6" className="mb-4">
             <fieldset className="border border-success p-4 bg-light rounded mt-4 mb-0" style={{ marginBottom: "20px" }}>
@@ -895,7 +894,7 @@ const CreateContactv3 = () => {
                     checked={contactData.typeFinanceRed.includes(source)}
                     valid={contactData.typeFinanceRed !== ''}
                     onChange={(e) => handleCheckboxInputChange(e, 'typeFinanceRed')}
-
+                    required
                     />
                     ))}
                 </CCol>
@@ -908,27 +907,27 @@ const CreateContactv3 = () => {
                     valid={contactData.montantFinanceRed !== ''}
                     onChange={handleInputChange}
                     placeholder="Montant"
-
+                    required
                   />
               </CCol>
               <CCol md="12">
                     <CFormLabel className="mt-2">Avez-vous déjà bénéficié d'un programme d'accompagnement?</CFormLabel><br/>
-                    <CFormCheck
-                        type="radio"
-                        name="progAccRed"
-                        id="progAccRedOui"
-                        value="Oui"
+                    <CFormCheck 
+                        type="radio" 
+                        name="progAccRed" 
+                        id="progAccRedOui" 
+                        value="Oui" 
                         checked={contactData.progAccRed === 'Oui'}
                         onChange={handleInputChange}
                     /> &nbsp;Oui &nbsp;&nbsp;&nbsp;
-                    <CFormCheck
-                        type="radio"
-                        name="progAccRed"
-                        id="progAccRedNon"
-                        value="Non"
+                    <CFormCheck 
+                        type="radio" 
+                        name="progAccRed" 
+                        id="progAccRedNon" 
+                        value="Non" 
                         checked={contactData.progAccRed === 'Non'}
                         onChange={handleInputChange}
-                    /> &nbsp;Non
+                    /> &nbsp;Non                
                     </CCol>
 
                     {/* Conditionally render the checkboxes only if "Oui" is selected */}
@@ -963,28 +962,26 @@ const CreateContactv3 = () => {
                         valid={contactData.typeAccRed !== ''}
                         checked={contactData.typeAccRed.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAccRed')}
-
+                        required
                         />
                     ))}
                     </CCol>
                   </fieldset>
-
+            
           </CCol>
           </CRow>
-
-          <CRow>
-            <CCol className="text-center mt-4">
-              <CButton type="submit" color="success">Create Contact</CButton>
-            </CCol>
-          </CRow>
-
-
-
-          </CForm>
-        </CCardBody>
-      </CCard>
-    </CContainer>
+          
+          </CModalBody>
+      <CModalFooter>
+        <CButton color="secondary" onClick={() => setVisible(false)}>
+          Annuler
+        </CButton>
+        <CButton color="primary" onClick={handleSaveChanges}>
+          Sauvegarder
+        </CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 
-export default CreateContactv3;
+export default EditButtonPop;
