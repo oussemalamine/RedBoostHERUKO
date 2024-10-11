@@ -216,23 +216,47 @@ const CreateContactv3 = () => {
     e.preventDefault();
     const form = e.currentTarget;
 
+    // Check form validity
     if (form.checkValidity() === false) {
       e.stopPropagation();
+      setValidated(true);  // Show validation feedback
+      return;
     }
-    setValidated(true);
-    if (formValidation()) return false;
 
+    // Perform any custom form validation (formValidation function)
+    if (formValidation()) {
+      return false;
+    }
 
-      console.log('DATA: ',contactData);
+    // Log the contact data before submission
+    console.log('DATA: ', contactData);
+
     try {
-      await axios.post('https://redboost-65f83dc8cbf1.herokuapp.com/createentrepreneurs', contactData);
+      // Attempt to send data to the server
+      await axios.post('http://localhost:5000/createentrepreneurs', contactData);
       toast.success("Contact Crée Avec Succès");
+
+      // Reset form data after successful submission
       setContactData(initialContactData);
+
     } catch (error) {
+      // Improved error handling
       console.error(error);
-      toast.error('Echec de Créer un Contact');
+
+      if (error.response) {
+        // If the server responds with an error status (like 400 or 500)
+        const errorMessage = error.response.data.message || 'Erreur inconnue';
+        toast.error(`Echec de Créer un Contact: ${errorMessage}`);
+      } else if (error.request) {
+        // If no response was received (network error)
+        toast.error("Aucune réponse du serveur. Veuillez vérifier votre connexion réseau.");
+      } else {
+        // Other errors during setup
+        toast.error(`Erreur: ${error.message}`);
+      }
     }
-  }
+  };
+
 
   return (
     <CContainer>
