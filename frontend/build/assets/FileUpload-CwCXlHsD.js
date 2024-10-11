@@ -1,1 +1,0 @@
-import{r as s,j as e}from"./index-CDhOlBFJ.js";import"./firebase-Crr-XX6G.js";function p(){const[l,t]=s.useState(null),[r,n]=s.useState(0);return e.jsxs("div",{children:[e.jsx("input",{type:"file",onChange:o=>t(o.target.files[0])}),e.jsx("button",{onClick:handleUpload,children:"Upload"}),e.jsxs("p",{children:["Upload Progress: ",r,"%"]})]})}export{p as default};
