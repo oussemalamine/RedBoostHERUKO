@@ -47,7 +47,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
     'Locale', 'National', 'International'
   ];
 
-  const redprog = ['CREACT4MED','widu','Women Go Green'];
+  const redprog = ['CREACT4MED','widu','Women Go Green', 'Greenit', 'Women Go Green 2', 'Redinnov', 'Junior Boss', 'SwitchMed II', 'We Go2Market'];
 
   const sourceFinList = [
     'Auto Financement', 'Crédit', 'Subvention'
@@ -404,7 +404,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                       onChange={handleInputChange}
                       valid={contactData.star !== ''}
                       feedbackInvalid="Star requis!"
-                      required
                     />
                   </CCol>
                   <CCol md='12'>
@@ -450,7 +449,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     placeholder="Vous êtes Projet / startup"
                     valid={contactData.startupType !== ''}
-                    required
+
                 >
                     <option value="">Vous êtes Startup / Entreprise</option>
                     <option value="entreprise">Entreprise</option>
@@ -467,7 +466,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.Label}
                     onChange={handleInputChange}
                     placeholder="Pré-Label / Label Startup"
-                    required={contactData.startupType === 'startup'}
+
                     />
                 </CCol>
                 )}
@@ -480,7 +479,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.votreRole}
                     onChange={handleInputChange}
                     valid={contactData.votreRole !== ''}
-                    required
+
                   >
                     <option value="">Sélectionner votre role</option>
                     <option value="Président Directeur Général">Président Directeur Général</option>
@@ -499,7 +498,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     placeholder="Nom du project"
                     valid={contactData.projName.length >= 4}
-                    required
+
                     />
                 </CCol>
                 <CCol md="12">
@@ -509,7 +508,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.phaseDeProjet}
                     onChange={handleInputChange}
                     valid={contactData.phaseDeProjet !== ''}
-                    required
+
                 >
                     <option value="">Selectionner le phase</option>
                     <option value="Ideation">Ideation</option>
@@ -531,7 +530,7 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         onChange={handleInputChange}
                         valid={contactData.entCapital !== ''}
                         feedbackInvalid="Capitale de l'entreprise requis!"
-                        required={contactData.phaseDeProjet === 'Crée'}
+
 
                     />
                     </CCol>
@@ -544,7 +543,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         value={contactData.entDate}
                         onChange={handleInputChange}
                         feedbackInvalid="Date de création est requis."
-                        required={contactData.phaseDeProjet === 'Crée'}
                     />
                     </CCol>
                     <CCol md="12">
@@ -554,7 +552,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         value={contactData.formeJuridique}
                         onChange={handleInputChange}
                         valid={contactData.formeJuridique !== ''}
-                        required={contactData.phaseDeProjet === 'Crée'}
                     >
                         <option value="">Selectionner Forme</option>
                         <option value="Société à Responsabilité Limitée">Société à Responsabilité Limitée (SARL)</option>
@@ -577,7 +574,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     placeholder="Desciription"
                     valid={contactData.descriptionActivite !== ''}
-                    required
                     />
                 </CCol>
                 <CCol md="12">
@@ -587,7 +583,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.secteurActivite}
                     onChange={handleInputChange}
                     valid={contactData.secteurActivite}
-                    required
                   >
                     <option value="">Selectionner Secteur d'Activite</option>
                     <option value="Secteur Agricole">Secteur Agricole</option>
@@ -613,7 +608,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     placeholder="N° Total"
                     feedbackInvalid="N° Total est requis."
-                    required
                   />
                 </CCol>
                 <CCol md="6">
@@ -626,7 +620,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     placeholder="N° des femmes"
                     feedbackInvalid="N° des femmes est requis."
-                    required
                   />
                 </CCol>
                 <CCol md='6'>
@@ -638,7 +631,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                       placeholder="Gouvernorat"
                       valid={contactData.projGouv !== ''}
                       feedbackInvalid="Gouvernorat est requis."
-                      required
                     >
                       <option value="">Select Gouvernorat</option>
                       {gouvernoratStartup.map((gouv) => (
@@ -657,7 +649,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                       placeholder="Delegation"
                       valid={contactData.projDel !== ''}
                       feedbackInvalid="Delegation est requis."
-                      required
                     >
                       <option value="">Select Delegation</option>
                       {delegationStartup.map((dele) => (
@@ -700,7 +691,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                             label={marche}
                             checked={contactData.marche.includes(marche)}
                             onChange={(e) => handleCheckboxInputChange(e, 'marche')}
-                            required={contactData.prodMarch === 'Oui'}
                         />
                         ))}
                     </CCol>
@@ -713,7 +703,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.chiffreAf}
                     onChange={handleInputChange}
                     valid={contactData.chiffreAf !== ''}
-                    required
                   >
                     <option value="">Selectionner Chiffre d'Affaires</option>
                     <option value="1,000 ou moins">1,000 ou moins</option>
@@ -747,7 +736,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     label={source}
                     checked={contactData.typeFinance.includes(source)}
                     onChange={(e) => handleCheckboxInputChange(e, 'typeFinance')}
-                    required
                     />
                 ))}
                 </CCol>
@@ -760,7 +748,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     value={contactData.montantFinance}
                     onChange={handleInputChange}
                     placeholder="Montant"
-                    required
                 />
                 </CCol>
 
@@ -776,7 +763,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     onChange={handleInputChange}
                     valid={contactData.sourceFinance !== ''}
                     feedbackInvalid="Source de Financement requis!"
-                    required={contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention')}
                     />
                 </CCol>
                 )}
@@ -814,7 +800,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         onChange={handleInputChange}
                         valid={contactData.progAccNom !== ''}
                         feedbackInvalid="Programme requis!"
-                        required={contactData.progAcc === 'Oui'}
                     />
                     </CCol>
                     <CCol md="12">
@@ -829,7 +814,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         valid={contactData.typeAcc !== ''}
                         checked={contactData.typeAcc.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAcc')}
-                        required
                         />
                     ))}
                     </CCol>
@@ -847,7 +831,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         onChange={handleInputChange}
                         valid={contactData.besoinAppui !== ''}
                         feedbackInvalid="Champ requis!"
-                        required
                     />
                   </CCol>
                   <CCol md='12'>
@@ -894,7 +877,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     checked={contactData.typeFinanceRed.includes(source)}
                     valid={contactData.typeFinanceRed !== ''}
                     onChange={(e) => handleCheckboxInputChange(e, 'typeFinanceRed')}
-                    required
                     />
                     ))}
                 </CCol>
@@ -907,7 +889,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                     valid={contactData.montantFinanceRed !== ''}
                     onChange={handleInputChange}
                     placeholder="Montant"
-                    required
                   />
               </CCol>
               <CCol md="12">
@@ -944,7 +925,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                             checked={contactData.redProg.includes(source)}
                             valid={contactData.redProg !== ''}
                             onChange={(e) => handleCheckboxInputChange(e, 'redProg')}
-                            required={contactData.progAccRed === 'Oui'}
                         />
                         ))}
                     </CCol>
@@ -962,7 +942,6 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
                         valid={contactData.typeAccRed !== ''}
                         checked={contactData.typeAccRed.includes(source)}
                         onChange={(e) => handleCheckboxInputChange(e, 'typeAccRed')}
-                        required
                         />
                     ))}
                     </CCol>
