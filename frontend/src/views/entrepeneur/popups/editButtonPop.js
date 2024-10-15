@@ -157,46 +157,16 @@ const EditButtonPop = ({ visible, setVisible, entrepreneur }) => {
 
 
 
-  // const formValidation = () => {
-  //   if(contactData.genre==='') return toast.error(`Genre invalide`);
-  //       if(contactData.mobile.length<8) return toast.error(`Mobile invalide`);
-  //       if(isNaN(contactData.mobile)) return toast.error(`Mobile invalide`);
-  //       if(!emailRegex.test(contactData.email)) return toast.error(`Email invalide`);
-  //       if(contactData.trancheAge==='') return toast.error(`Choisir Tranche d'age`);
-  //       if(contactData.diplome==='') return toast.error(`Choisir Diplome`);
-  //       if(contactData.gouvernorat==='') return toast.error(`Choisir Gouvernoat`);
-  //       if(contactData.delegation==='') return toast.error(`Choisir Delegation`);
-  //       if(contactData.startupType==='') return toast.error(`Choisir le type`);
-  //       if(contactData.Label==='' && contactData.startupType==='startup') return toast.error(`Choisir Label`);
-  //       if(contactData.votreRole==='') return toast.error(`Choisir votre Role`);
-  //       if(contactData.projName.length<2) return toast.error(`Nom du projet invalide`);
-  //       if(contactData.phaseDeProjet==='') return toast.error(`Choisir Phase du projet`);
-  //       if(contactData.phaseDeProjet==='Crée' && contactData.entCapital==='') return toast.error(`Choisir Capitale du l'entreprise`);
-  //       if(contactData.phaseDeProjet==='Crée' && contactData.entDate==='') return toast.error(`Choisir Date de création`);
-  //       if(contactData.phaseDeProjet==='Crée' && contactData.formeJuridique === '') return toast.error(`Choisir Forme de l'entreprise`);
-  //       if(contactData.descriptionActivite.length<5) return toast.error(`Description invalide`);
-  //       if(contactData.secteurActivite==='') return toast.error(`Choisir Secteur d'activité`);
-  //       if(isNaN(contactData.empTot)||contactData.empTot==='') return toast.error(`Choisir nombre totale d'employés`);
-  //       if(isNaN(contactData.nbF)||contactData.nbF==='') return toast.error(`Choisir nombre d'employés femmes`);
-  //       if(contactData.nbF > contactData.empTot) return toast.error(`Nombre d'employés femmes invalide`);
-  //       if(contactData.projGouv==='') return toast.error(`Choisir Gouvernoat du projet`);
-  //       if(contactData.projDel==='') return toast.error(`Choisir Delegation du projet`);
-  //       if(contactData.prodMarch==='') return toast.error(`Est-que vos produits / services sur le marché?`);
-  //       if(contactData.prodMarch==='Oui' && contactData.marche.length===0) return toast.error(`Saisir le marché?`);
-  //       if(contactData.chiffreAf==='') return toast.error(`Choisir Chiffre d'affaires`);
-  //       if(contactData.typeFinance.length===0) return toast.error(`Choisir Type de financement`);
-  //       if(contactData.montantFinance==='') return toast.error(`Choisir Montant de financement`);
-  //       if((contactData.typeFinance.includes('Crédit') || contactData.typeFinance.includes('Subvention'))&&contactData.sourceFinance==='') return toast.error(`Choisir Source de financement`);
-  //       if(contactData.progAcc==='') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-  //       if(contactData.progAcc==='Oui' && contactData.progAccNom=='') return toast.error(`Tapez le programme d'accompagnement`);
-  //       if(contactData.progAcc==='Oui' && contactData.typeAcc.length===0) return toast.error(`Choisir le Type d'accompagnement`);
-  //       if(contactData.besoinAppui.length<5)return toast.error(`Tapez les besoins`);
-  //       if(contactData.typeFinanceRed.length===0) return toast.error(`Choisir Type de financement`);
-  //       if(contactData.montantFinanceRed==='') return toast.error(`Choisir Montant de financement`);
-  //       if(contactData.progAccRed === '') return toast.error(`Avez-vous déjà bénéficié d'un programme d'accompagnement?`);
-  //       if(contactData.progAccRed === 'Oui' && contactData.redProg.length === 0) return toast.error(`Choisir le(s) programme d'accompagnement`);
-  //       if(contactData.typeAccRed.length===0) return toast.error(`Choisir le Type d'accompagnement`);
-  // }
+  const formValidation = () => {
+    if(contactData.genre==='') return toast.error(`Genre invalide`);
+        if(contactData.mobile.length<8) return toast.error(`Mobile invalide`);
+        if(isNaN(contactData.mobile)) return toast.error(`Mobile invalide`);
+        if(!emailRegex.test(contactData.email)) return toast.error(`Email invalide`);
+        if(contactData.trancheAge==='') return toast.error(`Choisir Tranche d'age`);
+        if(contactData.diplome==='') return toast.error(`Choisir Diplome`);
+        if(contactData.gouvernorat==='') return toast.error(`Choisir Gouvernoat`);
+        if(contactData.delegation==='') return toast.error(`Choisir Delegation`)
+  }
 
   const notifySuccess = () => {
     toast.success("Contact created successfully", {
