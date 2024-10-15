@@ -31,7 +31,8 @@ const CreateContactv3 = () => {
     'Locale', 'National', 'International'
   ];
 
-  const redprog = ['CREACT4MED','widu','Women Go Green'];
+  const redprog = ['CREACT4MED','widu','Women Go Green', 'Greenit', 'Women Go Green 2', 'Redinnov', 'Junior Boss', 'SwitchMed II', 'We Go2Market'];
+
 
   const sourceFinList = [
     'Auto Financement', 'Crédit', 'Subvention'

@@ -6,7 +6,7 @@ const AppFooter = () => {
     <CFooter className="px-4">
       <div>
         Redboost
-        <span className="ms-1">&copy; 2024 creativeLabs.</span>
+        <span className="ms-1">&copy; 2024 PixelPress.</span>
       </div>
     </CFooter>
   )
