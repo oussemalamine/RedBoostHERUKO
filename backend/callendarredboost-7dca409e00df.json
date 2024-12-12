@@ -1,13 +1,1 @@
-{
-  "type": "service_account",
-  "project_id": "callendarredboost",
-  "private_key_id": "7dca409e00dff4d0700f39894b6960a1892ad32f",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDC50wj5HIWih4R\ng1zUcFQPnRNd+MIjPKAzoV4yULyHCbPYSmznR0EnOEoJwktB20c4cs1nwAeelxQK\ney8VN10Lu7w/x5ZGGAtBfyRAC8ub7IHcitadr3HaD/5whPy4+deaSIxNDPFGThS5\neBZJlA1LGRZJs3BI6FnmIJCDRudq1sMOAkO1PesRm/DIXBwDCIBIZeA3JU7hKDfE\nrUsDtSLs8PyORGTrweQuXE/E9YcxkEqMQOxnsjRfnitXkVULHwOWpF5ZyKfz0SZa\nv9MTwBUBdg3B5bopnQJ6L2sUYrH0wwUliRvHhvVjm3F4PyLsJid1NUnNsVNmiKoD\ntZfNodE1AgMBAAECggEAK2QwNNtytObp+88plxgs9s7rFWRA4HRqXCREYuJLnqq/\n0dr79N+Nt0wWW6bYd2B4si4I4dzENYAAE7dKC6ioO+j/Z5mpMJDAzMOgD+wwV9Xn\nMXDth+yb5cbiyC0rUIk7AVu+dJb5jkPq5EHCgH4IGZyLtDvRN0IXZZ8BXWCnO8cR\n7bI5INCrcdAkpHkETgy1JqtuDonVfuqtrVzD8LfY+ZO+8M5bRHExZjHeojai5AEq\nVCPp3AvLRYtDEUcSa8mUBQTcV4cW2g6JBaDwGL+euJDkU6as7418aax7HumS1j/k\n1XwfwLp8Of5MkK4mWechV/kkJC/k/B6RTtOF+zmPLwKBgQDhsLqsiQ/d+Ui+5OX3\nvsl+0WVnjODtR/KTStOtNhMyRxWybskwUUixRmy/Uo2xBbr7wXAXNXOavpfmjJ/t\n7cbDEz9yImo4M86f4EyeiIj/CmJ0QVysM2j22chY+H4LIdDYZZA9G/6JB1G0adXa\nTzQTtsuKhRAipWpQvQW8PQxjkwKBgQDdFByQF5xz4veSe/B01cmENWEwFojYBL5t\nRJCcxLJgfnizPPYnyjLF+cimpkQPJfaWB/MJvwl5nGsMjuY2xSAKAYX48FhiqI2k\nu6IDXCvkZ3acluE2ES5euFP3lO/yWjgRBWas18vjHCQBaiCgYmMlVN4OLkjB3ZOi\nTZOakAEFFwKBgQDKyUcSHB1br8+DZpyTXKQkBPX+cwDvc0QswIEuE3ZwKJsANrcj\naQXN859m0UBrHOEDsK2MzQRQuIw4JYbV/F4pjbPmU7HpSfOQh7OQhtHBh40rNEeW\nmqLnmouAFdb7HalPpwJRRkQQz7jESIxUmfIK/KYqkqEK4GKEpTLwDlKBbQKBgHgF\nIhiL6PD1CAirZnhXU+aFgDS2FyaHNMZnUcb59gjywB42e0BQwk2+dFMcspgyuPLs\nb+Ibp04xP+B6d7rGO8WS3COwf5tX/EWxY5xFXsLJ9JfARZWvsCfWFCe14KoGlqeO\n8hXltZefQGDQN9Q6da7fqwmx0OgGnc6gJQDlKtiTAoGBAK+P1yoY0L/ltbPcS0CM\nP66C1E98HaJ0c0Ah9Vp7pXdim2CtJ085N2cOrprjxYf0iWM29mBXkc3aUEeG3NlS\nBjo1ROWFLQPIOr30r7yzxiFC9EqW8xeRd2o6dhkaI0g7E+QiQ6MiRm7xSp2t9GUX\nyirGvJh4K4Yw2WDZfSB9VU4s\n-----END PRIVATE KEY-----\n",
-  "client_email": "redboost-drive@callendarredboost.iam.gserviceaccount.com",
-  "client_id": "114616562925678052284",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/redboost-drive%40callendarredboost.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+{"web":{"client_id":"53123063238-g9pc0k2celgi7n963ukl83888niicq07.apps.googleusercontent.com","project_id":"callendarredboost","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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","redirect_uris":["https://dqclbjtlbhazzvlmqjgm.supabase.co/auth/v1/callback"],"javascript_origins":["https://redboost-65f83dc8cbf1.herokuapp.com"]}}
