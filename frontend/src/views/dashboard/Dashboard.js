@@ -13,7 +13,6 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CButton,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilPeople } from '@coreui/icons';
@@ -32,7 +31,6 @@ const Dashboard = () => {
       setSelectedUser(user);
     } else {
       alert('Please upload a photo to view user details.');
-      // You can customize this alert or UI notification as per your design requirements
     }
   };
 
@@ -46,9 +44,27 @@ const Dashboard = () => {
         <UserDetails user={selectedUser} onBack={handleBack} />
       ) : (
         <>
-         <WidgetsDropdown users={users} className="mb-4" />
+          <WidgetsDropdown users={users} className="mb-4" />
           <CRow>
             <CCol xs={12} md={6}>
+              <CCard className="mb-4">
+                <CCardHeader>RedBoost Calendar</CCardHeader>
+                <CCardBody>
+                  <TaskCalendar />
+                </CCardBody>
+              </CCard>
+            </CCol>
+            <CCol xs={12} md={6}>
+              <CCard className="mb-4">
+                <CCardHeader>Task List</CCardHeader>
+                <CCardBody>
+                  <TaskList />
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol xs={12}>
               <CCard className="mb-4">
                 <CCardHeader>Online Users</CCardHeader>
                 <CCardBody>
@@ -88,20 +104,6 @@ const Dashboard = () => {
                       ))}
                     </CTableBody>
                   </CTable>
-                </CCardBody>
-              </CCard>
-            </CCol>
-            <CCol xs={12} md={6}>
-              <CCard className="mb-4">
-                <CCardHeader>Calendar</CCardHeader>
-                <CCardBody>
-                  <TaskCalendar />
-                </CCardBody>
-              </CCard>
-              <CCard className="mb-4">
-                <CCardHeader>Task List</CCardHeader>
-                <CCardBody>
-                  <TaskList />
                 </CCardBody>
               </CCard>
             </CCol>

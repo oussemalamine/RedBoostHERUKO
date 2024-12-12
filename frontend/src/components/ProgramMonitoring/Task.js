@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { storage } from '../../firebase';
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import 'firebase/storage';
+import {getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import {
   CCard,
   CCardBody,
@@ -148,38 +149,55 @@ const Task = ({ task }) => {
       uploadTask.on(
         'state_changed',
         (snapshot) => {
+          // Calculate upload progress
           const progress = parseFloat(((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2));
-
           setProgress(progress);
         },
         (error) => {
-          console.error('Error uploading file:', error);
+          // Log error details for debugging
+          console.error('Error uploading file:', error.code, error.message);
         },
         async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log('File available at', downloadURL);
+          try {
+            // Get the file download URL after the upload completes
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref); // No parentheses needed
 
-          // Create a new deliverable object
-          const newDeliverable = {
-            fileName: newDeliverableName,
-            fileUrl: downloadURL,
-            // id: uuidv4(), // Assuming you have a function to generate unique IDs
-          };
+            console.log('File available at', downloadURL);
 
-          // Add the new deliverable to the list
-          setCurrentTask((prevTask) => ({
-            ...prevTask,
-            deliverables: [...prevTask.deliverables, newDeliverable],
-          }));
+            // Create a new deliverable object
+            const newDeliverable = {
+              fileName: newDeliverableName,
+              fileUrl: downloadURL,
+            };
 
-          // Reset form fields
-          setNewDeliverableName('');
-          setDeliverableFile(null);
-          setProgress(0);
+            // Optimistically update local state
+            const updatedTask = {
+              ...currentTask,
+              deliverables: [...currentTask.deliverables, newDeliverable],
+            };
+            setCurrentTask(updatedTask);  // Update local state immediately
+
+            // Dispatch the updated task to MongoDB after file upload is complete
+            dispatch(
+              updateTask({
+                taskId: task._id,
+                taskData: updatedTask,
+              })
+            );
+
+            // Reset form fields after dispatch
+            setNewDeliverableName('');  // Clear the file name input
+            setDeliverableFile(null);  // Clear the file input
+            setProgress(0);            // Reset progress bar
+          } catch (err) {
+            console.error('Error getting download URL:', err);
+          }
         }
       );
     }
   };
+
+
 
   const handleDeleteDeliverable = async (deliverableId, fileUrl) => {
     try {

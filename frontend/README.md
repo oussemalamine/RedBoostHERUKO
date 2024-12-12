@@ -81,18 +81,18 @@ $ yarn install
 ### Basic usage
 
 ```bash
-# dev server with hot reload at http://localhost:3000
+# dev server with hot reload at https://redboost-65f83dc8cbf1.herokuapp.com
 $ npm start
 ```
 
 or
 
 ```bash
-# dev server with hot reload at http://localhost:3000
+# dev server with hot reload at https://redboost-65f83dc8cbf1.herokuapp.com
 $ yarn start
 ```
 
-Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
+Navigate to [https://redboost-65f83dc8cbf1.herokuapp.com](https://redboost-65f83dc8cbf1.herokuapp.com). The app will automatically reload if you change any of the source files.
 
 #### Build
 

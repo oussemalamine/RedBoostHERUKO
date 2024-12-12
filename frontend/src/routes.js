@@ -28,7 +28,8 @@ const StatisticsEntrepeneurs = React.lazy(() => import('./views/Statistics/Entre
 const StartupsAccelerated = React.lazy(() => import('./views/Statistics/StartupsAccelerated'))
 const reportingScreen =React.lazy(()=> import('./views/reporting/reportingScreen'))
 const FileUpload =React.lazy(()=> import('./components/FileUpload'))
-
+const redboostDrive =React.lazy(()=> import('./views/drive/redboostDrive'))
+const RedBoostCallendar =React.lazy(()=> import('./views/redBoostCallendar/RedBoostCallendar'))
 
 
 const routes = [
@@ -73,7 +74,11 @@ const routes = [
   { path: '/users/:id', name: 'UserDetails', element: UserDetails },
   { path: '/:taskId', name: 'TaskDetails', element: TaskDetails},
   {path:'/Reporting', name:'Reporting', element: reportingScreen},
-  {path:'/fileupload', name:'test upload', element: FileUpload}
+  {path:'/fileupload', name:'test upload', element: FileUpload},
+
+  {path:'/redboostDrive', name:'Redboost Drive', element: redboostDrive},
+  {path:'/RedBoostCallendar', name:'RedBoost Callendar', element: RedBoostCallendar}
+
 
 ]
 

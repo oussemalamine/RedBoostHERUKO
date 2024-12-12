@@ -11,6 +11,7 @@ import {
   cilCursorMove,
   cilUser,
   cilTask,
+  cilFork
 } from '@coreui/icons'
 import { FiActivity } from 'react-icons/fi'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
@@ -19,7 +20,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Dashboard',
-    to: 'dashboard',
+    to: '/',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
   {
@@ -96,6 +97,18 @@ const _nav = [
     name: 'Marketing',
     to: 'Marketing',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'RedBoost Callendar',
+    to: '/Dash/RedBoostCallendar',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'RedBoost Drive',
+    to: '/Dash/redboostDrive',
+    icon: <CIcon icon={cilFork} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

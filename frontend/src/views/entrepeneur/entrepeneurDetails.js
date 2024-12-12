@@ -11,7 +11,7 @@ import {
   CButton,
   CSpinner,
   CAlert,
-  CAvatar,
+  CAvatar,CProgress, CProgressBar
 } from '@coreui/react';
 import InfoCard from './InfoCard';
 import EditButtonPop from './popups/editButtonPop'; // Assuming your modal component is named EditButtonPop
@@ -59,7 +59,7 @@ const EntrepreneurDetails = () => {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
-  
+
   // console.log(formatDate(entrepreneur.DateCre));
 
   return (
@@ -118,6 +118,19 @@ const EntrepreneurDetails = () => {
             <CCol md={3} className="text-center text-md-start px-md-3 mt-5">
               <p className="text-muted mt-mb-2">Member since {moment(entrepreneur.DateCre).format('MMMM Do, YYYY')}</p>
               <p className="text-muted mt-mb-2">XP Points: {entrepreneur.star}</p>
+                    {/* Display Completion as a Progress Bar */}
+              {entrepreneur.completionPercentage ? (
+                <CCol className="text-center text-md-start px-md-3">
+                  <div className="mb-4">
+                    <h5>Completion Status</h5>
+                    <CProgress value={entrepreneur.completionPercentage} color="success">
+                      <CProgressBar>{entrepreneur.completionPercentage.toFixed(2)}%</CProgressBar>
+                    </CProgress>
+                  </div>
+                </CCol>
+              ) : (
+                <span>N/A</span>
+              )}
             </CCol>
             <div className="text-end">
               <CButton color="secondary" onClick={handleEntrepreneurEditClick}>
@@ -142,7 +155,7 @@ const EntrepreneurDetails = () => {
               { label: 'Gouvernorat: ', value: entrepreneur.gouvernorat },
               { label: 'Delegation: ', value: entrepreneur.delegation },
               { label: 'Blacklisted: ', value: String(entrepreneur.blacklisted) },
-              
+
             ]}
           />
         </CCol>
@@ -194,7 +207,7 @@ const EntrepreneurDetails = () => {
               { label: 'Montant de financement: ', value: entrepreneur.montantFinanceRed },
               entrepreneur.progAccRed === 'Oui' &&{ label: "Programme d'Accompagnement: ", value: entrepreneur.redProg.join(', ') },
               { label: "Type d'accompagnement: ", value: entrepreneur.typeAccRed.join(', ') },
-              
+
             ]}
           />
         </CCol>
